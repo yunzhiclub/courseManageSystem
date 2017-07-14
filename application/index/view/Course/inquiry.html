@@ -15,7 +15,9 @@
             <form class="form-inline">
                 <div class="form-group">
                     <select class="btn btn-default">
-                        <option>离散数学</option>
+                        {volist name="$Course->all()" id="course"}
+                            <option>{$course->name}</option>
+                        {/volist}
                     </select>
                 </div>
                 
