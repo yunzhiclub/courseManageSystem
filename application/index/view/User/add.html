@@ -3,40 +3,36 @@
 
 <head>
     <meta charset="utf-8">
-    <title>用户信息管理</title>
+    <title>用户信息添加</title>
     <link rel="stylesheet" type="text/css" href="/timetableSystem/public/static/bootstrap-3.3.7-dist/css/bootstrap.min.css">
 </head>
 
 <body class="contanier">
-<div class="row-fluid">
+    <div class="row-fluid">
         <div class="col-md-12">
             <h3 class="text-center">
-                修改学生信息
+                新增学生信息
             </h3>
             <div class="col-md-12">
                 <div class="text-center">
-                    <form class="form-horizontal">
+                    <form class="form-horizontal" action="{:url('save')}" method="post">
                         <div class="form-group">
-                            <label for="inputusername" class="col-md-5 control-label">用户名</label>
+                            <label class="col-md-5 control-label">用户名</label>
                             <div class="col-md-2">
-                                <input type="text" class="form-control" id="inputusername" placeholder="username...">
+                                <input type="text" class="form-control" name="username" placeholder="username...">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="inputname" class="col-md-5 control-label">姓名</label>
+                            <label class="col-md-5 control-label">姓名</label>
                             <div class="col-md-2">
-                                <input type="text" class="form-control" id="inputname" placeholder="name...">
+                                <input type="text" class="form-control" name="name" placeholder="name...">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="inputphone" class="col-md-5 control-label">电话</label>
+                            <label class="col-md-5 control-label">电话</label>
                             <div class="col-md-2">
-                                <input type="tel" class="form-control" id="inputphone" placeholder="phone">
+                                <input type="tel" class="form-control" name="phone" placeholder="phone">
                             </div>
-                        </div>
-                        <div> 
-                            <input type="checkbox" name="teacher">teacher
-                            <input type="checkbox" name="student">student
                         </div>
                         <div class="form-group">
                             <div class="col-md-offset-6 col-md-1">
