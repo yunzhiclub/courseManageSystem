@@ -1,6 +1,7 @@
 <?php
 namespace app\index\controller;
 use think\Controller;
+use app\index\model\User;
 
 class UserController extends Controller
 {
@@ -9,7 +10,15 @@ class UserController extends Controller
 	 */
 	public function index()
 	{
-		return $this->fetch();
+		// 声明一个空对象
+		$User = new User;
+		$users = $User->select();
+
+		// 向v层传递数据
+		$this->assign('users',$users);
+
+		// 取回打包好的数据,并返回
+		return $this->fetch();		
 	}
 
 	/**

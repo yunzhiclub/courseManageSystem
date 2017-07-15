@@ -18,9 +18,9 @@
                     <br />
                     <div class="col-md-2">
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="姓名...">
+                            <input type="text" class="form-control" placeholder="姓名..." value="{:input('get.name')}">
                             <span class="input-group-btn">
-                            <button class="btn btn-default" type="button">搜索</button>
+                            <button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i>搜索</button>
                             </span>
                         </div>
                         <!-- /input-group -->
@@ -34,153 +34,25 @@
             <hr />
             <div class="col-md-8 col-md-offset-2">
                 <table class="table table-hover">
-                    <thead>
-                        <tr class="info">
-                            <th>序号</th>
-                            <th>用户名</th>
-                            <th>年级</th>
-                            <th>班级</th>
-                            <th>电话</th>
-                            <th>QQ</th>
-                            <th>E-mail</th>
-                            <th>操作</th>
-                        </tr>
-                    </thead>
+                    <tr class="info">
+                        <th>序号</th>
+                        <th>姓名</th>
+                        <th>用户名</th>
+                        <th>电话</th>
+                        <th>操作</th>
+                    </tr> 
+                    {volist name="users" id="user" key="key"}
                     <tr>
-                        <td>
-                            1
-                        </td>
-                        <td>
-                            朱晨澍
-                        </td>
-                        <td>
-                            大二
-                        </td>
-                        <td>
-                            XX151
-                        </td>
-                        <td>
-                            01234567890
-                        </td>
-                        <td>
-                            1234567890
-                        </td>
-                        <td>
-                            123456789@qq.com
-                        </td>
+                        <td>{$key}</td>    
+                        <td>{$user->getData('name')}</td>                       
+                        <td>{$user->getData('username')}</td>
+                        <td>{$user->getData('phone')}</td>
                         <td>
                             <a href="{:url('edit')}" class="btn btn-success">&nbsp;编辑</a>
                             <a href="#" class="btn btn-danger">&nbsp;删除</a>
                         </td>
                     </tr>
-                    <tr>
-                        <td>
-                            2
-                        </td>
-                        <td>
-                            朴世超
-                        </td>
-                        <td>
-                            大一
-                        </td>
-                        <td>
-                            XX161
-                        </td>
-                        <td>
-                            01234567890
-                        </td>
-                        <td>
-                            1234567890
-                        </td>
-                        <td>
-                            123456789@qq.com
-                        </td>
-                        <td>
-                            <a href="edit" class="btn btn-success">&nbsp;编辑</a>
-                            <a href="#" class="btn btn-danger">&nbsp;删除</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            3
-                        </td>
-                        <td>
-                            周杰
-                        </td>
-                        <td>
-                            大一
-                        </td>
-                        <td>
-                            XX162
-                        </td>
-                        <td>
-                            01234567890
-                        </td>
-                        <td>
-                            1234567890
-                        </td>
-                        <td>
-                            123456789@qq.com
-                        </td>
-                        <td>
-                            <a href="edit" class="btn btn-success">&nbsp;编辑</a>
-                            <a href="#" class="btn btn-danger">&nbsp;删除</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            4
-                        </td>
-                        <td>
-                            张喜硕
-                        </td>
-                        <td>
-                            大一
-                        </td>
-                        <td>
-                            XX162
-                        </td>
-                        <td>
-                            01234567890
-                        </td>
-                        <td>
-                            1234567890
-                        </td>
-                        <td>
-                            123456789@qq.com
-                        </td>
-                        <td>
-                            <a href="edit" class="btn btn-success">&nbsp;编辑</a>
-                            <a href="#" class="btn btn-danger">&nbsp;删除</a>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            5
-                        </td>
-                        <td>
-                            陈志高
-                        </td>
-                        <td>
-                            大一
-                        </td>
-                        <td>
-                            XX163
-                        </td>
-                        <td>
-                            01234567890
-                        </td>
-                        <td>
-                            1234567890
-                        </td>
-                        <td>
-                            123456789@qq.com
-                        </td>
-                        <td>
-                            <a href="edit" class="btn btn-success">&nbsp;编辑</a>
-                            <a href="#" class="btn btn-danger">&nbsp;删除</a>
-                        </td>
-                    </tr>
+                    {/volist}
                 </table>
                 <nav aria-label="Page navigation">
                     <ul class="pagination">
@@ -202,7 +74,6 @@
             </div>
         </div>
     </div>
-    
     <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
     <script src="/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
 </body>
