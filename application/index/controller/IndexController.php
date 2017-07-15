@@ -1,7 +1,7 @@
 <?php
 namespace app\index\controller;
 use think\Controller;
-use think\model\User;
+use app\model\User;
 class IndexController extends Controller
 {
     public function index()
