@@ -16,7 +16,7 @@ class IndexController extends Controller
         if ($power == 0)
         	return $this->success('login success', url('AskLeave/index'));
         else if ($power == 1) 
-        	return $this->success('login success', url('User/index'));
+        	return $this->success('login success', url('Eletivecourse/index'));
         else
         	return $this->error('password incrrect or no right', url('index'));
 
