@@ -12,23 +12,26 @@
 
     <div class="row">
         <div class="col-md-8">
-            <form class="form-inline">
-                <div class="form-group">
-                    <select class="btn btn-default">
-                        <option>离散数学</option>
-                    </select>
-                </div>
-                
-                <select class="btn btn-default">
-                    <option>2016--2017年春季学期</option>
-                    <option>2016--2017年秋季学期</option>
+            <form class="form-inline" action="{:url('inquiry')}" method="post">
+                <select name="Courseid" class="btn btn-default">
+                    {volist name="$Course->all()" id="course"}
+                        <option {eq name="$course->id" value="$Course->id"}selected="true"{/eq} value="{$course->id}">
+                            {$course->name}
+                        </option>
+                    {/volist}
+                </select>
+
+                <select name="Termid" class="btn btn-default">
+                    {volist name="$Term->all()" id="term"}
+                        <option {eq name="$term->id" value="$Term->id"}selected="true"{/eq} value="{$term->id}">
+                            {$term->name}
+                        </option>
+                    {/volist}
                 </select>
                 
                 <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i>&nbsp;查询</button>
             </form>
         </div>
-
-        
     </div>
 
     <hr />
@@ -36,64 +39,19 @@
     <table class="table table-hover table-bordered">
         <tr class="info">
             <th class="col-md-1"></th>
-            <th class="col-md-1">周一</th>
-            <th class="col-md-1">周二</th>
-            <th class="col-md-1">周三</th>
-            <th class="col-md-1">周四</th>
-            <th class="col-md-1">周五</th>
-            <th class="col-md-1">周六</th>
-            <th class="col-md-1">周日</th>
+            <th class="col-md-1">星期一</th>
+            <th class="col-md-1">星期二</th>
+            <th class="col-md-1">星期三</th>
+            <th class="col-md-1">星期四</th>
+            <th class="col-md-1">星期五</th>
+            <th class="col-md-1">星期六</th>
+            <th class="col-md-1">星期日</th>
         </tr>
-        <tr>
-            <td>第一节</td>
-            <td><a href="edit.html" class="btn btn-warning">1 2 3 4 5</a></td>
-            <td><a href="add.html" class="btn btn-default"><i class="glyphicon glyphicon-plus"></i></a></td>
-            <td><a href="add.html" class="btn btn-default"><i class="glyphicon glyphicon-plus"></i></a></td>
-            <td><a href="add.html" class="btn btn-default"><i class="glyphicon glyphicon-plus"></i></a></td>
-            <td><a href="add.html" class="btn btn-default"><i class="glyphicon glyphicon-plus"></i></a></td>
-            <td><a href="add.html" class="btn btn-default"><i class="glyphicon glyphicon-plus"></i></a></td>
-            <td><a href="add.html" class="btn btn-default"><i class="glyphicon glyphicon-plus"></i></a></td>
-        </tr>
-        <tr>
-            <td>第二节</td>
-            <td><a href="add.html" class="btn btn-default"><i class="glyphicon glyphicon-plus"></i></a></td>
-            <td><a href="add.html" class="btn btn-default"><i class="glyphicon glyphicon-plus"></i></a></td>
-            <td><a href="edit.html" class="btn btn-warning">10 12 16 18</a></td>
-            <td><a href="add.html" class="btn btn-default"><i class="glyphicon glyphicon-plus"></i></a></td>
-            <td><a href="add.html" class="btn btn-default"><i class="glyphicon glyphicon-plus"></i></a></td>
-            <td><a href="add.html" class="btn btn-default"><i class="glyphicon glyphicon-plus"></i></a></td>
-            <td><a href="add.html" class="btn btn-default"><i class="glyphicon glyphicon-plus"></i></a></td>
-        </tr>
-        <tr>
-            <td>第三节</td>
-            <td><a href="add.html" class="btn btn-default"><i class="glyphicon glyphicon-plus"></i></a></td>
-            <td><a href="add.html" class="btn btn-default"><i class="glyphicon glyphicon-plus"></i></a></td>
-            <td><a href="add.html" class="btn btn-default"><i class="glyphicon glyphicon-plus"></i></a></td>
-            <td><a href="edit.html" class="btn btn-warning">11 15 19</a></td>
-            <td><a href="add.html" class="btn btn-default"><i class="glyphicon glyphicon-plus"></i></a></td>
-            <td><a href="add.html" class="btn btn-default"><i class="glyphicon glyphicon-plus"></i></a></td>
-            <td><a href="add.html" class="btn btn-default"><i class="glyphicon glyphicon-plus"></i></a></td>
-        </tr>
-        <tr>
-            <td>第四节</td>
-            <td><a href="add.html" class="btn btn-default"><i class="glyphicon glyphicon-plus"></i></a></td>
-            <td><a href="add.html" class="btn btn-default"><i class="glyphicon glyphicon-plus"></i></a></td>
-            <td><a href="add.html" class="btn btn-default"><i class="glyphicon glyphicon-plus"></i></a></td>
-            <td><a href="add.html" class="btn btn-default"><i class="glyphicon glyphicon-plus"></i></a></td>
-            <td><a href="add.html" class="btn btn-default"><i class="glyphicon glyphicon-plus"></i></a></td>
-            <td><a href="edit.html" class="btn btn-warning">12 14 17</a></td>
-            <td><a href="add.html" class="btn btn-default"><i class="glyphicon glyphicon-plus"></i></a></td>
-        </tr>
-        <tr>
-            <td>第五节</td>
-            <td><a href="add.html" class="btn btn-default"><i class="glyphicon glyphicon-plus"></i></a></td>
-            <td><a href="edit.html" class="btn btn-warning">11 15 16</a></td>
-            <td><a href="add.html" class="btn btn-default"><i class="glyphicon glyphicon-plus"></i></a></td>
-            <td><a href="add.html" class="btn btn-default"><i class="glyphicon glyphicon-plus"></i></a></td>
-            <td><a href="add.html" class="btn btn-default"><i class="glyphicon glyphicon-plus"></i></a></td>
-            <td><a href="add.html" class="btn btn-default"><i class="glyphicon glyphicon-plus"></i></a></td>
-            <td><a href="add.html" class="btn btn-default"><i class="glyphicon glyphicon-plus"></i></a></td>
-        </tr>
+        {php}
+            use app\index\model\Coursetime;
+
+
+        {/php}
     </table>
     
 </body>
