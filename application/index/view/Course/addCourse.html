@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="zh-hans">
+<head>
+    <meta charset="utf-8">
+    <title>添加课程</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+</head>
+<body class="container">
+    <h2 style="text-align: center">添加课程</h2>
+    <form action="{:url('saveCourse')}" method="post">
+        <div class="row">
+            <label>课程名：</label>
+            <br>
+            <input type="text" name="CourseName" class="btn btn-default">
+        </div>
+
+        <hr>
+
+        <div class="row">
+            <button type="submit" class="btn btn-default">保存</button>
+        </div>
+    </form>
+</body>
+</html>

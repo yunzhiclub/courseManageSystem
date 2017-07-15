@@ -12,8 +12,9 @@
 return [
     // 数据库类型
     'type'            => 'mysql',
-    // 服务器地址
-    'hostname'        => '10.1.11.149',
+    // 服务器
+    'hostname'        => '10.1.11.149_3306',
+
     // 数据库名
     'database'        => 'coursemanage',
     // 用户名
