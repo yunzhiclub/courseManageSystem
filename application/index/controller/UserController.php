@@ -38,7 +38,7 @@ class UserController extends Controller
 	 */
 	public function add()
 	{
-		return $this->fetch();
+		
 	}
 
 	/**
@@ -70,6 +70,28 @@ class UserController extends Controller
 	 */
 	public function delete()
 	{
-		echo 'this is delete';
+        // 获取要删除的username.
+        $username = Request::instance()->param('username');
+
+
+        if (is_null($username)) {
+            return $this->error('未获取到username信息');
+        }
+
+        // 获取要删除的对象
+        $User = User::get($username);
+
+        // 要删除的对象不存在
+        if (is_null($User)) {
+            return $this->error('不存在username为' . $username . '的教师，删除失败');
+        }
+
+        // 删除对象
+        if (!$User->delete()) {
+            return $this->error('删除失败:' . $User->getError());
+        }
+
+        // 进行跳转
+        return $this->success('删除成功', url('index'));
 	}
 }
