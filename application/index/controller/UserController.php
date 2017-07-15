@@ -38,7 +38,7 @@ class UserController extends Controller
 	 */
 	public function add()
 	{
-		
+		return $this->fetch();
 	}
 
 	/**
@@ -46,7 +46,26 @@ class UserController extends Controller
 	 */
 	public function save()
 	{
-		echo 'this is save';
+		// 接收传入数据
+        $postData = Request::instance()->post();    
+
+        // 实例化空对象
+        $User = new User();
+
+        // 为对象赋值
+        $User->username = $postData['username'];
+        $User->name = $postData['name'];
+        $User->phone = $postData['phone'];
+
+        // 新增对象至数据表
+        $result = $User->save();
+
+        if (!$result) {
+        	return $this->error('新增失败:' . $Teacher->getError());
+        }
+
+        return  $this->success('用户' . $User->username . '新增成功', url('index'));
+
 	}
 
 	/**
@@ -83,7 +102,7 @@ class UserController extends Controller
 
         // 要删除的对象不存在
         if (is_null($User)) {
-            return $this->error('不存在username为' . $username . '的教师，删除失败');
+            return $this->error('不存在username为' . $username . '的用户，删除失败');
         }
 
         // 删除对象
