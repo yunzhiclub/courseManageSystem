@@ -73,7 +73,17 @@ class UserController extends Controller
 	 */
 	public function edit()
 	{
-		return $this->fetch();
+		// 获取传入用户名
+        $username = Request::instance()->param('username');
+
+        // 在User表模型中获取当前记录
+        $User = User::get($username);
+
+        // 将数据传给V层
+        $this->assign('User', $User);
+
+        // 接收并返还给用户
+        return $this->fetch();
 	}
 
 	/**
@@ -81,7 +91,24 @@ class UserController extends Controller
 	 */
 	public function update()
 	{
-		echo 'this is update';
+		// 接收数据
+        $username = Request::instance()->post('username');
+
+        // 获取当前对象
+        $User = User::get($username);
+
+        if (!is_null($User)) {
+        	$User->username = post('username');
+        	$User->phone = post('phone');
+        }
+        
+
+        // 依据状态定制提示信息
+        if (false === $User->isUpdate(true)->save($user)) {	
+            return $this->error('更新失败' . $User->getError());
+        }
+
+        return $this->success('更新成功', url('index'));
 	}
 
 	/**
@@ -112,5 +139,28 @@ class UserController extends Controller
 
         // 进行跳转
         return $this->success('删除成功', url('index'));
+	}
+
+	/**
+	 * 重置密码
+	 * @author  poshichao
+	 */
+	public function resetpassword()
+	{
+		// 获取重置密码的用户名
+		$password = Request::instance()->post('password');
+		
+		// 获取当前对象
+		$User = User::get($password);
+
+		// 写入默认密码
+		$User->password = '123';
+
+		// 更新
+		if (!$User->save()) {
+			return $this->error('重置失败' . $User->getError());
+		}
+
+		return $this->success('重置成功，新密码为123', url('index'));
 	}
 }
