@@ -161,19 +161,19 @@ class UserController extends Controller
 	public function resetpassword()
 	{
 		// 获取重置密码的用户名
-		$password = Request::instance()->post('password');
+		$username = Request::instance()->param('username');
 		
 		// 获取当前对象
-		$User = User::get($password);
+		$User = User::get($username);
 
 		// 写入默认密码
-		$User->password = '123';
+		$User->password = '456';
 
 		// 更新
-		if (!$User->save()) {
+		if (false === $User->isUpdate(true)->save()) {
 			return $this->error('重置失败' . $User->getError());
 		}
 
-		return $this->success('重置成功，新密码为123', url('index'));
+		return $this->success('重置成功，新密码为' . $User->password, url('index'));
 	}
 }
