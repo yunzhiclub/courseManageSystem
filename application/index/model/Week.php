@@ -6,10 +6,10 @@ use think\Model;
 
 /**
 * 张喜硕
-* 课程类
+* 周类
 */
-class Course extends Model
+class Week extends Model
 {
     
-
+    
 }

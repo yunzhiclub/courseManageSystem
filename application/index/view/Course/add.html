@@ -21,28 +21,43 @@
     <form action="{:url('save')}" method="post">
         <div class="row">
             <label>课程名：</label>
-            <br>
-            <input type="text" name="" value="离散数学" class="btn btn-default" disabled="true">
-        </div>
-                
-        <hr>
+            
+            <input type="text" name="course" value="{$Course->name}" class="btn btn-default" readonly="true">
 
-        <div class="row">
             <label>学期：</label>
-            <br>
-            <input type="text" name="" value="2016--2017年春季学期" class="btn btn-default" disabled="true">
+            
+            <input type="text" name="term" value="{$Term->name}" class="btn btn-default" readonly="true">
         </div>
 
         <hr>
 
         <div class="row">
-            <label>星期：</label>
-            <input type="text" name="" value="星期一" class="btn btn-default" disabled="true">
+            <label>星&nbsp;&nbsp;&nbsp;&nbsp;期：</label>
+            
+            <input type="text" name="day" value="{$Day->Day}" class="btn btn-default" readonly="true">
+
             <label>节数：</label>
-            <input type="text" name="" value="第一节" class="btn btn-default" disabled="true">
+            
+            <input type="text" name="knob" value="{$Knob->Knob}" class="btn btn-default" readonly="true">
         </div>
 
         <hr>
+
+        <div class="row">
+            <label>周次：</label>
+            <input type="button" class="btn btn-default" id="selectAll" value="全选">
+            <input type="button" class="btn btn-default" id="deleteAll" value="全不选">
+            <br>
+
+            {volist name="$Week->all()" id="week"}
+                <input type="checkbox" name="week[]" id="{$week->id}" value="{$week->id}"><label for="{$week->id}">{$week->name}</label>
+                {php}
+                    if($week->id % 10 == 0){
+                        echo '<br>';
+                    }
+                {/php}
+            {/volist}
+        </div>
 
         <hr>
 
