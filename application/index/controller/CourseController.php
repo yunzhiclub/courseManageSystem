@@ -98,13 +98,6 @@ class CourseController extends Controller
         }
 
         $CourseTerm = new CourseTerm($Course->id,$Term->id);
-<<<<<<< HEAD
-
-        $this->assign('Course',$Course);
-        $this->assign('Term',$Term);
-        $this->assign('CourseTerm',$CourseTerm);
-=======
-
         $this->assign('Course',$Course);
         $this->assign('Term',$Term);
         $this->assign('CourseTerm',$CourseTerm);
@@ -136,108 +129,10 @@ class CourseController extends Controller
 
         $Knob = new Knob($knob);
         $this->assign('Knob',$Knob);
->>>>>>> development
 
         return $this->fetch();
     }
 
-<<<<<<< HEAD
-    public function add(){
-
-        $course = Request::instance()->param('course');
-        $term   = Request::instance()->param('term');
-        $day    = Request::instance()->param('day');
-        $knob   = Request::instance()->param('knob');
-
-        $map = array();
-        $map['id'] = $course;
-        $Course = Course::get($map);
-        $this->assign('Course',$Course);
-
-        $map['id'] = $term;
-        $Term = Term::get($map);
-        $this->assign('Term',$Term);
-
-        $Week = new Week();
-        $this->assign('Week',$Week);
-
-        $Day = new Day($day);
-        $this->assign('Day',$Day);
-
-        $Knob = new Knob($knob);
-        $this->assign('Knob',$Knob);
-
-        return $this->fetch();
-    }
-
-    public function save(){
-        $Coursetime = new Coursetime();
-
-        $course = Request::instance()->post('course');
-        $term   = Request::instance()->post('term');
-        $day    = Request::instance()->post('day');
-        $knob   = Request::instance()->post('knob');
-        $weeks  = Request::instance()->post('week/a');
-
-        $map = array();
-        $map['name'] = $course;
-        $Course = Course::get($map);
-
-        $map['name'] = $term;
-        $Term = Term::get($map);
-
-        $w = sizeof($weeks);
-
-        for($temp = 0 ; $temp < $w ; $temp ++){
-            $Coursetime = new Coursetime();
-            $Coursetime->course_id = $Course->id;
-            $Coursetime->term_id   = $Term->id;
-            $Coursetime->day       = $day;
-            $Coursetime->knob      = $knob;
-            $Coursetime->week      = (int)$weeks[$temp];
-            if(!$Coursetime->save()){
-                return $this->error('Error' . $Coursetime->getError());
-            }
-        }
-
-        return $this->success('Success' , url('inquiry'));
-    }
-
-    public function edit(){
-
-        $course = Request::instance()->param('course');
-        $term   = Request::instance()->param('term');
-        $day    = Request::instance()->param('day');
-        $knob   = Request::instance()->param('knob');
-
-        $map = array();
-        $map['id'] = $course;
-        $Course = Course::get($map);
-        $this->assign('Course',$Course);
-
-        $map['id'] = $term;
-        $Term = Term::get($map);
-        $this->assign('Term',$Term);
-
-        $Day = new Day($day);
-        $this->assign('Day',$Day);
-
-        $Knob = new Knob($knob);
-        $this->assign('Knob',$Knob);
-
-        $Week = new Week();
-        $this->assign('Week',$Week);
-
-        $map['course_id'] = $course;
-        $map['term_id'] = $term;
-        $map['day'] = $day;
-        $map['knob'] = $knob;
-
-        $Coursetime = new Coursetime();
-        $Coursetimes = $Coursetime->where($map)->select();
-
-        var_dump($Coursetimes);
-=======
     public function save(){
         $Coursetime = new Coursetime();
 
@@ -330,7 +225,6 @@ class CourseController extends Controller
         $weeks  = Request::instance()->post('week/a');
 
         $w = sizeof($weeks);
->>>>>>> development
 
         for($temp = 0 ; $temp < $w ; $temp ++){
             $Coursetime = new Coursetime();

@@ -8,12 +8,7 @@ use think\Model;
 * 张喜硕
 * 周类
 */
-<<<<<<< HEAD
-class Week extends Model
-{
-    
-    
-=======
+
 class Week
 {
 
@@ -48,5 +43,4 @@ class Week
 
         return false;
     }
->>>>>>> development
 }

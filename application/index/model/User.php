@@ -1,11 +1,7 @@
 <?php
 namespace app\index\model;
 use think\Model;
-<<<<<<< HEAD
-use app\index\model\UserCourse;
 
-=======
->>>>>>> development
 
 class User extends Model
 { 
