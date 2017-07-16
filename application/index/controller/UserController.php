@@ -40,7 +40,18 @@ class UserController extends Controller
 	 */
 	public function add()
 	{
-		return $this->fetch();
+		// 实例化空对象
+		$User = new User;
+
+		// 设置默认值
+		$User->username = '';
+		$User->name = '';
+		$User->phone = '';
+
+		$this->assign('User', $User);
+
+		// 调用edit模板
+		return $this->fetch('edit');
 	}
 
 	/**
@@ -176,4 +187,9 @@ class UserController extends Controller
 
 		return $this->success('重置成功，新密码为' . $User->password, url('index'));
 	}
+
+	/**
+	 * 对用户保存或更新
+	 * @author poshichao
+	 */
 }
