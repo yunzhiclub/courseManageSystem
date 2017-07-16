@@ -2,7 +2,7 @@
 <html lang="zh-hans">
 <head>
     <meta charset="utf-8">
-    <title>添加课程时间</title>
+    <title>课程管理</title>
     <link rel="stylesheet" type="text/css" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
     <script type="text/javascript">
@@ -17,8 +17,16 @@
     </script>
 </head>
 <body class="container">
-    <h2 style="text-align: center">添加课程时间</h2>
-    <form action="{:url('save')}" method="post">
+    {php}
+        if(request()->action() === 'add'){
+            $action = 'save';
+            echo '<h2 style="text-align: center">添加课程时间</h2>';
+        } else {
+            $action = 'update';
+            echo '<h2 style="text-align: center">修改课程时间</h2>';
+        }
+    {/php}
+    <form action="{:url($action)}" method="post">
         <div class="row">
             <label>课程名：</label>
             
@@ -49,13 +57,9 @@
             <input type="button" class="btn btn-default" id="deleteAll" value="全不选">
             <br>
 
-            {volist name="$Week->all()" id="week"}
-                <input type="checkbox" name="week[]" id="{$week->id}" value="{$week->id}"><label for="{$week->id}">{$week->name}</label>
-                {php}
-                    if($week->id % 10 == 0){
-                        echo '<br>';
-                    }
-                {/php}
+            {volist name="$Knob->getWeeks()" id="week"}
+                <input type="checkbox" name="week[]" id="{$week->Week}" value="{$week->Week}" {eq name="$week->getIsChecked($week->Week)" value="true"} checked="true" {/eq}>
+                <label for="{$week->Week}">{$week->Week}</label>
             {/volist}
         </div>
 
