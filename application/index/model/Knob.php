@@ -12,9 +12,18 @@ namespace app\index\model;
 class Knob
 {
     
+<<<<<<< HEAD
     function __construct($knob = 0)
     {
         $this->Knob = $knob;
+=======
+    function __construct($knob = 0 , $course = 0 , $term = 0 , $day = 0)
+    {
+        $this->Knob = $knob;
+        $this->Course = $course;
+        $this->Term = $term;
+        $this->Day = $day;
+>>>>>>> development
     }
 
     public function getCourseLength(){
@@ -47,4 +56,17 @@ class Knob
 
         return $Coursetimes;
     }
+<<<<<<< HEAD
+=======
+
+    public function getWeeks(){
+        $weeks = [];
+        for($temp = 1 ; $temp <= 20 ; $temp ++) {
+            $Week = new Week($temp , $this->Course , $this->Term , $this->Day , $this->Knob);
+            array_push($weeks, $Week);
+        }
+
+        return $weeks;
+    }
+>>>>>>> development
 }
