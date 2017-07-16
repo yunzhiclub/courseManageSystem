@@ -15,28 +15,24 @@
             </h3>
             <div class="col-md-12">
                 <div class="text-center">
-                    <form class="form-horizontal">
+                    <form class="form-horizontal" action="{:url('save')}" method="post">
                         <div class="form-group">
-                            <label for="inputusername" class="col-md-5 control-label">用户名</label>
+                            <label class="col-md-5 control-label">用户名</label>
                             <div class="col-md-2">
-                                <input type="text" class="form-control" id="inputusername" placeholder="username...">
+                                <input type="text" class="form-control" placeholder="username..." name="username">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="inputname" class="col-md-5 control-label">姓名</label>
+                            <label class="col-md-5 control-label">姓名</label>
                             <div class="col-md-2">
-                                <input type="text" class="form-control" id="inputname" placeholder="name...">
+                                <input type="text" class="form-control" placeholder="name..." name="name">
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="inputphone" class="col-md-5 control-label">电话</label>
+                            <label class="col-md-5 control-label">电话</label>
                             <div class="col-md-2">
-                                <input type="tel" class="form-control" id="inputphone" placeholder="phone">
+                                <input type="tel" class="form-control" placeholder="phone"  name="phone">
                             </div>
-                        </div>
-                        <div> 
-                            <input type="checkbox" name="teacher">teacher
-                            <input type="checkbox" name="student">student
                         </div>
                         <div class="form-group">
                             <div class="col-md-offset-6 col-md-1">
