@@ -8,7 +8,7 @@ class User extends Model
 { 
 	 public function Courses()
     {
-        return $this->belongsToMany('User',  config('database.prefix') . 'user_course');
+        return $this->belongsToMany('Course', 'user_course');
     }
 	public function getIsChecked(Course &$Course)
     {
@@ -27,6 +27,8 @@ class User extends Model
     }
       public function UserCourses()
     {
-        return $this->hasMany('UserCourse');
+        $username = $this->username;
+        $UserCourse = UserCourse::get($username);
+        return $UserCourse;
     }
 }
