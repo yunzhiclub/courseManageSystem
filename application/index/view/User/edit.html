@@ -17,15 +17,16 @@
                 <div class="text-center">
                     <form class="form-horizontal" action="{:url('update')}" method="post">
                         <div class="form-group">
-                            <label for="inputEmail3" class="col-md-5 control-label">用户名</label>
-                            <div class="col-md-2">
-                                <input type="text" class="form-control" id="inputEmail3" placeholder="username..." value="{$User->getData('username')}">
+                            <label class="col-md-5 control-label">姓名</label>
+                            <input type="hidden" name="username" value="{$User->getData('username')}" />
+                            <div class="col-md-2">   
+                                <input type="text" class="form-control" name="name" value="{$User->getData('name')}" />
                             </div>
                         </div>
                         <div class="form-group">
-                            <label for="inputPassword3" class="col-md-5 control-label">电话</label>
+                            <label class="col-md-5 control-label">电话</label>
                             <div class="col-md-2">
-                                <input type="password" class="form-control" id="inputPassword3" placeholder="phone" value="{$User->getData('phone')}">
+                                <input type="tel" class="form-control" name="phone" value="{$User->getData('phone')}" />
                             </div>
                         </div>
                         <div class="form-group">

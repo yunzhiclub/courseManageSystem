@@ -8,6 +8,7 @@ class UserController extends Controller
 {
 	/**
 	 * 显示用户信息
+	 * @author poshichao
 	 */
 	public function index()
 	{
@@ -35,6 +36,7 @@ class UserController extends Controller
 
 	/**
 	 * 新增用户信息
+	 * @author poshichao
 	 */
 	public function add()
 	{
@@ -43,6 +45,7 @@ class UserController extends Controller
 
 	/**
 	 * 保存信息
+	 * @author poshichao
 	 */
 	public function save()
 	{
@@ -70,24 +73,34 @@ class UserController extends Controller
 
 	/**
 	 * 修改用户信息
+	 * @author poshichao
 	 */
 	public function edit()
 	{
-		// 获取传入用户名
+		// 获取传入username
         $username = Request::instance()->param('username');
-
+        
+        // 判断是否成功接收
+        if (is_null($username)) {
+            return $this->error('未获取到用户名信息');
+        }
+        
         // 在User表模型中获取当前记录
-        $User = User::get($username);
-
+        if (null === $User = User::get($username))
+        {
+            return $this->error('系统未找到username为' . $username . '的记录');
+        } 
+            
         // 将数据传给V层
         $this->assign('User', $User);
 
-        // 接收并返还给用户
+        // 获取封装好的V层内容,并返回
         return $this->fetch();
 	}
 
 	/**
 	 * 更新信息
+	 * @author poshichao
 	 */
 	public function update()
 	{
@@ -98,13 +111,12 @@ class UserController extends Controller
         $User = User::get($username);
 
         if (!is_null($User)) {
-        	$User->username = post('username');
-        	$User->phone = post('phone');
+        	$User->name = Request::instance()->post('name');
+        	$User->phone = Request::instance()->post('phone');
         }
         
-
         // 依据状态定制提示信息
-        if (false === $User->isUpdate(true)->save($user)) {	
+        if (false === $User->isUpdate(true)->save()) {	
             return $this->error('更新失败' . $User->getError());
         }
 
@@ -113,6 +125,7 @@ class UserController extends Controller
 
 	/**
 	 * 删除学生信息
+	 * @author poshichao
 	 */
 	public function delete()
 	{
