@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html lang="zh-hans">
-<head>
-    <meta charset="utf-8">
-    <title>课程管理</title>
-    <link rel="stylesheet" type="text/css" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
-</head>
-<body class="container">
+{extend name="index"/}
+{block name="title"}
+课程管理
+{/block}
+{block name="content"}
     <h2 style="text-align: center">课程管理</h2>
 
     <hr>
@@ -63,6 +60,7 @@
         {/volist}
 
     </table>
+{/block}
+{block name="page"}
     {$Courses->render()}
-</body>
-</html>
+{/block}
