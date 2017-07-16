@@ -2,7 +2,7 @@
 <html lang="zh-hans">
 <head>
     <meta charset="utf-8">
-    <title>查询课程</title>
+    <title>课程管理</title>
     <link rel="stylesheet" type="text/css" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
 </head>
 <body class="container">
@@ -38,20 +38,41 @@
 
     <table class="table table-hover table-bordered">
         <tr class="info">
-            <th class="col-md-1"></th>
-            <th class="col-md-1">星期一</th>
-            <th class="col-md-1">星期二</th>
-            <th class="col-md-1">星期三</th>
-            <th class="col-md-1">星期四</th>
-            <th class="col-md-1">星期五</th>
-            <th class="col-md-1">星期六</th>
-            <th class="col-md-1">星期日</th>
+            <th class="col-md-2"></th>
+            <th class="col-md-2">第一节</th>
+            <th class="col-md-2">第二节</th>
+            <th class="col-md-2">第三节</th>
+            <th class="col-md-2">第四节</th>
+            <th class="col-md-2">第五节</th>
         </tr>
-        {php}
-            use app\index\model\Coursetime;
-
-
-        {/php}
+        {volist name="$CourseTerm->getDays()" id="day" key="key"}
+            <tr>
+                <td>星期{$key}</td>
+                {volist name="$day->getKnobs()" id="knob"}
+                    <td>
+                        {eq name="$knob->getCourseLength()" value="0"}
+                            <a href="{:url('add' , [
+                                    'course' => $knob->Course,
+                                    'term'   => $knob->Term,
+                                    'day'    => $knob->Day,
+                                    'knob'   => $knob->Knob
+                                ])}" class="btn btn-success">
+                                <i class="glyphicon glyphicon-plus"></i>
+                            </a>
+                            {else /}
+                            <a href="{:url('edit' , [
+                                    'course' => $knob->Course,
+                                    'term'   => $knob->Term,
+                                    'day'    => $knob->Day,
+                                    'knob'   => $knob->Knob
+                                ])}" class="btn btn-default">
+                                {$knob->getCourseWeek()}
+                            </a>
+                        {/eq}
+                    </td>
+                {/volist}
+            </tr>
+        {/volist}
     </table>
     
 </body>

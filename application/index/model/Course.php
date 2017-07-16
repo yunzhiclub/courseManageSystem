@@ -6,6 +6,7 @@ use think\Model;
 
 /**
 * 张喜硕
+* 课程类
 */
 class Course extends Model
 {
