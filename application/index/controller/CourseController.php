@@ -2,11 +2,16 @@
 
 namespace app\index\controller;
 
-use think\Controller;
 use think\Request;
-use app\index\model\Course;
+use think\Controller;
+use app\index\model\Day;
+use app\index\model\Week;
+use app\index\model\Knob;
 use app\index\model\Term;
+use app\index\model\Course;
 use app\index\model\Coursetime;
+use app\index\model\CourseTerm;
+
 
 /**
 * 课程管理 张喜硕
@@ -18,11 +23,10 @@ class CourseController extends Controller
 
         $CourseName = Request::instance()->get('CourseName');
 
-        $pageSize = 5;
+        $pageSize   = 5;
 
-        $Course = new Course;
+        $Course     = new Course();
 
-        //查询name字段与$CourseName相似的对象
         if (!empty($CourseName)) {
             $Course->where('name' , 'like' , '%' . $CourseName . '%');
         }
@@ -75,15 +79,11 @@ class CourseController extends Controller
 
         if(is_null(Request::instance()->post('Courseid'))){
             $id = Request::instance()->param('id/d');
-        }
-
-        else {
+        } else {
             $id = Request::instance()->post('Courseid/d');
         }
 
         $Course = Course::get($id);
-
-        $this->assign('Course',$Course);
 
         if(is_null(Request::instance()->post('Termid'))){
             $map = array();
@@ -91,73 +91,116 @@ class CourseController extends Controller
             $map['state'] = 1;
 
             $Term = Term::get($map);
-        }
-
-        else {
+        } else {
             $id = Request::instance()->post('Termid/d');
 
             $Term = Term::get($id);
         }
 
-        $this->assign('Term',$Term);
+        $CourseTerm = new CourseTerm($Course->id,$Term->id);
 
-        $this->settable($Course,$Term);
+        $this->assign('Course',$Course);
+        $this->assign('Term',$Term);
+        $this->assign('CourseTerm',$CourseTerm);
 
         return $this->fetch();
     }
 
-    private function settable(&$Course,&$Term){
-        for($row = 1 ; $row <= 5 ; $row ++){
-
-            echo '<tr>';
-
-            for($column = 0 ; $column < 8 ; $column ++){
-
-                if ($column == 0) {
-                    echo '<td>' . '第' . $row . '节' . '</td>';
-                }
-
-                else {
-                    $map = array();
-                    $map['day'] = $column;
-                    $map['knob'] = $row;
-
-                    $map['course_id'] = $Course->id;
-                    $map['term_id'] = $Term->id;
-
-                    $Coursetime = new Coursetime;
-                    $Coursetimes = $Coursetime->where($map)->select();
-
-                    $length = sizeof($Coursetimes);
-
-                    echo '<td>';
-
-                        if($length == 0){
-                            echo '<a class="btn btn-success" href="add">';
-                        }
-
-                        else {
-                            echo '<a class="btn btn-default">';
-
-                            for($temp = 0 ; $temp < $length ; $temp ++){
-                                echo $Coursetimes[$temp]->week;
-                                echo ' ';
-                            }
-
-                            echo '</a>';
-                        }
-
-                    echo '</td>';
-                }
-            }
-
-        echo '</tr>';
-        }
-    }
-
     public function add(){
 
-        var_dump(Request::instance()->post('courseid'));
+        $course = Request::instance()->param('course');
+        $term   = Request::instance()->param('term');
+        $day    = Request::instance()->param('day');
+        $knob   = Request::instance()->param('knob');
+
+        $map = array();
+        $map['id'] = $course;
+        $Course = Course::get($map);
+        $this->assign('Course',$Course);
+
+        $map['id'] = $term;
+        $Term = Term::get($map);
+        $this->assign('Term',$Term);
+
+        $Week = new Week();
+        $this->assign('Week',$Week);
+
+        $Day = new Day($day);
+        $this->assign('Day',$Day);
+
+        $Knob = new Knob($knob);
+        $this->assign('Knob',$Knob);
+
+        return $this->fetch();
+    }
+
+    public function save(){
+        $Coursetime = new Coursetime();
+
+        $course = Request::instance()->post('course');
+        $term   = Request::instance()->post('term');
+        $day    = Request::instance()->post('day');
+        $knob   = Request::instance()->post('knob');
+        $weeks  = Request::instance()->post('week/a');
+
+        $map = array();
+        $map['name'] = $course;
+        $Course = Course::get($map);
+
+        $map['name'] = $term;
+        $Term = Term::get($map);
+
+        $w = sizeof($weeks);
+
+        for($temp = 0 ; $temp < $w ; $temp ++){
+            $Coursetime = new Coursetime();
+            $Coursetime->course_id = $Course->id;
+            $Coursetime->term_id   = $Term->id;
+            $Coursetime->day       = $day;
+            $Coursetime->knob      = $knob;
+            $Coursetime->week      = (int)$weeks[$temp];
+            if(!$Coursetime->save()){
+                return $this->error('Error' . $Coursetime->getError());
+            }
+        }
+
+        return $this->success('Success' , url('inquiry'));
+    }
+
+    public function edit(){
+
+        $course = Request::instance()->param('course');
+        $term   = Request::instance()->param('term');
+        $day    = Request::instance()->param('day');
+        $knob   = Request::instance()->param('knob');
+
+        $map = array();
+        $map['id'] = $course;
+        $Course = Course::get($map);
+        $this->assign('Course',$Course);
+
+        $map['id'] = $term;
+        $Term = Term::get($map);
+        $this->assign('Term',$Term);
+
+        $Day = new Day($day);
+        $this->assign('Day',$Day);
+
+        $Knob = new Knob($knob);
+        $this->assign('Knob',$Knob);
+
+        $Week = new Week();
+        $this->assign('Week',$Week);
+
+        $map['course_id'] = $course;
+        $map['term_id'] = $term;
+        $map['day'] = $day;
+        $map['knob'] = $knob;
+
+        $Coursetime = new Coursetime();
+        $Coursetimes = $Coursetime->where($map)->select();
+
+        var_dump($Coursetimes);
 
         return $this->fetch();
     }
