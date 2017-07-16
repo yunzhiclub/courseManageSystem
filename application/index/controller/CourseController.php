@@ -186,22 +186,59 @@ class CourseController extends Controller
         $Day = new Day($day);
         $this->assign('Day',$Day);
 
-        $Knob = new Knob($knob);
+        $Knob = new Knob($knob , $course , $term , $day);
         $this->assign('Knob',$Knob);
 
-        $Week = new Week();
+        $Week = new Week($Knob);
         $this->assign('Week',$Week);
 
-        $map['course_id'] = $course;
-        $map['term_id'] = $term;
-        $map['day'] = $day;
-        $map['knob'] = $knob;
+        return $this->fetch('add');
+    }
+
+    public function update(){
+
+        $course = Request::instance()->post('course');
+        $term   = Request::instance()->post('term');
+        $day    = Request::instance()->post('day');
+        $knob   = Request::instance()->post('knob');
+
+        $map['name'] = $course;
+        $Course = Course::get($map);
+
+        $map['name'] = $term;
+        $Term = Term::get($map);
+
+        $map = array();
+        $map = [
+            'course_id' => $Course->id,
+            'term_id'   => $Term->id,
+            'day'       => $day,
+            'knob'      => $knob
+        ];
 
         $Coursetime = new Coursetime();
         $Coursetimes = $Coursetime->where($map)->select();
 
-        var_dump($Coursetimes);
+        if(!$Coursetime->where($map)->delete()){
+            return $this->error('删除原始数据失败' . $Coursetime->getError());
+        }
 
-        return $this->fetch();
+        $weeks  = Request::instance()->post('week/a');
+
+        $w = sizeof($weeks);
+
+        for($temp = 0 ; $temp < $w ; $temp ++){
+            $Coursetime = new Coursetime();
+            $Coursetime->course_id = $Course->id;
+            $Coursetime->term_id   = $Term->id;
+            $Coursetime->day       = $day;
+            $Coursetime->knob      = $knob;
+            $Coursetime->week      = (int)$weeks[$temp];
+            if(!$Coursetime->save()){
+                return $this->error('保存失败' . $Coursetime->getError());
+            }
+        }
+
+        return $this->success('操作成功' , url('inquiry'));
     }
 }
