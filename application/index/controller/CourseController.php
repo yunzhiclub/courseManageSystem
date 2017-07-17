@@ -29,10 +29,11 @@ class CourseController extends Controller
         $Course     = new Course();
 
         if (!empty($CourseName)) {
+
             $Course->where('name' , 'like' , '%' . $CourseName . '%');
         }
 
-        $Courses = $Course->paginate($pageSize , false , [
+        $Courses    = $Course->paginate($pageSize , false , [
             'query' => [
                 'name' => $CourseName,
                 ],
@@ -50,13 +51,12 @@ class CourseController extends Controller
 
     public function saveCourse(){
 
-        $CourseName = Request::instance()->post('CourseName');
-
-        $Course = new Course;
-
+        $CourseName   = Request::instance()->post('CourseName');
+        $Course       = new Course;
         $Course->name = $CourseName;
 
         if(!$Course->save()){
+
             return $this->error('保存失败' . $Course->getError());
         }
 
@@ -65,20 +65,23 @@ class CourseController extends Controller
 
     public function delete(){
 
-        $id = Request::instance()->param('id/d');
-
+        $id     = Request::instance()->param('id/d');
         $Course = Course::get($id);
 
         if(is_null($Course)){
+
             return $this->error('课程不存在' , url('index'));
         }
 
         $UserCourse = new UserCourse();
+
         if($UserCourse->getIsChecked($id)){
+
             return $this->error('此课程已经被学生选择，无法删除' , url('index'));
         }
 
         if(!$Course->delete()){
+
             return $this->error('删除失败' . $Course->getError());
         }
 
@@ -88,22 +91,23 @@ class CourseController extends Controller
     public function inquiry(){
 
         if(is_null(Request::instance()->post('Courseid'))){
+
             $id = Request::instance()->param('id/d');
         } else {
+
             $id = Request::instance()->post('Courseid/d');
         }
 
         $Course = Course::get($id);
 
         if(is_null(Request::instance()->post('Termid'))){
-            $map = array();
 
-            $map['state'] = 1;
-
+            $map  = array();
+            $map  = ['state' => 1];
             $Term = Term::get($map);
         } else {
-            $id = Request::instance()->post('Termid/d');
 
+            $id   = Request::instance()->post('Termid/d');
             $Term = Term::get($id);
         }
 
@@ -124,22 +128,20 @@ class CourseController extends Controller
         $knob   = Request::instance()->param('knob');
 
         $map = array();
+
         $map['id'] = $course;
-        $Course = Course::get($map);
-        $this->assign('Course',$Course);
-
+        $Course    = Course::get($map);
         $map['id'] = $term;
-        $Term = Term::get($map);
-        $this->assign('Term',$Term);
+        $Term      = Term::get($map);
+        $Week      = new Week();
+        $Day       = new Day($day);
+        $Knob      = new Knob($knob);
 
-        $Week = new Week();
-        $this->assign('Week',$Week);
-
-        $Day = new Day($day);
-        $this->assign('Day',$Day);
-
-        $Knob = new Knob($knob);
-        $this->assign('Knob',$Knob);
+        $this->assign('Course' , $Course);
+        $this->assign('Term'   , $Term);
+        $this->assign('Week'   , $Week);
+        $this->assign('Day'    , $Day);
+        $this->assign('Knob'   , $Knob);
 
         return $this->fetch();
     }
@@ -153,23 +155,27 @@ class CourseController extends Controller
         $knob   = Request::instance()->post('knob');
         $weeks  = Request::instance()->post('week/a');
 
-        $map = array();
-        $map['name'] = $course;
+        $map    = array();
+        $map    = ['name' => $course];
         $Course = Course::get($map);
 
-        $map['name'] = $term;
-        $Term = Term::get($map);
+        $map    = ['name' => $term];
+        $Term   = Term::get($map);
 
-        $w = sizeof($weeks);
+        $w      = sizeof($weeks);
 
         for($temp = 0 ; $temp < $w ; $temp ++){
+
             $Coursetime = new Coursetime();
+
             $Coursetime->course_id = $Course->id;
             $Coursetime->term_id   = $Term->id;
             $Coursetime->day       = $day;
             $Coursetime->knob      = $knob;
             $Coursetime->week      = (int)$weeks[$temp];
+
             if(!$Coursetime->save()){
+
                 return $this->error('保存失败' . $Coursetime->getError());
             }
         }
@@ -184,23 +190,20 @@ class CourseController extends Controller
         $day    = Request::instance()->param('day');
         $knob   = Request::instance()->param('knob');
 
-        $map = array();
-        $map['id'] = $course;
+        $map    = array();
+        $map    = ['id' => $course];
         $Course = Course::get($map);
-        $this->assign('Course',$Course);
+        $map    = ['id' => $term];
+        $Term   = Term::get($map);
+        $Day    = new Day($day);
+        $Knob   = new Knob($knob , $course , $term , $day);
+        $Week   = new Week($Knob);
 
-        $map['id'] = $term;
-        $Term = Term::get($map);
-        $this->assign('Term',$Term);
-
-        $Day = new Day($day);
-        $this->assign('Day',$Day);
-
-        $Knob = new Knob($knob , $course , $term , $day);
-        $this->assign('Knob',$Knob);
-
-        $Week = new Week($Knob);
-        $this->assign('Week',$Week);
+        $this->assign('Course' , $Course);
+        $this->assign('Term'   , $Term);
+        $this->assign('Day'    , $Day);
+        $this->assign('Knob'   , $Knob);
+        $this->assign('Week'   , $Week);
 
         return $this->fetch('add');
     }
@@ -212,39 +215,42 @@ class CourseController extends Controller
         $day    = Request::instance()->post('day');
         $knob   = Request::instance()->post('knob');
 
-        $map['name'] = $course;
+        $map    = ['name' => $course];
         $Course = Course::get($map);
+        $map    = ['name' => $term];
+        $Term   = Term::get($map);
 
-        $map['name'] = $term;
-        $Term = Term::get($map);
-
-        $map = array();
-        $map = [
+        $map    = array();
+        $map    = [
             'course_id' => $Course->id,
             'term_id'   => $Term->id,
             'day'       => $day,
             'knob'      => $knob
         ];
 
-        $Coursetime = new Coursetime();
+        $Coursetime  = new Coursetime();
         $Coursetimes = $Coursetime->where($map)->select();
 
         if(!$Coursetime->where($map)->delete()){
+
             return $this->error('删除原始数据失败' . $Coursetime->getError());
         }
 
         $weeks  = Request::instance()->post('week/a');
-
-        $w = sizeof($weeks);
+        $w      = sizeof($weeks);
 
         for($temp = 0 ; $temp < $w ; $temp ++){
+
             $Coursetime = new Coursetime();
+
             $Coursetime->course_id = $Course->id;
             $Coursetime->term_id   = $Term->id;
             $Coursetime->day       = $day;
             $Coursetime->knob      = $knob;
             $Coursetime->week      = (int)$weeks[$temp];
+
             if(!$Coursetime->save()){
+                
                 return $this->error('保存失败' . $Coursetime->getError());
             }
         }
