@@ -66,15 +66,8 @@ class UserController extends Controller
         // 实例化空对象
         $User = new User();
 
-        // 为对象赋值
-        $User->username = $postData['username'];
-        $User->name = $postData['name'];
-        $User->phone = $postData['phone'];
-
-        // 新增对象至数据表
-        $result = $User->save();
-
-        if (!$result) {
+        // 返回保存结果
+        if (!$this->saveUser($User,true)) {
         	return $this->error('新增失败:' . $Teacher->getError());
         }
 
@@ -121,13 +114,8 @@ class UserController extends Controller
         // 获取当前对象
         $User = User::get($username);
 
-        if (!is_null($User)) {
-        	$User->name = Request::instance()->post('name');
-        	$User->phone = Request::instance()->post('phone');
-        }
-        
-        // 依据状态定制提示信息
-        if (false === $User->isUpdate(true)->save()) {	
+        // 返回更新结果
+        if (false === $this->saveUser($User)) {	
             return $this->error('更新失败' . $User->getError());
         }
 
@@ -190,6 +178,21 @@ class UserController extends Controller
 
 	/**
 	 * 对用户保存或更新
+	 * @param User &$User  用户
+	 * @param bool $isSave 是否为保存操作
+	 * @return bool 
 	 * @author poshichao
 	 */
+	private function saveUser(User &$User,$isSave = false)
+	{	
+		// 写入要更新的数据
+		if ($isSave) {
+			$User->username = input('post.username');
+		}
+		$User->name = input('post.name');
+		$User->phone = input('post.phone');
+
+		// 更新或保存
+		return $User->save();
+	}
 }
