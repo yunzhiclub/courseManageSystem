@@ -14,6 +14,7 @@ namespace app\index\model;
 class Knob
 {
     
+
     function __construct($knob = 0 , $course = 0 , $term = 0 , $day = 0)
     {
         $this->Knob   = $knob;
@@ -54,7 +55,6 @@ class Knob
 
         return $Coursetimes;
     }
-
     public function getWeeks(){
         $weeks = [];
 

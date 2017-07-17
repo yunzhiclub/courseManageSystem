@@ -112,7 +112,6 @@ class CourseController extends Controller
         }
 
         $CourseTerm = new CourseTerm($Course->id,$Term->id);
-
         $this->assign('Course',$Course);
         $this->assign('Term',$Term);
         $this->assign('CourseTerm',$CourseTerm);
