@@ -17,7 +17,7 @@ use app\index\model\CourseTerm;
 /**
 * 课程管理 张喜硕
 */
-class CourseController extends Controller
+class CourseController extends IsloginController
 {
     
     public function index(){
