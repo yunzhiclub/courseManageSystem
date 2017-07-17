@@ -32,12 +32,28 @@ class User extends Model
         }
     }
 
+    /**
+     * 判断用户是否登录
+     * @return  bool 登录为true
+     * @author  poshichao
+     */
+    static public function isLogin()
+    {
+        $username = session('username');
+
+        if (isset($username)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
     public static function getCurrentLoginUser()
     {
         return $_SESSION['think']['username'];
     }
 
-   public function Courses()
+    public function Courses()
     {
         return $this->belongsToMany('Course', 'user_course');
     }
