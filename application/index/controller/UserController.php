@@ -21,12 +21,13 @@ class UserController extends Controller
 
 		// 实例化空对象
 		$User = new User;
-		$users = $User->where('name' , 'like' , '%' . $name . '%')->paginate($pageSize,false,[
+		
+		$users = $User->where('name' , 'like' , '%' . $name . '%')->where('power','=','0')->paginate($pageSize,false,[
 				'query'=>[
 					'name' => $name,
 				],
 			]);
-
+		
 		// 向v层传递数据
 		$this->assign('users',$users);
 
