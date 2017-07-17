@@ -1,22 +1,10 @@
-<!DOCTYPE html>
-<html lang="zh-hans">
-<head>
-    <meta charset="utf-8">
-    <title>课程管理</title>
-    <link rel="stylesheet" type="text/css" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
-    <script type="text/javascript">
-        jQuery(function($){
-            $("#selectAll").click(function(){ 
-                $("input[name='week[]']").attr("checked","true"); 
-            })
-            $("#deleteAll").click(function(){
-                $("input[name='week[]']").removeAttr("checked");
-            })
-        })
-    </script>
-</head>
-<body class="container">
+<!-- 张喜硕 添加/修改课程时间界面 -->
+{extend name="index"/}
+{block name="title"}
+课程管理
+{/block}
+{block name="content"}
+
     {php}
         if(request()->action() === 'add'){
             $action = 'save';
@@ -26,6 +14,7 @@
             echo '<h2 style="text-align: center">修改课程时间</h2>';
         }
     {/php}
+    
     <form action="{:url($action)}" method="post">
         <div class="row">
             <label>课程名：</label>
@@ -68,5 +57,16 @@
             <button type="submit" class="btn btn-default">保存</button>
         </div>
     </form>
-</body>
-</html>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+    <script type="text/javascript">
+        jQuery(function($){
+            $("#selectAll").click(function(){ 
+                $("input[name='week[]']").attr("checked","true"); 
+            })
+            $("#deleteAll").click(function(){
+                $("input[name='week[]']").removeAttr("checked");
+            })
+        })
+    </script>
+{/block}

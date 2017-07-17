@@ -7,6 +7,8 @@ use think\Model;
 /**
 * 张喜硕
 * 周类
+* 构造函数请不要更改
+* @getIsChecked用于判断该周次是否已在数据库中存在
 */
 
 class Week
@@ -14,14 +16,15 @@ class Week
 
     function __construct($week = 0 , $course = 0 , $term = 0 , $day = 0 , $knob = 0){
         
-        $this->Week = $week;
+        $this->Week   = $week;
         $this->Course = $course;
-        $this->Term = $term;
-        $this->Day = $day;
-        $this->Knob = $knob;
+        $this->Term   = $term;
+        $this->Day    = $day;
+        $this->Knob   = $knob;
     }
 
     public function getIsChecked($num){
+
         $map = array();
         $map = [
             'course_id' => $this->Course,
@@ -30,10 +33,9 @@ class Week
             'knob'      => $this->Knob
         ];
 
-        $Coursetime = new Coursetime();
+        $Coursetime  = new Coursetime();
         $Coursetimes = $Coursetime->where($map)->select();
-
-        $Length = sizeof($Coursetimes);
+        $Length      = sizeof($Coursetimes);
 
         for($temp = 0 ; $temp < $Length ; $temp ++){
             if($Coursetimes[$temp]->week == $num){

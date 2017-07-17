@@ -57,7 +57,7 @@
         {volist name="$Term->getDays()" id="day" key="key"}
             <tr>
                 <td>星期{$key}</td>
-                {volist name="$day->getKnobs()" id="knob"}
+                {volist name="$day->getKnob()" id="knob"}
                     <td>
                     {volist name="$knob->getUsers($week->WeekDay(strtotime($Term->start_time),time()))" id="user"}
                         <span
