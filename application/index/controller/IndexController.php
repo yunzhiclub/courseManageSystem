@@ -11,6 +11,7 @@ class IndexController extends Controller
 
     public function login()
     {
+        
     	$User = new User();
     	$power = $User->log($_POST['username'], $_POST['password']);
         if ($power == 0)
