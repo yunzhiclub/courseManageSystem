@@ -45,20 +45,9 @@
             <input type="button" class="btn btn-default" id="selectAll" value="全选">
             <input type="button" class="btn btn-default" id="deleteAll" value="全不选">
             <br>
-
-<<<<<<< HEAD
-            {volist name="$Week->all()" id="week"}
-                <input type="checkbox" name="week[]" id="{$week->id}" value="{$week->id}"><label for="{$week->id}">{$week->name}</label>
-                {php}
-                    if($week->id % 10 == 0){
-                        echo '<br>';
-                    }
-                {/php}
-=======
             {volist name="$Knob->getWeeks()" id="week"}
                 <input type="checkbox" name="week[]" id="{$week->Week}" value="{$week->Week}" {eq name="$week->getIsChecked($week->Week)" value="true"} checked="true" {/eq}>
                 <label for="{$week->Week}">{$week->Week}</label>
->>>>>>> development
             {/volist}
         </div>
 

@@ -13,8 +13,6 @@ namespace app\index\model;
 */
 class Knob
 {
-    
-
     function __construct($knob = 0 , $course = 0 , $term = 0 , $day = 0)
     {
         $this->Knob   = $knob;
@@ -66,5 +64,16 @@ class Knob
         }
 
         return $weeks;
+    }
+    public function getUsers($week){
+        $users = User::all();
+        $length = sizeof($users);
+        for($a = 0;$a < $length;$a++){
+            $users[$a]->term = $this->Term;
+            $users[$a]->day = $this->Day;
+            $users[$a]->knob = $this->Knob;
+            $users[$a]->week = $week;
+        }
+        return $users;
     }
 }
