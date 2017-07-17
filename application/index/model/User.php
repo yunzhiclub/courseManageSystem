@@ -31,4 +31,8 @@ class User extends Model
             return 2;
         }
     }
+    public static function getCurrentLoginUser()
+    {
+        return $_SESSION['think']['username'];
+    }
 }
