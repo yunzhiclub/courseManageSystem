@@ -17,7 +17,7 @@
             <div class="col-sm-8 col-md-8">
                 <center>
                     <label>第
-                        <input type="number" min=1 max=20 value="20" name=""> 周</label>
+                        <input type="number" min=1 max=20 value="{$ALWeek->weekTime}" name="weekTime"> 周</label>
                 </center>
                 <table class="table table-hover table-bordered">
                     <tr class="info">
@@ -30,30 +30,18 @@
                         <th>星期六</th>
                         <th>星期天</th>
                     </tr>
+                    {volist name="ALWeek->konbs" id="Knob" key="key"}
                     <tr>
-                        <th>1</th>
-                        <th>
-                            <button type="button" class="btn btn-primary">请假</button>
-                        </th>
-                        <th>
-                            <button type="button" class="btn btn-primary">请假</button>
-                        </th>
-                        <th>
-                            <button type="button" class="btn btn-primary">请假</button>
-                        </th>
-                        <th>
-                            <button type="button" class="btn btn-primary">请假</button>
-                        </th>
-                        <th>
-                            <button type="button" class="btn btn-primary">请假</button>
-                        </th>
-                        <th>
-                            <button type="button" class="btn btn-primary">请假</button>
-                        </th>
-                        <th>
-                            <button type="button" class="btn btn-primary">请假</button>
-                        </th>
+                    <th>{$Knob->konbName}</th>
+                    {volist name="Knob->Days" id="Day" key="key"}
+                    <th>
+                        <div class="{$Day->style}">
+                        <button type="button" class="btn btn-primary">{$Day->char}{$Day->coursename}</button>
+                        </div>
+                    </th>
+                    {/volist}
                     </tr>
+                    {/volist}
                 </table>
             </div>
         </form>

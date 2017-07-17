@@ -10,7 +10,6 @@ namespace app\index\model;
 */
 class CourseTerm
 {
-
     function __construct($Courseid, $Termid){
         $this->Course = $Courseid;
         $this->Term   = $Termid;
