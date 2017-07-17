@@ -19,7 +19,7 @@ class Day
     public function getKnobs(){
         $Knobs = [];
         for($temp = 1 ; $temp <= 5 ; $temp ++){
-            $Knob = new Knob($temp , $this->Course , $this->Term , $this->Day);
+            $Knob = new Knob($temp , 0 , $this->Term , $this->Day);
             array_push($Knobs, $Knob);
         }
 

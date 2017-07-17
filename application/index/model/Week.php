@@ -43,4 +43,14 @@ class Week
 
         return false;
     }
+    public function WeekDay($startTimestamp,$currentTimestamp){
+
+        $TimeInterval = $currentTimestamp - $startTimestamp;
+
+        $DayInterval = $TimeInterval / 86400;
+
+        $Week = (int)($DayInterval / 7) + 1;
+        return $Week;
+    }
+
 }

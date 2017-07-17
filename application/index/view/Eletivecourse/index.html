@@ -37,265 +37,38 @@
 		<div class="col-md-12 col-md-offset-1" >
 			<div class="col-md-6  col-md-offset-1" style="margin-top: 20px;">
 			<label>周次</label>
-			<input type="" name="week"  class="form-control" >
+			{:var_dump(time())}
+			<input type="" name="week"  class="form-control" value="{$week->WeekDay(strtotime($Term->start_time),time())}">
 			<button class="btn btn-default" type="submit">查询</button>
 		    </div>
 		</div>
 		<hr/>	
 	</form>
 	<hr/>
-	<table class="table table-bordered table-hover" style="width: 1000px; margin: 0 auto;">
-		<tr class="active">
-			<th>节次</th>
-			<th>周一</th>
-			<th>周二</th>
-			<th>周三</th>
-			<th>周四</th>
-			<th>周五</th>
-			<th>周六</th>
-			<th>周日</th>
-		</tr>
-		 <tr >
-			<td>第一节</td>
-			<td><span style="color: red;">朱晨澍</span><br>
-			<span style="color: blue">周杰</span><br>
-			<span style="color: green;">张喜硕</span><br>
-			<span style="color: green;">朴世超</span><br>
-			<span style="color: green;">陈志高</span><br>
-			</td>
-			 
-			<td>
-			<span style="color: red;">朱晨澍</span><br>
-			<span style="color: blue">周杰</span><br>
-			<span style="color: green;">张喜硕</span><br>
-			<span style="color: blue;">朴世超</span><br>
-			<span style="color: green;">陈志高</span><br>
-			</td>
-			<td>
-			<span style="color: green;">朱晨澍</span><br>
-			<span style="color: blue">周杰</span><br>
-			<span style="color: green;">张喜硕</span><br>
-			<span style="color: blue;">朴世超</span><br>
-			<span style="color: green;">陈志高</span><br>
-			</td>
-			<td><span style="color: green;">朱晨澍</span><br>
-			<span style="color: red">周杰</span><br>
-			<span style="color: green;">张喜硕</span><br>
-			<span style="color: blue;">朴世超</span><br>
-			<span style="color: green;">陈志高</span><br>
-			<td>
-			<span style="color: green;">朱晨澍</span><br>
-			<span style="color: red">周杰</span><br>
-			<span style="color: green;">张喜硕</span><br>
-			<span style="color: blue;">朴世超</span><br>
-			<span style="color: blue;">陈志高</span><br>
-			</td>
-			<td>
-			<span style="color: blue;">朱晨澍</span><br>
-			<span style="color: blue">周杰</span><br>
-			<span style="color: blue;">张喜硕</span><br>
-			<span style="color: blue;">朴世超</span><br>
-			<span style="color: blue;">陈志高</span><br>
-			</td>
-			<td><span style="color: blue;">朱晨澍</span><br>
-			<span style="color: blue">周杰</span><br>
-			<span style="color: blue;">张喜硕</span><br>
-			<span style="color: blue;">朴世超</span><br>
-			<span style="color: blue;">陈志高</span><br></td>
-		</tr>
-		<tr>
-			<td>第二节</td>
-			<td><span style="color: red;">朱晨澍</span><br>
-			<span style="color: blue">周杰</span><br>
-			<span style="color: green;">张喜硕</span><br>
-			<span style="color: green;">朴世超</span><br>
-			<span style="color: green;">陈志高</span><br>
-			</td>
-			 
-			<td>
-			<span style="color: red;">朱晨澍</span><br>
-			<span style="color: blue">周杰</span><br>
-			<span style="color: green;">张喜硕</span><br>
-			<span style="color: blue;">朴世超</span><br>
-			<span style="color: green;">陈志高</span><br>
-			</td>
-			<td>
-			<span style="color: green;">朱晨澍</span><br>
-			<span style="color: blue">周杰</span><br>
-			<span style="color: green;">张喜硕</span><br>
-			<span style="color: blue;">朴世超</span><br>
-			<span style="color: green;">陈志高</span><br>
-			</td>
-			<td><span style="color: green;">朱晨澍</span><br>
-			<span style="color: red">周杰</span><br>
-			<span style="color: green;">张喜硕</span><br>
-			<span style="color: blue;">朴世超</span><br>
-			<span style="color: green;">陈志高</span><br>
-			<td>
-			<span style="color: green;">朱晨澍</span><br>
-			<span style="color: red">周杰</span><br>
-			<span style="color: green;">张喜硕</span><br>
-			<span style="color: blue;">朴世超</span><br>
-			<span style="color: blue;">陈志高</span><br>
-			</td>
-			<td>
-			<span style="color: blue;">朱晨澍</span><br>
-			<span style="color: blue">周杰</span><br>
-			<span style="color: blue;">张喜硕</span><br>
-			<span style="color: blue;">朴世超</span><br>
-			<span style="color: blue;">陈志高</span><br>
-			</td>
-			<td><span style="color: blue;">朱晨澍</span><br>
-			<span style="color: blue">周杰</span><br>
-			<span style="color: blue;">张喜硕</span><br>
-			<span style="color: blue;">朴世超</span><br>
-			<span style="color: blue;">陈志高</span><br></td>
-		</tr>
-		<tr>
-			<td>第三节</td>
-			<td><span style="color: red;">朱晨澍</span><br>
-			<span style="color: blue">周杰</span><br>
-			<span style="color: green;">张喜硕</span><br>
-			<span style="color: green;">朴世超</span><br>
-			<span style="color: green;">陈志高</span><br>
-			</td>
-			 
-			<td>
-			<span style="color: red;">朱晨澍</span><br>
-			<span style="color: blue">周杰</span><br>
-			<span style="color: green;">张喜硕</span><br>
-			<span style="color: blue;">朴世超</span><br>
-			<span style="color: green;">陈志高</span><br>
-			</td>
-			<td>
-			<span style="color: green;">朱晨澍</span><br>
-			<span style="color: blue">周杰</span><br>
-			<span style="color: green;">张喜硕</span><br>
-			<span style="color: blue;">朴世超</span><br>
-			<span style="color: green;">陈志高</span><br>
-			</td>
-			<td><span style="color: green;">朱晨澍</span><br>
-			<span style="color: red">周杰</span><br>
-			<span style="color: green;">张喜硕</span><br>
-			<span style="color: blue;">朴世超</span><br>
-			<span style="color: green;">陈志高</span><br>
-			<td>
-			<span style="color: green;">朱晨澍</span><br>
-			<span style="color: red">周杰</span><br>
-			<span style="color: green;">张喜硕</span><br>
-			<span style="color: blue;">朴世超</span><br>
-			<span style="color: blue;">陈志高</span><br>
-			</td>
-			<td>
-			<span style="color: blue;">朱晨澍</span><br>
-			<span style="color: blue">周杰</span><br>
-			<span style="color: blue;">张喜硕</span><br>
-			<span style="color: blue;">朴世超</span><br>
-			<span style="color: blue;">陈志高</span><br>
-			</td>
-			<td><span style="color: blue;">朱晨澍</span><br>
-			<span style="color: blue">周杰</span><br>
-			<span style="color: blue;">张喜硕</span><br>
-			<span style="color: blue;">朴世超</span><br>
-			<span style="color: blue;">陈志高</span><br></td>
-		</tr>
-		<tr>
-			<td>第四节</td>
-			<td><span style="color: red;">朱晨澍</span><br>
-			<span style="color: blue">周杰</span><br>
-			<span style="color: green;">张喜硕</span><br>
-			<span style="color: green;">朴世超</span><br>
-			<span style="color: green;">陈志高</span><br>
-			</td>
-			 
-			<td>
-			<span style="color: red;">朱晨澍</span><br>
-			<span style="color: blue">周杰</span><br>
-			<span style="color: green;">张喜硕</span><br>
-			<span style="color: blue;">朴世超</span><br>
-			<span style="color: green;">陈志高</span><br>
-			</td>
-			<td>
-			<span style="color: green;">朱晨澍</span><br>
-			<span style="color: blue">周杰</span><br>
-			<span style="color: green;">张喜硕</span><br>
-			<span style="color: blue;">朴世超</span><br>
-			<span style="color: green;">陈志高</span><br>
-			</td>
-			<td><span style="color: green;">朱晨澍</span><br>
-			<span style="color: red">周杰</span><br>
-			<span style="color: green;">张喜硕</span><br>
-			<span style="color: blue;">朴世超</span><br>
-			<span style="color: green;">陈志高</span><br>
-			<td>
-			<span style="color: green;">朱晨澍</span><br>
-			<span style="color: red">周杰</span><br>
-			<span style="color: green;">张喜硕</span><br>
-			<span style="color: blue;">朴世超</span><br>
-			<span style="color: blue;">陈志高</span><br>
-			</td>
-			<td>
-			<span style="color: blue;">朱晨澍</span><br>
-			<span style="color: blue">周杰</span><br>
-			<span style="color: blue;">张喜硕</span><br>
-			<span style="color: blue;">朴世超</span><br>
-			<span style="color: blue;">陈志高</span><br>
-			</td>
-			<td><span style="color: blue;">朱晨澍</span><br>
-			<span style="color: blue">周杰</span><br>
-			<span style="color: blue;">张喜硕</span><br>
-			<span style="color: blue;">朴世超</span><br>
-			<span style="color: blue;">陈志高</span><br></td>
-		</tr> 
-		<tr>
-			<td>第五节</td>
-			<td><span style="color: red;">朱晨澍</span><br>
-			<span style="color: blue">周杰</span><br>
-			<span style="color: green;">张喜硕</span><br>
-			<span style="color: green;">朴世超</span><br>
-			<span style="color: green;">陈志高</span><br>
-			</td>
-			 
-			<td>
-			<span style="color: red;">朱晨澍</span><br>
-			<span style="color: blue">周杰</span><br>
-			<span style="color: green;">张喜硕</span><br>
-			<span style="color: blue;">朴世超</span><br>
-			<span style="color: green;">陈志高</span><br>
-			</td>
-			<td>
-			<span style="color: green;">朱晨澍</span><br>
-			<span style="color: blue">周杰</span><br>
-			<span style="color: green;">张喜硕</span><br>
-			<span style="color: blue;">朴世超</span><br>
-			<span style="color: green;">陈志高</span><br>
-			</td>
-			<td><span style="color: green;">朱晨澍</span><br>
-			<span style="color: red">周杰</span><br>
-			<span style="color: green;">张喜硕</span><br>
-			<span style="color: blue;">朴世超</span><br>
-			<span style="color: green;">陈志高</span><br>
-			<td>
-			<span style="color: green;">朱晨澍</span><br>
-			<span style="color: red">周杰</span><br>
-			<span style="color: green;">张喜硕</span><br>
-			<span style="color: blue;">朴世超</span><br>
-			<span style="color: blue;">陈志高</span><br>
-			</td>
-			<td>
-			<span style="color: blue;">朱晨澍</span><br>
-			<span style="color: blue">周杰</span><br>
-			<span style="color: blue;">张喜硕</span><br>
-			<span style="color: blue;">朴世超</span><br>
-			<span style="color: blue;">陈志高</span><br>
-			</td>
-			<td><span style="color: blue;">朱晨澍</span><br>
-			<span style="color: blue">周杰</span><br>
-			<span style="color: blue;">张喜硕</span><br>
-			<span style="color: blue;">朴世超</span><br>
-			<span style="color: blue;">陈志高</span><br></td>
-		</tr> 
-	</table>
+	<table class="table table-hover table-bordered">
+        <tr class="info">
+            <th class="col-md-2"></th>
+            <th class="col-md-2">第一节</th>
+            <th class="col-md-2">第二节</th>
+            <th class="col-md-2">第三节</th>
+            <th class="col-md-2">第四节</th>
+            <th class="col-md-2">第五节</th>
+        </tr>
+        {volist name="$Term->getDays()" id="day" key="key"}
+            <tr>
+                <td>星期{$key}</td>
+                {volist name="$day->getKnobs()" id="knob"}
+                    <td>
+                    {volist name="$knob->getUsers($week->WeekDay(strtotime($Term->start_time),time()))" id="user"}
+                        <span
+                        {eq name="$user->CheckedCourse()" value="true"} style="color: green;" {else /} style="color: blue;" {/eq}
+                        {eq name="$user->CheckedLeave()" value="true"} style="color: red;" {/eq}>{$user->name}</span><br>
+                    {/volist}
+                    </td>
+                {/volist}
+            </tr>
+        {/volist}
+    </table>
 	<hr>
 	<p class="col-md-3 col-md-offset-1"><span style="color: red">红色:请假</span>&nbsp;<span style="color: green;">绿色：有课</span>&nbsp;<span style="color: blue;">蓝色：无课</span></p>
 </body>

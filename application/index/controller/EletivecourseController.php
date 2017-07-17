@@ -4,9 +4,11 @@ namespace app\index\controller;
 use app\index\model\Eletivecourse;
 use app\index\model\Course;
 use app\index\model\User;
+use app\index\model\Term;
 use app\index\model\UserCourse;
 use think\Controller;
 use think\Request;
+use app\index\model\Week;
 
 /**
 * 选课管理 朱晨澍
@@ -15,7 +17,14 @@ class EletivecourseController extends Controller
 {
 	public function index()
 	{
+		$map = array();
+		$map['state'] = 1;
+		$term = Term::get($map);
+		$this->assign('Term',$term);
+		$week = new Week;
+		$this->assign('week',$week);
 		return $this->fetch();
+		
 	}
 
     //选课 澍
