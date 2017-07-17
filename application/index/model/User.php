@@ -28,7 +28,7 @@ class User extends Model
             }
             
         } else {
-            return 0;
+            return 2;
         }
     }
 }
