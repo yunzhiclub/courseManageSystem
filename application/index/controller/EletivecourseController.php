@@ -15,25 +15,8 @@ use app\index\model\Week;
 */
 class EletivecourseController extends Controller
 {
-	public function index()
-	{
-		$weeke = (int)Request::instance()->post('week');
-		$map = array();
-		$map['state'] = 1;
-		$term = Term::get($map);
-		$this->assign('Term',$term);
-		$week = new Week;
-		$weeks = $week->WeekDay(strtotime($term->start_time),time());
-		
-		if($weeke==0){
-		$this->assign('week',$weeks);}else{
-			$this->assign('week',$weeke);
-		}
-		return $this->fetch();
-	}
-
     //选课 澍
-	public function eletive()
+	public function index()
 	{
 		$name = Request::instance()->post('name');
 		
@@ -66,7 +49,7 @@ class EletivecourseController extends Controller
 		$courseIds = Request::instance()->post('course_id/a');
         // 检查当前用户名是否存在
 		if (is_null($User = User::get($username))) {
-			return $this->error('不存在name为' . $username. '的记录');
+			return $this->error('不存在name' . $username. '的记录');
 		}
         // 删除原有信息
         $map = ['username'=>$username];
@@ -74,8 +57,8 @@ class EletivecourseController extends Controller
             return $this->error('删除班级课程关联信息发生错误' . $User->UserCourses()->getError());
         }
 
-        // // 增加新增数据，执行添加操作。
-         // 利用klass_id这个数组，拼接为包括klass_id和course_id的二维数组。
+        //  增加新增数据，执行添加操作。
+        // 利用klass_id这个数组，拼接为包括klass_id和course_id的二维数组。
 		if (!is_null($courseIds)) {
 			$datas = array();
 			foreach ($courseIds as $courseId) {

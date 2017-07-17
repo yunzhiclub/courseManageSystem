@@ -19,7 +19,7 @@
                     </div>
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                         <ul class="nav navbar-nav">
-                            <li {eq name=':request()->controller()' value=""} class="active" {/eq}><a href="{:url('')}">首页</a></li>
+                            <li {eq name=':request()->controller()' value="Home"} class="active" {/eq}><a href="{:url('Home/index')}">首页</a></li>
 
                             <li {eq name=':request()->controller()' value="Eletivecourse"} class="active" {/eq}><a href="{:url('Eletivecourse/index')}">选课管理</a></li>
 

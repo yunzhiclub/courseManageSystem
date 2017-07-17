@@ -25,5 +25,4 @@ class CourseTerm
 
         return $days;
     }
-
 }
