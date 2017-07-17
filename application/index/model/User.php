@@ -31,10 +31,17 @@ class User extends Model
             return 2;
         }
     }
+
+    public static function getCurrentLoginUser()
+    {
+        return $_SESSION['think']['username'];
+    }
+
    public function Courses()
     {
         return $this->belongsToMany('Course', 'user_course');
     }
+
 	public function getIsChecked(Course &$Course)
     {
     	$username = $this->username;
@@ -50,6 +57,7 @@ class User extends Model
     		return true;
     	}
     }
+
       public function UserCourses()
     {
         $username = $this->username;
