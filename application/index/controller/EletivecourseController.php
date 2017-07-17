@@ -17,21 +17,36 @@ class EletivecourseController extends Controller
 {
 	public function index()
 	{
+		$weeke = (int)Request::instance()->post('week');
 		$map = array();
 		$map['state'] = 1;
 		$term = Term::get($map);
 		$this->assign('Term',$term);
 		$week = new Week;
-		$this->assign('week',$week);
-		return $this->fetch();
+		$weeks = $week->WeekDay(strtotime($term->start_time),time());
 		
+		if($weeke==0){
+		$this->assign('week',$weeks);}else{
+			$this->assign('week',$weeke);
+		}
+		return $this->fetch();
 	}
 
     //选课 澍
 	public function eletive()
 	{
-		$name = Request::instance()->post();
-		$User = User::get($name);
+		$name = Request::instance()->post('name');
+		
+		if($name==''){
+			$User = new User;
+			$User->username = "";
+		}else
+		{ 
+			$map = array();
+			$map['name'] = $name;
+			$User = User::get($map);
+			
+		}
 		if(is_null($User)){
 			return $this->error('输入信息不存在');
 		}
@@ -51,7 +66,7 @@ class EletivecourseController extends Controller
 		$courseIds = Request::instance()->post('course_id/a');
         // 检查当前用户名是否存在
 		if (is_null($User = User::get($username))) {
-			return $this->error('不存在name为' . $id . '的记录');
+			return $this->error('不存在name为' . $username. '的记录');
 		}
         // 删除原有信息
         $map = ['username'=>$username];

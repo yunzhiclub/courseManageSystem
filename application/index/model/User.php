@@ -3,6 +3,7 @@ namespace app\index\model;
 use think\Model;
 use app\index\model\UserCourse;
 use app\index\model\Coursetime;
+use app\index\model\Leave;
 
 class User extends Model
 { 
@@ -14,7 +15,7 @@ class User extends Model
         return $this->belongsToMany('Course', 'user_course');
     }
     // 检查是否存在数据 澍
-	public function getIsChecked(Course &$Course)
+	public function getIsChecked(&$Course)
     {
     	$username = $this->username;
     	$courseId = (int)$Course->id;
@@ -41,25 +42,23 @@ class User extends Model
     {
         $map = array();
         $map = [
-
             'week' => $this->week,
             'term_id' => $this->term,
             'day' => $this->day,
             'knob' => $this->knob
         ];
         $coursetime = new Coursetime;
-
         $course = $coursetime->where($map)->select();
-        
         $map = ['username' => $this->username];
         $usercourse = new UserCourse;
         $courseids = $usercourse->where($map)->select();
-
         $usid = sizeof($courseids);
         $ctid = sizeof($course);
         for($a=0;$a <$usid;$a++){
                 for($b=0;$b<$ctid;$b++){
-                    if($course[$b]==$courseids[$a]){
+                    // var_dump($course[$b]);
+                    // var_dump($courseids[$a]);
+                    if($course[$b]->course_id==$courseids[$a]->course_id){
                         return true;
                     }
                 }
@@ -68,11 +67,28 @@ class User extends Model
     }
     // 检查是否请假 澍
     public function CheckedLeave()
-    {}
+    {
+        $map = array();
+        $map = [
+            'week' => $this->week,
+            'term_id' => $this->term,
+            'day' => $this->day,
+            'knob' => $this->knob
+        ];
+        $leave = new Leave;
+        $leaves = $leave->where($map)->select();
         
-/**
-* 周杰
-*/
+        $leavelength = sizeof($leaves);
+        
+        for($l=0;$l<$leavelength;$l++){
+            // var_dump($leaves[$l]->username);
+            // var_dump($this->username);
+            if($leaves[$l]->username==$this->username){
+                return true;
+            }
+        }
+        return false;
+    }
 
     static public function log($username, $password)
     {

@@ -16,7 +16,7 @@
                     <!-- Collect the nav links, forms, and other content for toggling -->
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                         <ul class="nav navbar-nav">
-                            <li class="active"><a href="#">首页</a></li>
+                            <li class="active"><a href="{:url('')}">首页</a></li>
                             <li><a href="{:url('eletive')}">选课管理</a></li>
                             <li><a href="{:url('Course/index')}">用户管理</a></li>
                             <li><a href="{:url('User/index')}">课程管理</a></li>
@@ -37,8 +37,7 @@
 		<div class="col-md-12 col-md-offset-1" >
 			<div class="col-md-6  col-md-offset-1" style="margin-top: 20px;">
 			<label>周次</label>
-			{:var_dump(time())}
-			<input type="" name="week"  class="form-control" value="{$week->WeekDay(strtotime($Term->start_time),time())}">
+			<input type="" name="week"  class="form-control" placeholder="{$week}">
 			<button class="btn btn-default" type="submit">查询</button>
 		    </div>
 		</div>
@@ -59,10 +58,11 @@
                 <td>星期{$key}</td>
                 {volist name="$day->getKnob()" id="knob"}
                     <td>
-                    {volist name="$knob->getUsers($week->WeekDay(strtotime($Term->start_time),time()))" id="user"}
+                    {volist name="$knob->getUsers($week)" id="user"}
                         <span
+                        {eq name="$user->CheckedLeave()" value="true"} style="color: red;" {/eq}
                         {eq name="$user->CheckedCourse()" value="true"} style="color: green;" {else /} style="color: blue;" {/eq}
-                        {eq name="$user->CheckedLeave()" value="true"} style="color: red;" {/eq}>{$user->name}</span><br>
+                        >{$user->name}</span><br>
                     {/volist}
                     </td>
                 {/volist}
