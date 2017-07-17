@@ -69,9 +69,9 @@ class UserController extends Controller
 
         // 返回保存结果
         if (!$this->saveUser($User,true)) {
-        	return $this->error('新增失败:' . $Teacher->getError());
+        	return $this->error('新增失败:' . $User->getError());
         }
-
+        	
         return  $this->success('用户' . $User->username . '新增成功', url('index'));
 
 	}
@@ -194,6 +194,6 @@ class UserController extends Controller
 		$User->phone = input('post.phone');
 
 		// 更新或保存
-		return $User->save();
+		return $User->validate()->save();
 	}
 }
