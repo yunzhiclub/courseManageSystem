@@ -1,22 +1,15 @@
-<!DOCTYPE html>
-<html lang="zh-cn">
-
-<head>
-    <meta charset="utf-8">
-    <title>用户信息管理</title>
-    <link rel="stylesheet" type="text/css" href="/timetableSystem/public/static/bootstrap-3.3.7-dist/css/bootstrap.min.css">
-</head>
-
-<body class="contanier">
-    <div class="row">
+{extend name="index"}
+{block name="title"}用户信息管理
+{/block}
+{block name="content"}
+<div class="row">
         <div class="col-md-12">
             <h3 class="text-center">
                 学生信息管理
             </h3>
             <div class="row">
-                <div class="col-md-offset-2">
-                    <br />
-                    <div class="col-md-3">
+                <div class="col-md-offset-1">                    
+                    <div class="col-md-4">
                         <form class="form-inline">
                             <div class="form-group">
                                 <label class="sr-only" for="name">姓名</label>
@@ -27,12 +20,12 @@
                         <!-- /input-group -->
                     </div>
                 </div>
-                <div class="col-md-5 text-right">
+                <div class="col-md-6 text-right">
                     <a href="{:url('add')}" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i>&nbsp;增加</a>
                 </div>
             </div>
             <hr />
-            <div class="col-md-8 col-md-offset-2">
+            <div class="col-md-10 col-md-offset-1">
                 <table class="table table-hover">
                     <tr class="info">
                         <th>序号</th>
@@ -61,6 +54,4 @@
     </div>
     <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
     <script src="/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
-</body>
-
-</html>
+    {/block}
