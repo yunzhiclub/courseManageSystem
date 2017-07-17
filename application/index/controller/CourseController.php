@@ -9,6 +9,7 @@ use app\index\model\Week;
 use app\index\model\Knob;
 use app\index\model\Term;
 use app\index\model\Course;
+use app\index\model\UserCourse;
 use app\index\model\Coursetime;
 use app\index\model\CourseTerm;
 
@@ -56,10 +57,10 @@ class CourseController extends Controller
         $Course->name = $CourseName;
 
         if(!$Course->save()){
-            return $this->error('Error' . $Course->getError());
+            return $this->error('保存失败' . $Course->getError());
         }
 
-        return $this->success('Success' , url('index'));
+        return $this->success('保存成功' , url('index'));
     }
 
     public function delete(){
@@ -68,11 +69,20 @@ class CourseController extends Controller
 
         $Course = Course::get($id);
 
-        if(!$Course->delete()){
-            return $this->error('Error' . $Course->getError());
+        if(is_null($Course)){
+            return $this->error('课程不存在' , url('index'));
         }
 
-        return $this->success('Success' , url('index'));
+        $UserCourse = new UserCourse();
+        if($UserCourse->getIsChecked($id)){
+            return $this->error('此课程已经被学生选择，无法删除' , url('index'));
+        }
+
+        if(!$Course->delete()){
+            return $this->error('删除失败' . $Course->getError());
+        }
+
+        return $this->success('删除成功' , url('index'));
     }
 
     public function inquiry(){
@@ -160,11 +170,11 @@ class CourseController extends Controller
             $Coursetime->knob      = $knob;
             $Coursetime->week      = (int)$weeks[$temp];
             if(!$Coursetime->save()){
-                return $this->error('Error' . $Coursetime->getError());
+                return $this->error('保存失败' . $Coursetime->getError());
             }
         }
 
-        return $this->success('Success' , url('inquiry'));
+        return $this->success('保存成功' , url('inquiry'));
     }
 
     public function edit(){
@@ -239,6 +249,6 @@ class CourseController extends Controller
             }
         }
 
-        return $this->success('操作成功' , url('inquiry'));
+        return $this->success('保存成功' , url('inquiry'));
     }
 }
