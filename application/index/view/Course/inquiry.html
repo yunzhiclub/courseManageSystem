@@ -10,7 +10,7 @@
 
     <div class="row">
         <div class="col-md-8">
-            <form class="form-inline" action="{:url('inquiry')}" method="post">
+            <form class="form-inline" action="{:url('inquiry?id=' . $Course->id)}" method="post">
                 <select name="Termid" class="btn btn-default">
                     {volist name="$Term->all()" id="term"}
                         <option {eq name="$term->id" value="$Term->id"}selected="true"{/eq} value="{$term->id}">
