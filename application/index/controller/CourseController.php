@@ -52,10 +52,10 @@ class CourseController extends Controller
     public function saveCourse(){
 
         $CourseName   = Request::instance()->post('CourseName');
-        $Course       = new Course;
+        $Course       = new Course();
         $Course->name = $CourseName;
 
-        if(!$Course->save()){
+        if(!$Course->validate()->save()){
 
             return $this->error('保存失败' . $Course->getError());
         }
