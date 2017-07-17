@@ -31,4 +31,20 @@ class User extends Model
             return 2;
         }
     }
+
+    /**
+     * 判断用户是否登录
+     * @return  bool 登录为true
+     * @author  poshichao
+     */
+    static public function isLogin()
+    {
+        $username = session('username');
+
+        if (isset($username)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
