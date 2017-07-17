@@ -10,6 +10,9 @@ use think\Model;
 */
 class Coursetime extends Model
 {
-    
+    public function Coursetimes()
+    {
+    	return $this->belongsToMany('user',  config('database.prefix') . 'user_course');
+    }
 
 }

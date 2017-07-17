@@ -115,4 +115,52 @@ class User extends Model
             return 2;
         }
     }
+    /**
+     * 判断用户是否登录
+     * @return  bool 登录为true
+     * @author  poshichao
+     */
+    static public function isLogin()
+    {
+        $username = session('username');
+
+        if (isset($username)) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    public static function getCurrentLoginUser()
+    {
+        return $_SESSION['think']['username'];
+    }
+
+    public function Courses()
+    {
+        return $this->belongsToMany('Course', 'user_course');
+    }
+
+	public function getIsChecked(Course &$Course)
+    {
+    	$username = $this->username;
+    	$courseId = (int)$Course->id;
+    	$map = array();
+    	$map['username'] = $username;
+    	$map['course_id'] = $courseId;
+    	//有记录，返回true；没记录，返回false
+    	$UserCourse = UserCourse::get($map);
+    	if (is_null($UserCourse)) {
+    		return false;
+    	} else {
+    		return true;
+    	}
+    }
+
+      public function UserCourses()
+    {
+        $username = $this->username;
+        $UserCourse = UserCourse::get($username);
+        return $UserCourse;
+    }
 }

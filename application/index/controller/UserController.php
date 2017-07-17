@@ -1,10 +1,10 @@
 <?php
 namespace app\index\controller;
-use think\Controller;
+use app\index\controller\IsloginController;
 use app\index\model\User;
 use think\Request;
 
-class UserController extends Controller
+class UserController extends IsloginController
 {
 	/**
 	 * 显示用户信息
