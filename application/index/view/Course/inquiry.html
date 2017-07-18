@@ -4,21 +4,13 @@
 课程管理
 {/block}
 {block name="content"}
-    <h2 style="text-align: center">查询课程</h2>
+    <h2 style="text-align: center">{$Course->name}</h2>
 
     <hr />
 
     <div class="row">
         <div class="col-md-8">
             <form class="form-inline" action="{:url('inquiry')}" method="post">
-                <select name="Courseid" class="btn btn-default">
-                    {volist name="$Course->all()" id="course"}
-                        <option {eq name="$course->id" value="$Course->id"}selected="true"{/eq} value="{$course->id}">
-                            {$course->name}
-                        </option>
-                    {/volist}
-                </select>
-
                 <select name="Termid" class="btn btn-default">
                     {volist name="$Term->all()" id="term"}
                         <option {eq name="$term->id" value="$Term->id"}selected="true"{/eq} value="{$term->id}">

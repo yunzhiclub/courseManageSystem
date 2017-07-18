@@ -90,24 +90,26 @@ class CourseController extends IsloginController
 
     public function inquiry(){
 
-        if(is_null(Request::instance()->post('Courseid'))){
-
-            $id = Request::instance()->param('id/d');
-        } else {
-
-            $id = Request::instance()->post('Courseid/d');
-        }
+        $id = Request::instance()->param('id/d');
 
         $Course = Course::get($id);
 
-        if(is_null(Request::instance()->post('Termid'))){
+        if(is_null(Request::instance()->post('Termid'))&&is_null(Request::instance()->param('term_id/d'))){
 
-            $map  = array();
-            $map  = ['state' => 1];
-            $Term = Term::get($map);
-        } else {
+                $map  = array();
+                $map  = ['state' => 1];
+                $Term = Term::get($map);
+        }
 
-            $id   = Request::instance()->post('Termid/d');
+        else if(!is_null(Request::instance()->post('Termid'))){
+
+            $id   = Request::instance()->post('Termid');
+            $Term = Term::get($id);
+        }
+
+        else if(!is_null(Request::instance()->param('term_id/d'))) {
+
+            $id   = Request::instance()->param('term_id/d');
             $Term = Term::get($id);
         }
 
@@ -179,7 +181,10 @@ class CourseController extends IsloginController
             }
         }
 
-        return $this->success('保存成功' , url('inquiry'));
+        return $this->success('保存成功' , url('inquiry' , [
+                'id'         =>  $Course->id,
+                'term_id'    =>  $Term->id
+            ]));
     }
 
     public function edit(){
@@ -254,6 +259,9 @@ class CourseController extends IsloginController
             }
         }
 
-        return $this->success('保存成功' , url('inquiry'));
+        return $this->success('保存成功' , url('inquiry' , [
+                'id'         =>  $Course->id,
+                'term_id'    =>  $Term->id
+            ]));
     }
 }
