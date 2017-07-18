@@ -9,6 +9,7 @@ use think\Model;
 * 周类
 * 构造函数请不要更改
 * @getIsChecked用于判断该周次是否已在数据库中存在
+* @WeekDay根据当前时间与起始时间时间戳计算当前周数
 */
 
 class Week
@@ -45,6 +46,7 @@ class Week
 
         return false;
     }
+
     public function WeekDay($startTimestamp,$currentTimestamp){
 
         $TimeInterval = $currentTimestamp - $startTimestamp;

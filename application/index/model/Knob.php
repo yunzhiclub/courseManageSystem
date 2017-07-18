@@ -5,7 +5,7 @@ namespace app\index\model;
 * 张喜硕
 * 节类
 * 构造函数请不要更改
-* @getWeeks 获取20个周对象
+* @getItsWeeks 获取与该节时间相关的20个周对象
 * @getCourse 获个周合条件的课程数组
 * @getCourse 获取课程数组的长度
 * @getCourseWeek 获取课程的上课周次
@@ -53,7 +53,7 @@ class Knob
         return $Coursetimes;
     }
     
-    public function getWeeks(){
+    public function getItsWeeks(){
         $weeks = [];
         for($temp = 1 ; $temp <= 20 ; $temp ++) {
 
