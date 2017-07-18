@@ -194,6 +194,6 @@ class UserController extends IsloginController
 		$User->phone = input('post.phone');
 
 		// 更新或保存
-		return $User->validate()->save();
+		return $User->validate(true)->save($User->getData());
 	}
 }
