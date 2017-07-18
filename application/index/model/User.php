@@ -7,13 +7,28 @@ use app\index\model\Leave;
 
 class User extends Model
 { 
+
     public $week;
+    // 关联中间表 澍
+	public function Courses()
+    {
+        return $this->belongsToMany('Course', 'user_course');
+    }
+    // 检查是否存在数据 澍
+
+    // 检查中间表中的数据 澍
+    public function UserCourses()
+    {
+        $username = $this->username;
+        $UserCourse = UserCourse::get($username);
+        return $UserCourse;
+    }
     // 检查user是否有课 澍
-    public function CheckedCourse($week)
+    public function CheckedCourse()
     {
         $map = array();
         $map = [
-            'week' => $week,
+            'week' => $this->week,
             'term_id' => $this->term,
             'day' => $this->day,
             'knob' => $this->knob
@@ -37,11 +52,11 @@ class User extends Model
         return false;
     }
     // 检查是否请假 澍
-    public function CheckedLeave($week)
+    public function CheckedLeave()
     {
         $map = array();
         $map = [
-            'week' => $week,
+            'week' => $this->week,
             'term_id' => $this->term,
             'day' => $this->day,
             'knob' => $this->knob
@@ -52,6 +67,8 @@ class User extends Model
         $leavelength = sizeof($leaves);
         
         for($l=0;$l<$leavelength;$l++){
+            // var_dump($leaves[$l]->username);
+            // var_dump($this->username);
             if($leaves[$l]->username==$this->username){
                 return true;
             }
@@ -104,12 +121,6 @@ class User extends Model
     {
         return $_SESSION['think']['username'];
     }
-
-    public function Courses()
-    {
-        return $this->belongsToMany('Course', 'user_course');
-    }
-
 	public function getIsChecked(Course &$Course)
     {
     	$username = $this->username;
