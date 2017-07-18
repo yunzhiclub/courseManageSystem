@@ -21,6 +21,7 @@ class EletivecourseController extends IsloginController
 		if($name==''){
 			$User = new User;
 			$User->username = "";
+			$User->name = "";
 		}else
 		{ 
 			$map = array();
@@ -28,7 +29,7 @@ class EletivecourseController extends IsloginController
 			$User = User::get($map);
 		}
 		if(is_null($User)){
-			return $this->error('输入信息不存在');
+			return $this->error('输入信息不存在',url('index'));
 		}
 		$courses = Course::all();
 		$this->assign('courses', $courses);
