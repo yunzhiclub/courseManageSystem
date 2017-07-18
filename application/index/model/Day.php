@@ -29,6 +29,7 @@ class Day
 
         return $Knobs;
     }
+    // 从天获取节 澍
     public function getKnob(){
         $Knobs = [];
 

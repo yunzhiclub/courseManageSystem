@@ -6,18 +6,17 @@ use app\index\model\Course;
 use app\index\model\User;
 use app\index\model\Term;
 use app\index\model\UserCourse;
-use think\Controller;
 use think\Request;
 use app\index\model\Week;
-
+use app\index\controller\IsloginController;
 /**
 * 教师主页 朱晨澍
 */
-class HomeController extends Controller
+class HomeController extends IsloginController
 {
 	public function index()
 	{
-		$weeke = (int)Request::instance()->post('week');
+		$weeke = (int)Request::instance()->get('week');
 		$map = array();
 		$map['state'] = 1;
 		$term = Term::get($map);

@@ -45,6 +45,7 @@
             <input type="button" class="btn btn-default" id="selectAll" value="全选">
             <input type="button" class="btn btn-default" id="deleteAll" value="全不选">
             <br>
+
             {volist name="$Knob->getWeeks()" id="week"}
                 <input type="checkbox" name="week[]" id="{$week->Week}" value="{$week->Week}" {eq name="$week->getIsChecked($week->Week)" value="true"} checked="true" {/eq}>
                 <label for="{$week->Week}">{$week->Week}</label>
