@@ -7,42 +7,13 @@ use app\index\model\Leave;
 
 class User extends Model
 { 
-
     public $week;
-    // 关联中间表 澍
-	public function Courses()
-    {
-        return $this->belongsToMany('Course', 'user_course');
-    }
-    // 检查是否存在数据 澍
-	public function getIsChecked(&$Course)
-    {
-    	$username = $this->username;
-    	$courseId = (int)$Course->id;
-    	$map = array();
-    	$map['username'] = $username;
-    	$map['course_id'] = $courseId;
-    	//有记录，返回true；没记录，返回false
-    	$UserCourse = UserCourse::get($map);
-    	if (is_null($UserCourse)) {
-    		return false;
-    	} else {
-    		return true;
-    	}
-    }
-    // 检查中间表中的数据 澍
-    public function UserCourses()
-    {
-        $username = $this->username;
-        $UserCourse = UserCourse::get($username);
-        return $UserCourse;
-    }
     // 检查user是否有课 澍
-    public function CheckedCourse()
+    public function CheckedCourse($week)
     {
         $map = array();
         $map = [
-            'week' => $this->week,
+            'week' => $week,
             'term_id' => $this->term,
             'day' => $this->day,
             'knob' => $this->knob
@@ -66,11 +37,11 @@ class User extends Model
         return false;
     }
     // 检查是否请假 澍
-    public function CheckedLeave()
+    public function CheckedLeave($week)
     {
         $map = array();
         $map = [
-            'week' => $this->week,
+            'week' => $week,
             'term_id' => $this->term,
             'day' => $this->day,
             'knob' => $this->knob
@@ -81,8 +52,6 @@ class User extends Model
         $leavelength = sizeof($leaves);
         
         for($l=0;$l<$leavelength;$l++){
-            // var_dump($leaves[$l]->username);
-            // var_dump($this->username);
             if($leaves[$l]->username==$this->username){
                 return true;
             }
