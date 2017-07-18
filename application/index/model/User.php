@@ -24,11 +24,11 @@ class User extends Model
         return $UserCourse;
     }
     // 检查user是否有课 澍
-    public function CheckedCourse()
+    public function CheckedCourse($week)
     {
         $map = array();
         $map = [
-            'week' => $this->week,
+            'week' => $week,
             'term_id' => $this->term,
             'day' => $this->day,
             'knob' => $this->knob
@@ -52,11 +52,11 @@ class User extends Model
         return false;
     }
     // 检查是否请假 澍
-    public function CheckedLeave()
+    public function CheckedLeave($week)
     {
         $map = array();
         $map = [
-            'week' => $this->week,
+            'week' => $week,
             'term_id' => $this->term,
             'day' => $this->day,
             'knob' => $this->knob
@@ -135,12 +135,5 @@ class User extends Model
     	} else {
     		return true;
     	}
-    }
-
-      public function UserCourses()
-    {
-        $username = $this->username;
-        $UserCourse = UserCourse::get($username);
-        return $UserCourse;
     }
 }
