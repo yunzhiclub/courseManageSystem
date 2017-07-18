@@ -137,10 +137,10 @@ class User extends Model
     	}
     }
 
-      public function UserCourses()
-    {
-        $username = $this->username;
-        $UserCourse = UserCourse::get($username);
-        return $UserCourse;
-    }
+    //   public function UserCourses()
+    // {
+    //     $username = $this->username;
+    //     $UserCourse = UserCourse::get($username);
+    //     return $UserCourse;
+    // }
 }
