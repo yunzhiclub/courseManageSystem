@@ -4,25 +4,32 @@ namespace app\index\controller;
 use app\index\model\Eletivecourse;
 use app\index\model\Course;
 use app\index\model\User;
+use app\index\model\Term;
 use app\index\model\UserCourse;
 use think\Controller;
 use think\Request;
+use app\index\model\Week;
 
 /**
 * 选课管理 朱晨澍
 */
 class EletivecourseController extends Controller
 {
+    //选课 澍
 	public function index()
 	{
-		return $this->fetch();
-	}
-
-    //选课 澍
-	public function eletive()
-	{
-		$name = Request::instance()->post();
-		$User = User::get($name);
+		$name = Request::instance()->post('name');
+		
+		if($name==''){
+			$User = new User;
+			$User->username = "";
+		}else
+		{ 
+			$map = array();
+			$map['name'] = $name;
+			$User = User::get($map);
+			
+		}
 		if(is_null($User)){
 			return $this->error('输入信息不存在');
 		}
@@ -42,7 +49,7 @@ class EletivecourseController extends Controller
 		$courseIds = Request::instance()->post('course_id/a');
         // 检查当前用户名是否存在
 		if (is_null($User = User::get($username))) {
-			return $this->error('不存在name为' . $id . '的记录');
+			return $this->error('不存在name' . $username. '的记录');
 		}
         // 删除原有信息
         $map = ['username'=>$username];
@@ -50,8 +57,8 @@ class EletivecourseController extends Controller
             return $this->error('删除班级课程关联信息发生错误' . $User->UserCourses()->getError());
         }
 
-        // // 增加新增数据，执行添加操作。
-         // 利用klass_id这个数组，拼接为包括klass_id和course_id的二维数组。
+        //  增加新增数据，执行添加操作。
+        // 利用klass_id这个数组，拼接为包括klass_id和course_id的二维数组。
 		if (!is_null($courseIds)) {
 			$datas = array();
 			foreach ($courseIds as $courseId) {
