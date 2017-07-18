@@ -3,7 +3,7 @@
 {/block}
 {block name="content"}
 	<hr/>
-	<form class="form-inline row" method="post">
+	<form class="form-inline row" method="get">
 		<div class="col-md-12 col-md-offset-1" >
 			<div class="col-md-6  col-md-offset-1" style="margin-top: 20px;">
 			<label>周次</label>
@@ -16,7 +16,7 @@
 	<hr/>
 	<table class="table table-hover table-bordered">
         <tr class="info">
-            <th class="col-md-2"></th>
+            <th class="col-md-2">周次</th>
             <th class="col-md-2">第一节</th>
             <th class="col-md-2">第二节</th>
             <th class="col-md-2">第三节</th>
@@ -28,10 +28,10 @@
                 <td>星期{$key}</td>
                 {volist name="$day->getKnob()" id="knob"}
                     <td>
-                    {volist name="$knob->getUsers($week)" id="user"}
+                    {volist name="$knob->getUsers()" id="user"}
                         <span
-                        {eq name="$user->CheckedLeave()" value="true"} style="color: red;" {/eq}
-                        {eq name="$user->CheckedCourse()" value="true"} style="color: green;" {else /} style="color: blue;" {/eq}
+                        {eq name="$user->CheckedLeave($week)" value="true"} style="color: red;" {/eq}
+                        {eq name="$user->CheckedCourse($week)" value="true"} style="color: green;" {else /} style="color: blue;" {/eq}
                         >{$user->name}</span><br>
                     {/volist}
                     </td>

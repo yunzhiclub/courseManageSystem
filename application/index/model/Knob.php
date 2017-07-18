@@ -1,7 +1,6 @@
 <?php
 
 namespace app\index\model;
-
 /**
 * 张喜硕
 * 节类
@@ -55,7 +54,6 @@ class Knob
     }
     public function getWeeks(){
         $weeks = [];
-
         for($temp = 1 ; $temp <= 20 ; $temp ++) {
 
             $Week = new Week($temp , $this->Course , $this->Term , $this->Day , $this->Knob);
@@ -65,14 +63,15 @@ class Knob
 
         return $weeks;
     }
-    public function getUsers($week){
-        $users = User::all();
+    public function getUsers(){
+        $map = array();
+        $map['power'] = 0;
+        $users = User::all($map);
         $length = sizeof($users);
         for($a = 0;$a < $length;$a++){
             $users[$a]->term = $this->Term;
             $users[$a]->day = $this->Day;
             $users[$a]->knob = $this->Knob;
-            $users[$a]->week = $week;
         }
         return $users;
     }

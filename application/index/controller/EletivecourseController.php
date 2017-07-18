@@ -6,20 +6,18 @@ use app\index\model\Course;
 use app\index\model\User;
 use app\index\model\Term;
 use app\index\model\UserCourse;
-use think\Controller;
 use think\Request;
 use app\index\model\Week;
-
+use app\index\controller\IsloginController;
 /**
 * 选课管理 朱晨澍
 */
-class EletivecourseController extends Controller
+class EletivecourseController extends IsloginController
 {
     //选课 澍
 	public function index()
 	{
 		$name = Request::instance()->post('name');
-		
 		if($name==''){
 			$User = new User;
 			$User->username = "";
@@ -28,13 +26,11 @@ class EletivecourseController extends Controller
 			$map = array();
 			$map['name'] = $name;
 			$User = User::get($map);
-			
 		}
 		if(is_null($User)){
 			return $this->error('输入信息不存在');
 		}
 		$courses = Course::all();
-		// var_dump($courses);
 		$this->assign('courses', $courses);
 		$this->assign('User', $User);
 		return $this->fetch();
@@ -49,14 +45,13 @@ class EletivecourseController extends Controller
 		$courseIds = Request::instance()->post('course_id/a');
         // 检查当前用户名是否存在
 		if (is_null($User = User::get($username))) {
-			return $this->error('不存在name' . $username. '的记录');
+			return $this->error('不存在name' . $username. '的记录',url('index'));
 		}
         // 删除原有信息
         $map = ['username'=>$username];
         if (false === $User->UserCourses()->where($map)->delete()) {
             return $this->error('删除班级课程关联信息发生错误' . $User->UserCourses()->getError());
         }
-
         //  增加新增数据，执行添加操作。
         // 利用klass_id这个数组，拼接为包括klass_id和course_id的二维数组。
 		if (!is_null($courseIds)) {
@@ -74,7 +69,7 @@ class EletivecourseController extends Controller
             		return $this->error('课程-班级信息保存错误：' . $UserCourse->getError());
             	}
             }
-            return $this->success('更新成功', url('index'));
+            return $this->success('更新成功', url('Home/index'));
         }
     }
 }
