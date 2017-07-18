@@ -13,4 +13,5 @@ class Course extends Validate
     protected $rule = [
         'CourseName' => 'require|length:1,20'
     ];
+    $validate = new Validate($rules);
 }

@@ -10,7 +10,8 @@ use think\Request;
 use app\index\model\Week;
 use app\index\controller\IsloginController;
 /**
-* 选课管理 朱晨澍
+* 选课管理 
+* @author 朱晨澍
 */
 class EletivecourseController extends IsloginController
 {
@@ -54,13 +55,12 @@ class EletivecourseController extends IsloginController
             return $this->error('删除班级课程关联信息发生错误' . $User->UserCourses()->getError());
         }
         //  增加新增数据，执行添加操作。
-        // 利用klass_id这个数组，拼接为包括klass_id和course_id的二维数组。
 		if (!is_null($courseIds)) {
 			$datas = array();
 			foreach ($courseIds as $courseId) {
 				$data = array();
 				$data['course_id'] = $courseId;
-                $data['username'] = $username;     // 此时，由于前面已经执行过数据插入操作，所以可以直接获取到Course对象中的ID值。
+                $data['username'] = $username;     
                 array_push($datas, $data);
             }
             // 利用saveAll()方法，来将二维数据存入数据库。
