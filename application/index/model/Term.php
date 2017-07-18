@@ -2,6 +2,7 @@
 namespace app\index\model ;
 
 use think\Model;
+use app\index\model\Day;
 
 /**
 * 学期管理
@@ -52,4 +53,14 @@ class Term extends Model
         $time = int($day/7) + 1 ;
         return $time;
 	}
+
+    public function getDays(){
+        $days = [];
+        for($temp = 1 ; $temp <= 7 ; $temp ++) {
+            $Day = new Day($temp , 0,$this->id);
+            $Day->Day = $temp;
+            array_push($days, $Day);
+        }
+        return $days;
+    }
 }
