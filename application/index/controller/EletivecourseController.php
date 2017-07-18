@@ -12,6 +12,8 @@ use app\index\controller\IsloginController;
 /**
 * 选课管理 
 * @author 朱晨澍
+* @index  选课主界面
+* @save   保存选课信息
 */
 class EletivecourseController extends IsloginController
 {

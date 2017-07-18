@@ -12,6 +12,7 @@ use app\index\controller\IsloginController;
 /**
 * 教师主页
 * @author 朱晨澍
+* @index   用户主界面
 */
 class HomeController extends IsloginController
 {
