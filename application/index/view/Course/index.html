@@ -9,6 +9,7 @@
     <hr>
 
     <div class="row">
+        <!-- 顶部搜索框 -->
         <div class="col-md-8">
             <form class="form-inline">
                 <input class="form-control" type="text" name="CourseName" placeholder="课程名..." value="{:input('get.CourseName')}">
@@ -20,12 +21,14 @@
             </form>
         </div>
 
+        <!-- 添加课程 -->
         <div class="col-md-4 text-right">
             <a href="{:url('addCourse')}" class="btn btn-primary">
                 <i class="glyphicon glyphicon-plus"></i>
                 &nbsp;添加
             </a>
         </div>
+        
     </div>
 
     <hr>
