@@ -11,12 +11,9 @@ use think\Model;
 class Course extends Model
 {
     
-    public function checkName() {
-        if(is_null($this->name)) {
-            return false;
-        }
+    public function checkName($CourseName) {
 
-        if(sizeof($this->name)>20) {
+        if(is_null($CourseName)) {
             return false;
         }
 
@@ -25,7 +22,7 @@ class Course extends Model
         $Length = sizeof($Courses);
 
         for($temp = 0 ; $temp < $Length ; $temp ++) {
-            if($Courses[$temp]->name == $this->name) {
+            if($Courses[$temp]->name == $CourseName) {
                 return false;
             }
         }
