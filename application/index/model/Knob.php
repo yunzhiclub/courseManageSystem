@@ -53,6 +53,7 @@ class Knob
 
         return $Coursetimes;
     }
+    
     public function getWeeks(){
         $weeks = [];
 
