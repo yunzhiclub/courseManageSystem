@@ -67,7 +67,12 @@ class CourseController extends IsloginController
         $Course->name = $CourseName;
 
         // 获取传入课程名，验证保存
-        if(!$Course->validate()->save()){
+        if(!$Course->checkName()){
+
+            return $this->error('课程格式错误，保存失败');
+        }
+
+        if(!$Course->save()){
 
             return $this->error('保存失败' . $Course->getError());
         }
@@ -112,9 +117,7 @@ class CourseController extends IsloginController
         // 若URL传入term_id与input框中Termid同时为空时，获取当前学期
         if(is_null(Request::instance()->post('Termid'))&&is_null(Request::instance()->param('term_id/d'))){
 
-                $map  = array();
-                $map  = ['state' => 1];
-                $Term = Term::get($map);
+            $Term = Term::getCurrentTerm();
         }
 
         // 若input框中Termid不为空，说明用户执行搜索功能，根据Termid查询相关学期
