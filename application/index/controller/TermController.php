@@ -112,6 +112,8 @@ class TermController extends Controller
 
 	public function setstate()
 	{
+        // $a = Term::getCurrentTerm();
+        // var_dump($a);die();
         // 获取所有学期的状态
         $terms = Term::all();
 

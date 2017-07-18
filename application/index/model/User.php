@@ -1,11 +1,81 @@
 <?php
 namespace app\index\model;
 use think\Model;
-/**
-* 周杰
-*/
+use app\index\model\UserCourse;
+use app\index\model\Coursetime;
+use app\index\model\Leave;
+
 class User extends Model
-{
+{ 
+
+    public $week;
+    // 关联中间表 澍
+	public function Courses()
+    {
+        return $this->belongsToMany('Course', 'user_course');
+    }
+    // 检查是否存在数据 澍
+
+    // 检查中间表中的数据 澍
+    public function UserCourses()
+    {
+        $username = $this->username;
+        $UserCourse = UserCourse::get($username);
+        return $UserCourse;
+    }
+    // 检查user是否有课 澍
+    public function CheckedCourse()
+    {
+        $map = array();
+        $map = [
+            'week' => $this->week,
+            'term_id' => $this->term,
+            'day' => $this->day,
+            'knob' => $this->knob
+        ];
+        $coursetime = new Coursetime;
+        $course = $coursetime->where($map)->select();
+        $map = ['username' => $this->username];
+        $usercourse = new UserCourse;
+        $courseids = $usercourse->where($map)->select();
+        $usid = sizeof($courseids);
+        $ctid = sizeof($course);
+        for($a=0;$a <$usid;$a++){
+                for($b=0;$b<$ctid;$b++){
+                    // var_dump($course[$b]);
+                    // var_dump($courseids[$a]);
+                    if($course[$b]->course_id==$courseids[$a]->course_id){
+                        return true;
+                    }
+                }
+            }
+        return false;
+    }
+    // 检查是否请假 澍
+    public function CheckedLeave()
+    {
+        $map = array();
+        $map = [
+            'week' => $this->week,
+            'term_id' => $this->term,
+            'day' => $this->day,
+            'knob' => $this->knob
+        ];
+        $leave = new Leave;
+        $leaves = $leave->where($map)->select();
+        
+        $leavelength = sizeof($leaves);
+        
+        for($l=0;$l<$leavelength;$l++){
+            // var_dump($leaves[$l]->username);
+            // var_dump($this->username);
+            if($leaves[$l]->username==$this->username){
+                return true;
+            }
+        }
+        return false;
+    }
+
     static public function log($username, $password)
     {
         $map = array('username'  => $username);
@@ -31,7 +101,6 @@ class User extends Model
             return 2;
         }
     }
-
     /**
      * 判断用户是否登录
      * @return  bool 登录为true
@@ -52,12 +121,6 @@ class User extends Model
     {
         return $_SESSION['think']['username'];
     }
-
-    public function Courses()
-    {
-        return $this->belongsToMany('Course', 'user_course');
-    }
-
 	public function getIsChecked(Course &$Course)
     {
     	$username = $this->username;
