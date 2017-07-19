@@ -16,6 +16,15 @@ use app\index\model\CourseTerm;
 
 /**
 * 课程管理 张喜硕
+* @index      课程管理主页
+* @addCourse  添加课程名称
+* @saveCourse 保存课程名称
+* @delete     删除课程
+* @inquiry    查询课程时间
+* @add        添加课程时间
+* @save       保存课程时间
+* @edit       编辑课程时间
+* @update     更新课程时间
 */
 class CourseController extends IsloginController
 {
@@ -28,11 +37,13 @@ class CourseController extends IsloginController
 
         $Course     = new Course();
 
+        // 若传入值不为空则根据传入的CourseName执行查询功能
         if (!empty($CourseName)) {
 
             $Course->where('name' , 'like' , '%' . $CourseName . '%');
         }
 
+        // 查找，并根据条件分页
         $Courses    = $Course->paginate($pageSize , false , [
             'query' => [
                 'name' => $CourseName,
@@ -54,8 +65,14 @@ class CourseController extends IsloginController
         $CourseName   = Request::instance()->post('CourseName');
         $Course       = new Course();
         $Course->name = $CourseName;
+        
+        // 获取传入课程名，验证保存
+        if(!$Course->checkName($CourseName)){
 
-        if(!$Course->validate()->save()){
+            return $this->error('课程格式错误，保存失败');
+        }
+
+        if(!$Course->save()){
 
             return $this->error('保存失败' . $Course->getError());
         }
@@ -68,6 +85,7 @@ class CourseController extends IsloginController
         $id     = Request::instance()->param('id/d');
         $Course = Course::get($id);
 
+        // 若获取不到对象，弹出错误
         if(is_null($Course)){
 
             return $this->error('课程不存在' , url('index'));
@@ -75,11 +93,13 @@ class CourseController extends IsloginController
 
         $UserCourse = new UserCourse();
 
+        // 若课程已经在UserCourse表中有记录，弹出错误
         if($UserCourse->getIsChecked($id)){
 
             return $this->error('此课程已经被学生选择，无法删除' , url('index'));
         }
 
+        // 删除失败时，弹出错误
         if(!$Course->delete()){
 
             return $this->error('删除失败' . $Course->getError());
@@ -94,25 +114,27 @@ class CourseController extends IsloginController
 
         $Course = Course::get($id);
 
+        // 若URL传入term_id与input框中Termid同时为空时，获取当前学期
         if(is_null(Request::instance()->post('Termid'))&&is_null(Request::instance()->param('term_id/d'))){
 
-                $map  = array();
-                $map  = ['state' => 1];
-                $Term = Term::get($map);
+            $Term = Term::getCurrentTerm();
         }
 
+        // 若input框中Termid不为空，说明用户执行搜索功能，根据Termid查询相关学期
         else if(!is_null(Request::instance()->post('Termid'))){
 
             $id   = Request::instance()->post('Termid');
             $Term = Term::get($id);
         }
 
+        // 若URL传入term_id不为空，说明add或update已经执行完成，应跳转到修改课程的学期
         else if(!is_null(Request::instance()->param('term_id/d'))) {
 
             $id   = Request::instance()->param('term_id/d');
             $Term = Term::get($id);
         }
 
+        // 创建CourseTerm对象，存储课程与学期
         $CourseTerm = new CourseTerm($Course->id,$Term->id);
         $this->assign('Course',$Course);
         $this->assign('Term',$Term);
@@ -165,6 +187,7 @@ class CourseController extends IsloginController
 
         $w      = sizeof($weeks);
 
+        // 循环保存多条数据
         for($temp = 0 ; $temp < $w ; $temp ++){
 
             $Coursetime = new Coursetime();
@@ -235,6 +258,7 @@ class CourseController extends IsloginController
         $Coursetime  = new Coursetime();
         $Coursetimes = $Coursetime->where($map)->select();
 
+        // 原始数据删除失败，弹出错误
         if(!$Coursetime->where($map)->delete()){
 
             return $this->error('删除原始数据失败' . $Coursetime->getError());
@@ -243,6 +267,7 @@ class CourseController extends IsloginController
         $weeks  = Request::instance()->post('week/a');
         $w      = sizeof($weeks);
 
+        // 循环保存多条数据
         for($temp = 0 ; $temp < $w ; $temp ++){
 
             $Coursetime = new Coursetime();

@@ -86,22 +86,22 @@ class UserController extends IsloginController
         $username = Request::instance()->param('username');
         
         // 判断是否成功接收
-        if (is_null($username)) {
-            return $this->error('未获取到用户名信息');
+        if (!is_null($username)) {
+
+            // 在User表模型中获取当前记录
+        	if ($User = User::get($username)) {
+        	
+             	// 将数据传给V层
+        		$this->assign('User', $User);
+
+        		// 获取封装好的V层内容,并返回
+        		return $this->fetch();
+        	}
         }
         
-        // 在User表模型中获取当前记录
-        if (null === $User = User::get($username))
-        {
-            return $this->error('系统未找到username为' . $username . '的记录');
-        } 
-            
-        // 将数据传给V层
-        $this->assign('User', $User);
-
-        // 获取封装好的V层内容,并返回
-        return $this->fetch();
+        return $this->error('未获取到到用户名信息!');   
 	}
+
 
 	/**
 	 * 更新信息
@@ -132,26 +132,24 @@ class UserController extends IsloginController
         // 获取要删除的username.
         $username = Request::instance()->param('username');
 
+        if (!is_null($username)) {
 
-        if (is_null($username)) {
-            return $this->error('未获取到username信息');
+            // 获取要删除的对象
+        	$User = User::get($username);
+
+        	// 要删除的对象存在
+        	if (!is_null($User)) {
+
+            	// 删除对象
+        		if (!$User->delete()) {
+            		return $this->error('删除失败:' . $User->getError());
+        		}
+
+        		return $this->success('删除成功', url('index'));
+        	}
         }
 
-        // 获取要删除的对象
-        $User = User::get($username);
-
-        // 要删除的对象不存在
-        if (is_null($User)) {
-            return $this->error('不存在username为' . $username . '的用户，删除失败');
-        }
-
-        // 删除对象
-        if (!$User->delete()) {
-            return $this->error('删除失败:' . $User->getError());
-        }
-
-        // 进行跳转
-        return $this->success('删除成功', url('index'));
+        return $this->error('未获取到用户名信息');  
 	}
 
 	/**
@@ -194,6 +192,6 @@ class UserController extends IsloginController
 		$User->phone = input('post.phone');
 
 		// 更新或保存
-		return $User->validate()->save();
+		return $User->validate(true)->save($User->getData());
 	}
 }

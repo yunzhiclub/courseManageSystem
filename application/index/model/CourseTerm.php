@@ -17,6 +17,7 @@ class CourseTerm
     public function getDays(){
         $days = [];
         for($temp = 1 ; $temp <= 7 ; $temp ++) {
+            
             $Day = new Day($temp , $this->Course , $this->Term);
             $Day->Day = $temp;
             array_push($days, $Day);

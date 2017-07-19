@@ -10,17 +10,27 @@ use think\Request;
 use app\index\model\Week;
 use app\index\controller\IsloginController;
 /**
-* 选课管理 朱晨澍
+* 选课管理 
+* @author 朱晨澍
+* @index  选课主界面
+* @save   保存选课信息
 */
 class EletivecourseController extends IsloginController
 {
     //选课 澍
 	public function index()
 	{
+        $save_name = Request::instance()->param('name');
 		$name = Request::instance()->post('name');
-		if($name==''){
+        if(!is_null($save_name)){
+            $map = array();
+            $map['name'] = $save_name;
+            $User = User::get($map);
+        }
+		else if($name==''){
 			$User = new User;
 			$User->username = "";
+			$User->name = "";
 		}else
 		{ 
 			$map = array();
@@ -28,7 +38,7 @@ class EletivecourseController extends IsloginController
 			$User = User::get($map);
 		}
 		if(is_null($User)){
-			return $this->error('输入信息不存在');
+			return $this->error('输入信息不存在',url('index'));
 		}
 		$courses = Course::all();
 		$this->assign('courses', $courses);
@@ -45,21 +55,21 @@ class EletivecourseController extends IsloginController
 		$courseIds = Request::instance()->post('course_id/a');
         // 检查当前用户名是否存在
 		if (is_null($User = User::get($username))) {
-			return $this->error('不存在name' . $username. '的记录',url('index'));
+			return $this->error('不存在name' . $username . '的记录',url('index'));
 		}
         // 删除原有信息
         $map = ['username'=>$username];
         if (false === $User->UserCourses()->where($map)->delete()) {
             return $this->error('删除班级课程关联信息发生错误' . $User->UserCourses()->getError());
         }
+        $User = User::get($username);
         //  增加新增数据，执行添加操作。
-        // 利用klass_id这个数组，拼接为包括klass_id和course_id的二维数组。
 		if (!is_null($courseIds)) {
 			$datas = array();
 			foreach ($courseIds as $courseId) {
 				$data = array();
 				$data['course_id'] = $courseId;
-                $data['username'] = $username;     // 此时，由于前面已经执行过数据插入操作，所以可以直接获取到Course对象中的ID值。
+                $data['username'] = $username;     
                 array_push($datas, $data);
             }
             // 利用saveAll()方法，来将二维数据存入数据库。
@@ -69,7 +79,7 @@ class EletivecourseController extends IsloginController
             		return $this->error('课程-班级信息保存错误：' . $UserCourse->getError());
             	}
             }
-            return $this->success('更新成功', url('Home/index'));
+            return $this->success('更新成功', url('index?name=' . $User->name));
         }
     }
 }

@@ -10,22 +10,29 @@ use think\Request;
 use app\index\model\Week;
 use app\index\controller\IsloginController;
 /**
-* 教师主页 朱晨澍
+* 教师主页
+* @author 朱晨澍
+* @index   用户主界面
 */
 class HomeController extends IsloginController
 {
 	public function index()
 	{
 		$weeke = (int)Request::instance()->get('week');
+		if($weeke>20){
+			return $this->error('输入周次不存在',url('index'));
+		}elseif ($weeke<0) {
+			return $this->error('输入周次不存在',url('index'));
+		}
 		$map = array();
 		$map['state'] = 1;
 		$term = Term::get($map);
 		$this->assign('Term',$term);
 		$week = new Week;
 		$weeks = $week->WeekDay(strtotime($term->start_time),time());
-		
 		if($weeke==0){
-		$this->assign('week',$weeks);}else{
+		$this->assign('week',$weeks);
+		}else{
 			$this->assign('week',$weeke);
 		}
 		return $this->fetch();
