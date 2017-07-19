@@ -119,6 +119,7 @@ class User extends Model
      * 判断用户是否登录
      * @return  bool 登录为true
      * @author  poshichao
+     * @author  朱晨澍
      */
     static public function isLogin()
     {
