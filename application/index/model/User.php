@@ -7,7 +7,40 @@ use app\index\model\Leave;
 
 class User extends Model
 { 
-
+    public static function selected($day) 
+    {
+        $days = [];
+        for($i=1;$i<=7;$i++)
+        {
+            if($day == $i)
+                $days[$i] = 'selected';
+            else
+                $days[$i] = null;
+        }
+        return $days;
+    }
+    public static function checked($knob) 
+    {
+        $knobs = [];
+        for($i=1;$i<=5;$i++)
+        {
+            if($knob == $i)
+                $knobs[$i] = 'checked';
+            else
+                $knobs[$i] = null;
+        }
+        return $knobs;
+    }
+    public static function getWeek($code)  // $code == 'weekTime':获取周；$code == 'termId'：获取学期id。
+    {
+        $Term = new Term();
+        $result = $Term->where('state = 1')->select();
+        $weekTime = ceil((time() - strtotime($result[0]['start_time']))/(7*24*60*60));
+        if ($code == 'weekTime')
+            return $weekTime;
+        if ($code == 'termId')
+            return $result[0]['id'];
+    }
     public $week;
     // 关联中间表 澍
 	public function Courses()
@@ -127,7 +160,7 @@ class User extends Model
         $user = User::get($username);
         $power = $user->power;
         $pageURL = $_SERVER['PHP_SELF'];
-        if($pageURL=='/courseManageSystem/public/index.php/index/ask_leave/index.html' or $pageURL=='/courseManageSystem/public/index.php/index/ask_leave/'){
+        if(request()->controller() == 'AskLeave'){
             if($power==0){
                 return true;
             }else{
