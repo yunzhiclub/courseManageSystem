@@ -37,7 +37,7 @@
                     <td>
                     {volist name="$knob->getUsers()" id="user"}
                         <span
-                        {eq name="$user->CheckedLeave($week)" value="true"} style="color: red;" {/eq}
+                        {eq name="$user->CheckedLeave($week)" value="true"} style="color: red;" title="{$user->getleavereason($week)}"{/eq}
                         {eq name="$user->CheckedCourse($week)" value="true"} style="color: green;" {else /} style="color: blue;" {/eq}
                         >{$user->name}</span><br>
                     {/volist}
