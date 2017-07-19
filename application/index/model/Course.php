@@ -12,19 +12,14 @@ class Course extends Model
 {
     
     public function checkName($CourseName) {
-
-        if(is_null($CourseName)) {
+        if($CourseName=='') {
             return false;
         }
 
-        $Courses = Course::all();
-
-        $Length = sizeof($Courses);
-
-        for($temp = 0 ; $temp < $Length ; $temp ++) {
-            if($Courses[$temp]->name == $CourseName) {
-                return false;
-            }
+        $map =['name' => $CourseName];
+        $Course = Course::get($map);
+        if(!is_null($Course)){
+            return false;
         }
 
         return true;
