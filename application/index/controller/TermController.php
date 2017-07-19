@@ -64,7 +64,7 @@ class TermController extends Controller
 
         // 新增对象至数据表
         $Term->save();
-        return  '新增成功。新增ID为:' . $Term->id;
+        return $this->success('新增成功', url('index'));
     }
 
 
