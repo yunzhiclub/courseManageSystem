@@ -86,22 +86,22 @@ class UserController extends IsloginController
         $username = Request::instance()->param('username');
         
         // 判断是否成功接收
-        if (is_null($username)) {
-            return $this->error('未获取到用户名信息');
+        if (!is_null($username)) {
+
+            // 在User表模型中获取当前记录
+        	if ($User = User::get($username)) {
+        	
+             	// 将数据传给V层
+        		$this->assign('User', $User);
+
+        		// 获取封装好的V层内容,并返回
+        		return $this->fetch();
+        	}
         }
         
-        // 在User表模型中获取当前记录
-        if (null === $User = User::get($username))
-        {
-            return $this->error('系统未找到用户名为' . $username . '的记录');
-        } 
-            
-        // 将数据传给V层
-        $this->assign('User', $User);
-
-        // 获取封装好的V层内容,并返回
-        return $this->fetch();
+        return $this->error('未获取到到用户名信息!');   
 	}
+
 
 	/**
 	 * 更新信息
