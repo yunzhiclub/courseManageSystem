@@ -88,6 +88,14 @@ class User extends Model
         return false;
     }
 
+    /**
+     * 登录
+     * @param  [string] $username 用户名
+     * @param  [string] $password 密码
+     * @return [int]   0:学生; 1:老师; 2:登录失败
+     * @author 周杰 
+     * @author poshichao  重构
+     */
     static public function log($username, $password)
     {
         $map = array('username'  => $username);
@@ -95,24 +103,18 @@ class User extends Model
         // $User要么是一个对象，要么是null。
         if (!is_null($User)) {
             // 验证密码是否正确
-            if ($User->getData('password') !== $password) {
-                // 用户名密码错误，跳转到登录界面。
-                return 2;
-            } else {
+            if ($User->getData('password') === $password) {
                 // 用户名密码正确，将UserId存session。
                 session('username', $User->getData('username'));
                 if ($User->getData('power') == 0)
                     return 0;
                 else if ($User->getData('power') == 1)
                     return 1;
-                else
-                    return 2;
-            }
-            
-        } else {
-            return 2;
+            } 
         }
+        return 2;
     }
+
     /**
      * 判断用户是否登录
      * @return  bool 登录为true
