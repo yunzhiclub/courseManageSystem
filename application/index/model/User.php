@@ -7,6 +7,18 @@ use app\index\model\Leave;
 
 class User extends Model
 { 
+    public function getleavereason($week)
+    {
+        $map = [
+            'week' => $week,
+            'term_id' => $this->term,
+            'day' => $this->day,
+            'knob' => $this->knob
+        ];
+        $leave = Leave::get($map);
+        return $leave->reason;
+
+    }
     public static function selected($day) 
     {
         $days = [];
