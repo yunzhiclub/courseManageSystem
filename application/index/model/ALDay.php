@@ -1,59 +1,94 @@
 <?php
 namespace app\index\model;
 use app\index\model\Coursetime;
+use app\index\model\User_course;
 use app\index\model\Course;
+use app\index\model\Leave;
+use app\index\model\Term;
 /**
 * 周杰
 */
 class ALDay
 {
-	// $konbName;
+	// $konb;
 	// $weekTime;
-    // $state;
+    // $color;
     // $char;
     // $coursename；
     // $style;
+    // $day;
 
-	function __construct($konb , $weekTime , $day)
+	function __construct($konb , $weekTime , $day , $userName , $termId)
 	{
-        $this->konbName = $konb; 
+        $this->termId = $termId;
+        $this->userName = $userName;
+        $this->konb = $konb; 
         $this->weekTime = $weekTime;
-        $this->Day = $this->makeDay($konb , $weekTime , $day);
+        $this->day = $day;
+        $this->Day = $this->makeDay($konb , $weekTime , $day , $userName);
     }
-    public function makeDay($konb , $weekTime , $day)
+
+    public function makeDay($konb , $weekTime , $day , $userName)
     {
         $Coursetime = new Coursetime();
-        $coursetime = $Coursetime->where(' week = '.$weekTime.' and knob = '.$konb.' and day = '.$day.' and term_id = 1')->select();
-        if(!$coursetime == null)
+        $coursetime = $Coursetime->where(' week = '.$weekTime.' and knob = '.$konb.' and day = '.$day.' and term_id = '.$this->termId)->select();
+        if (!$coursetime == null)
         {
-        $Courseid = $coursetime['course_id'];
-        die();
-        $Coursetime = get($Courseid);
-        $result = $Coursetime->$Coursetimes()->where('username = '.$_SESSION['think']['username'])->select();
-        if(!$result == null)
-        {
-            $Course = new Course();
-            $course = $Course->get($Courseid);
-            $this->coursename = $course[0]['name'];
-            $this->state = 0;
-            $this->char = 0;
-            $this->style = 'hidden';
+            $Courseid = $coursetime[0]['course_id'];
+            $User_course = new User_course();
+            $result = $User_course->where('username = "'.$userName.'" and course_id = '.$Courseid)->select();
+            if (!$result == null)
+            {
+                $Course = new Course();
+                $course = $Course->get($Courseid);
+                $this->coursename = $course['name'];
+                $this->color = null;
+                $this->char = null;
+                $this->style = 'hidden';
+                $this->state = null;
+            }
+            else
+            {
+                $this->coursename = null;
+                $this->color = 'btn-primary';
+                $this->char = '请假';
+                $this->style = null;
+                $this->state = "/courseManageSystem/public/index.php/index/ask_leave/leave.html?weekTime=".$this->weekTime.'&&day='.$this->day.'&&konb='.$this->konb;
+                $this->leave();
+                $this->isPastTime();
+            }
         }
         else
         {
             $this->coursename = null;
-            $this->state = 0;
-            $this->char = 0;
-            $this->style = 0;
-
-        }
-        }
-        else
-        {
-            $this->coursename = null;
-            $this->state = 0;
+            $this->color = 'btn-primary';
             $this->char = '请假';
-            $this->style = 0;
+            $this->style = null;
+            $this->state = "/courseManageSystem/public/index.php/index/ask_leave/leave.html?weekTime=".$this->weekTime.'&&day='.$this->day.'&&konb='.$this->konb;
+            $this->leave();
+            $this->isPastTime();
+        }
+    }
+
+    public function leave()
+    {
+        $Leave = new Leave();
+        $result = $Leave->where('username = "'.$this->userName.'" and week = '.$this->weekTime.' and day = '.$this->day.' and knob = '.$this->konb.' and term_id = '.$this->termId)->select();
+        if (!$result == null)
+        {
+            $this->color = 'btn-warning';
+            $this->char = '取消';
+            $this->state = '/courseManageSystem/public/index.php/index/ask_leave/unLeave.html?weekTime='.$this->weekTime.'&&day='.$this->day.'&&konb='.$this->konb;
+        }
+    }
+    public function isPastTime()
+    {
+        $Term = new Term();
+        $result = $Term->get($this->termId);    
+        $askTime = strtotime($result['start_time']) + ($this->weekTime-1)*7*24*60*60 + ($this->day-1)*24*60*60;
+        if (time() > $askTime)
+        {
+            $this->style = 'hidden';
         }
     }
 }
