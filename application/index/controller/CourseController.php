@@ -148,16 +148,14 @@ class CourseController extends IsloginController
         $term   = Request::instance()->param('term');
         $day    = Request::instance()->param('day');
         $knob   = Request::instance()->param('knob');
-
-        $map = array();
-
-        $map['id'] = $course;
-        $Course    = Course::get($map);
-        $map['id'] = $term;
-        $Term      = Term::get($map);
-        $Week      = new Week();
-        $Day       = new Day($day);
-        $Knob      = new Knob($knob);
+        
+        $map    = ['id' => $course];
+        $Course = Course::get($map);
+        $map    = ['id' => $term];
+        $Term   = Term::get($map);
+        $Week   = new Week();
+        $Day    = new Day($day);
+        $Knob   = new Knob($knob);
 
         $this->assign('Course' , $Course);
         $this->assign('Term'   , $Term);
@@ -177,7 +175,6 @@ class CourseController extends IsloginController
         $knob   = Request::instance()->post('knob');
         $weeks  = Request::instance()->post('week/a');
 
-        $map    = array();
         $map    = ['name' => $course];
         $Course = Course::get($map);
 
@@ -215,8 +212,7 @@ class CourseController extends IsloginController
         $term   = Request::instance()->param('term');
         $day    = Request::instance()->param('day');
         $knob   = Request::instance()->param('knob');
-
-        $map    = array();
+        
         $map    = ['id' => $course];
         $Course = Course::get($map);
         $map    = ['id' => $term];
@@ -240,7 +236,7 @@ class CourseController extends IsloginController
         $term   = Request::instance()->post('term');
         $day    = Request::instance()->post('day');
         $knob   = Request::instance()->post('knob');
-
+        
         $map    = ['name' => $course];
         $Course = Course::get($map);
         $map    = ['name' => $term];
