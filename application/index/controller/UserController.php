@@ -132,26 +132,24 @@ class UserController extends IsloginController
         // 获取要删除的username.
         $username = Request::instance()->param('username');
 
+        if (!is_null($username)) {
 
-        if (is_null($username)) {
-            return $this->error('未获取到用户名信息');
+            // 获取要删除的对象
+        	$User = User::get($username);
+
+        	// 要删除的对象存在
+        	if (!is_null($User)) {
+
+            	// 删除对象
+        		if (!$User->delete()) {
+            		return $this->error('删除失败:' . $User->getError());
+        		}
+
+        		return $this->success('删除成功', url('index'));
+        	}
         }
 
-        // 获取要删除的对象
-        $User = User::get($username);
-
-        // 要删除的对象不存在
-        if (is_null($User)) {
-            return $this->error('系统未获取到用户名为' . $username . '的用户，删除失败');
-        }
-
-        // 删除对象
-        if (!$User->delete()) {
-            return $this->error('删除失败:' . $User->getError());
-        }
-
-        // 进行跳转
-        return $this->success('删除成功', url('index'));
+        return $this->error('未获取到用户名信息');  
 	}
 
 	/**
