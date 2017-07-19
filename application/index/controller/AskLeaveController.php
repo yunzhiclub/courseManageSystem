@@ -2,7 +2,7 @@
 namespace app\index\controller;
 use think\Controller;
 use app\index\model\ALWeek;
-class AskLeaveController extends Controller
+class AskLeaveController extends IsloginController
 {
     public function index()
     {

@@ -14,14 +14,28 @@ class User extends Model
     {
         return $this->belongsToMany('Course', 'user_course');
     }
-    // 检查是否存在数据 澍
-
     // 检查中间表中的数据 澍
     public function UserCourses()
     {
         $username = $this->username;
         $UserCourse = UserCourse::get($username);
         return $UserCourse;
+    }
+    // 判断用户已选课程 澍
+    public function getIsChecked(Course &$Course)
+    {
+        $username = $this->username;
+        $courseId = (int)$Course->id;
+        $map = array();
+        $map['username'] = $username;
+        $map['course_id'] = $courseId;
+        //有记录，返回true；没记录，返回false
+        $UserCourse = UserCourse::get($map);
+        if (is_null($UserCourse)) {
+            return false;
+        } else {
+            return true;
+        }
     }
     // 检查user是否有课 澍
     public function CheckedCourse($week)
@@ -67,8 +81,6 @@ class User extends Model
         $leavelength = sizeof($leaves);
         
         for($l=0;$l<$leavelength;$l++){
-            // var_dump($leaves[$l]->username);
-            // var_dump($this->username);
             if($leaves[$l]->username==$this->username){
                 return true;
             }
@@ -107,35 +119,31 @@ class User extends Model
      * 判断用户是否登录
      * @return  bool 登录为true
      * @author  poshichao
+     * @author  朱晨澍
      */
     static public function isLogin()
     {
         $username = session('username');
-
-        if (isset($username)) {
-            return true;
-        } else {
-            return false;
+        $user = User::get($username);
+        $power = $user->power;
+        $pageURL = $_SERVER['PHP_SELF'];
+        if($pageURL=='/courseManageSystem/public/index.php/index/ask_leave/index.html' or $pageURL=='/courseManageSystem/public/index.php/index/ask_leave/'){
+            if($power==0){
+                return true;
+            }else{
+                return false;
+            }
+        }else{
+            if($power==1){
+                return true;
+            }else{
+                return false;
+            }
         }
     }
     
     public static function getCurrentLoginUser()
     {
         return $_SESSION['think']['username'];
-    }
-	public function getIsChecked(Course &$Course)
-    {
-    	$username = $this->username;
-    	$courseId = (int)$Course->id;
-    	$map = array();
-    	$map['username'] = $username;
-    	$map['course_id'] = $courseId;
-    	//有记录，返回true；没记录，返回false
-    	$UserCourse = UserCourse::get($map);
-    	if (is_null($UserCourse)) {
-    		return false;
-    	} else {
-    		return true;
-    	}
     }
 }
