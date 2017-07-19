@@ -11,7 +11,7 @@
                 <form class="form-inline">
                     <div class="form-group">
                         <label class="sr-only" for="name">名称</label>
-                        <input name="name" type="text" class="form-control" placeholder="名称..." value="">
+                        <input name="name" type="text" class="form-control" placeholder="名称..." >
                     </div>
                     <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i>&nbsp;查询</button>
                 </form>
@@ -50,8 +50,6 @@
                 {else/}
                 <a class="btn btn-sm btn-primary active" href="{:url('setstate?id=' . $term->getData('id'))}"><i class=""></i>&nbsp;激活</a>&nbsp;<a class="btn btn-danger btn-sm" href="{:url('delete?id=' . $term->getData('id'))}"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</a>
                 {/eq}
-
-                
                 </td>
             </tr>
             {/volist}
