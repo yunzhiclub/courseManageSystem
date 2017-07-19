@@ -39,6 +39,7 @@ class TermController extends Controller
     {
         $htmls = $this->fetch();
         return $htmls; 
+
     }
 
 
@@ -51,16 +52,19 @@ class TermController extends Controller
         // 实例化Teacher空对象
         $Term = new Term();
 
+       
         // 为对象赋值
         $Term->name = $postData['name'];
+       
         $Term->start_time = $postData['start_time'];
        
         $Term->end_time = $postData['end_time'];
+       // $Term->state = $postData['state'];
         
 
         // 新增对象至数据表
         $Term->save();
-        return  '新增成功。新增ID为:' . $Term->id;
+        return $this->success('新增成功', url('index'));
     }
 
 
@@ -79,7 +83,7 @@ class TermController extends Controller
 
         // 要删除的对象不存在
         if (is_null($Term)) {
-            return $this->error('不存在id为' . $id . '的教师，删除失败');
+            return $this->error('不存在id为' . $id . '的学期，删除失败');
         }
 
         // 删除对象
@@ -106,6 +110,7 @@ class TermController extends Controller
         // 获取封装好的V层内容
         $htmls = $this->fetch();
 
+
         // 将封装好的V层内容返回给用户
         return $htmls;
 	}
@@ -115,6 +120,7 @@ class TermController extends Controller
         // $a = Term::getCurrentTerm();
         // var_dump($a);die();
         // 获取所有学期的状态
+        
         $terms = Term::all();
 
         // 通过循环实现状态值都设置为0
@@ -130,8 +136,7 @@ class TermController extends Controller
  
        // 把某学期状态设置为1
         $id = Request::instance()->param('id/d');
-        var_dump($id);
-
+        
         $Term = Term::get($id);
         $Term->state = 1;
 
@@ -148,20 +153,23 @@ class TermController extends Controller
         $id = Request::instance()->post('id/d');
 
         // 获取当前对象
+       
         $Term = Term::get($id);
-
+        
 
         // 写入要更新的数据
         $Term->name = Request::instance()->post('name');
+
         $Term->start_time = Request::instance()->post('start_time');
         $Term->end_time = Request::instance()->post('end_time');
-        $Term->state = Request::instance()->post('state');
 
         // 更新
-        var_dump($Term->save());
+        $Term->save();
+        
 
         return $this->success('更新成功', url('index'));
     }
+
 }
 
 

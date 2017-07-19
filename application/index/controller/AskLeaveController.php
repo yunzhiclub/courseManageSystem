@@ -1,10 +1,11 @@
 <?php
 namespace app\index\controller;
-use think\Controller;
+use app\index\controller\IsloginController;
 use app\index\model\ALWeek;
 use app\index\model\User;
 use app\index\model\Leave;
-class AskLeaveController extends Controller
+
+class AskLeaveController extends IsloginController
 {
     public function index()
     {
