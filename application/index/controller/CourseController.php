@@ -64,12 +64,11 @@ class CourseController extends IsloginController
 
         $CourseName   = Request::instance()->post('CourseName');
         $Course       = new Course();
-        $Course->name = $CourseName;
         
         // 获取传入课程名，验证保存
         if(!$Course->checkName($CourseName)){
 
-            return $this->error('课程格式错误，保存失败');
+            return $this->error('保存失败');
         }
 
         if(!$Course->save()){
