@@ -93,7 +93,7 @@ class UserController extends IsloginController
         // 在User表模型中获取当前记录
         if (null === $User = User::get($username))
         {
-            return $this->error('系统未找到username为' . $username . '的记录');
+            return $this->error('系统未找到用户名为' . $username . '的记录');
         } 
             
         // 将数据传给V层
@@ -134,7 +134,7 @@ class UserController extends IsloginController
 
 
         if (is_null($username)) {
-            return $this->error('未获取到username信息');
+            return $this->error('未获取到用户名信息');
         }
 
         // 获取要删除的对象
@@ -142,7 +142,7 @@ class UserController extends IsloginController
 
         // 要删除的对象不存在
         if (is_null($User)) {
-            return $this->error('不存在username为' . $username . '的用户，删除失败');
+            return $this->error('系统未获取到用户名为' . $username . '的用户，删除失败');
         }
 
         // 删除对象
