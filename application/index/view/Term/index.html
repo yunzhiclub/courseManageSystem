@@ -48,7 +48,7 @@
                 {eq name="$term['state']" value="1"}
                 <a class="btn btn-sm btn-primary" href="{:url('edit?id=' . $term->getData('id'))}"><i class="glyphicon glyphicon-pencil"></i>&nbsp;编辑</a>
                 {else/}
-                <a class="btn btn-sm btn-primary active" href="{:url('setstate?id=' . $term->getData('id'))}"><i class=""></i>&nbsp;激活</a>&nbsp;<a class="btn btn-danger btn-sm" href="{:url('delete?id=' . $term->getData('id'))}"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</a>
+                <a class="btn btn-sm btn-primary active" href="{:url('setstate?id=' . $term->getData('id'))}"><i class="glyphicon glyphicon-off"></i>&nbsp;激活</a>&nbsp;<a class="btn btn-sm btn-primary" href="{:url('edit?id=' . $term->getData('id'))}"><i class="glyphicon glyphicon-pencil"></i>&nbsp;编辑</a>&nbsp;<a class="btn btn-danger btn-sm" href="{:url('delete?id=' . $term->getData('id'))}"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</a>
                 {/eq}
                 </td>
             </tr>
