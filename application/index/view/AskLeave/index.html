@@ -12,12 +12,13 @@
         <h1>课表系统~</h1></center>
     <br>
     <div class="row">
-        <form>
+        <form action="{:url('query')}" method="post">
             <div class="col-sm-2 col-md-2"></div>
             <div class="col-sm-8 col-md-8">
                 <center>
-                    <label>第
-                        <input type="number" min=1 max=20 value="{$ALWeek->weekTime}" name="weekTime"> 周</label>
+                    <label>第<div class="btn">
+                        <input type="number" min=1 max=20 value="{$ALWeek->weekTime}" name="weekTime"></div>周</label>
+                        <input type="submit" value="确定">
                 </center>
                 <table class="table table-hover table-bordered">
                     <tr class="info">
@@ -36,8 +37,11 @@
                     {volist name="Knob->Days" id="Day" key="key"}
                     <th>
                         <div class="{$Day->style}">
-                        <button type="button" class="btn btn-primary">{$Day->char}{$Day->coursename}</button>
+                        <a href="{$Day->state}">
+                        <button type="button" class="btn {$Day->color}">{$Day->char}</button>
+                        </a>
                         </div>
+                        <center>{$Day->coursename}</center>
                     </th>
                     {/volist}
                     </tr>
