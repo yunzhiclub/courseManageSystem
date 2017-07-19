@@ -19,7 +19,7 @@
 			<!-- <input type="text" name="namea" readonly="true"  value="{$User->name}" style="border:none;"> -->
 			{volist name="courses" id="course"}
 	            <input type="checkbox" class="checkbox" name="course_id[]" id="UserCourse" value="{$course->id}" {eq name="User->getIsChecked($course)" value="true"} checked="checked"{/eq}/>
-	            <label for="UserCourse">{$course->name}</label>
+	            <label for="UserCourse">{$course->name}&nbsp;&nbsp;</label>
         	{/volist}
 		</div>
 	</div>
