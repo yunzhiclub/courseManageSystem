@@ -1,3 +1,4 @@
+<!-- 选课管理界面 -->
 {extend name="index"}
 {block name="title"}选课管理
 {/block}
@@ -13,13 +14,12 @@
 	<hr>
 	<form action="{:url ('save');}" method="post">
 	<div class="col-md-offset-1">
-		<h3>课程</h3>
-		<div class="col-md-offset-1">
+		<div class="col-md-offset-1 form-inline">
 			<input type="text" name="name" readonly="true" class="sr-only" value="{$User->username}" style="border:none;">
 			<!-- <input type="text" name="namea" readonly="true"  value="{$User->name}" style="border:none;"> -->
 			{volist name="courses" id="course"}
-	            <input type="checkbox" name="course_id[]" id="UserCourse" value="{$course->id}" {eq name="User->getIsChecked($course)" value="true"} checked="checked"{/eq}/>
-	            <label for="UserCourse">{$course->name}</label>
+	            <input type="checkbox" class="checkbox" name="course_id[]" id="UserCourse" value="{$course->id}" {eq name="User->getIsChecked($course)" value="true"} checked="checked"{/eq}/>
+	            <label for="UserCourse">{$course->name}&nbsp;&nbsp;</label>
         	{/volist}
 		</div>
 	</div>
