@@ -26,13 +26,14 @@ class EletivecourseController extends IsloginController
             $map = array();
             $map['name'] = $save_name;
             $User = User::get($map);
+            $this->assign('name', $save_name);
         }
 		else if($name==''){
 			$User = new User;
 			$User->username = "";
 			$User->name = "";
 		}else
-		{ 
+		{ 	$this->assign('name', $name);
 			$map = array();
 			$map['name'] = $name;
 			$User = User::get($map);
@@ -41,8 +42,12 @@ class EletivecourseController extends IsloginController
 			return $this->error('输入信息不存在',url('index'));
 		}
 		$courses = Course::all();
+		$map = array();
+        $map['power'] = 0;
+        $users = User::all($map);
 		$this->assign('courses', $courses);
 		$this->assign('User', $User);
+		$this->assign('users', $users);
 		return $this->fetch();
 	}
 

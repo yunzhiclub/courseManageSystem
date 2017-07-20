@@ -185,7 +185,6 @@ class User extends Model
         }
 
         $power = $user->power;
-
         // 访问用户界面，权限为0，登录
         if (request()->controller() == 'AskLeave') {
             if ($power === 0) {
