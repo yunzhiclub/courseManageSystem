@@ -9,7 +9,7 @@ use think\Request;
 /**
  * 学期管理，继承think\Controller后，就可以利用V层对数据进行打包了。
  */
-class TermController extends Controller
+class TermController extends IsloginController
 {
 
 	// 显示学期数据
