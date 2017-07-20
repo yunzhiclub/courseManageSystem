@@ -59,8 +59,10 @@ class EletivecourseController extends IsloginController
 		}
         // 删除原有信息
         $map = ['username'=>$username];
-        if (false === $User->UserCourses()->where($map)->delete()) {
+        if(!is_null($User->UserCourses())){
+        	if (false === $User->UserCourses()->where($map)->delete()) {
             return $this->error('删除班级课程关联信息发生错误' . $User->UserCourses()->getError());
+        		}	
         }
         $User = User::get($username);
         //  增加新增数据，执行添加操作。
@@ -80,6 +82,8 @@ class EletivecourseController extends IsloginController
             	}
             }
             return $this->success('更新成功', url('index?name=' . $User->name));
+        }else{
+        	return $this->success('更新成功', url('index?name=' . $User->name));
         }
     }
 }
