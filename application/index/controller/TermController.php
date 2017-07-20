@@ -15,6 +15,8 @@ class TermController extends IsloginController
 	// 显示学期数据
 	public function index()
 	{
+        $name = Request::instance()->get('name');
+
 		// 每页显示5条数据
         $pageSize = 5; 
 
@@ -22,7 +24,11 @@ class TermController extends IsloginController
         $Term = new Term; 
 
         // 调用分页
-        $terms = $Term->paginate($pageSize);
+        $terms = $Term->where('name', 'like', '%' . $name . '%')->paginate($pageSize,false,[
+                'query'=>[
+                    'name' => $name
+                ]
+            ]);
 
         // 向V层传数据
         $this->assign('terms', $terms);
