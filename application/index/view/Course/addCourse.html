@@ -4,12 +4,20 @@
 课程管理
 {/block}
 {block name="content"}
-    <h2 style="text-align: center">添加课程</h2>
-    <form action="{:url('saveCourse')}" method="post">
+
+    
+    <h2 style="text-align: center">{eq name="$Course->name" value=""}添加课程{else /}编辑课程{/eq}</h2>
+
+    {eq name="$Course->name" value=""}
+        <form action="{:url('saveCourse')}" method="post">
+    {else /}
+        <form action="{:url('updateCourse?id=' . $Course->id)}" method="post">
+    {/eq}
+    
         <div class="row">
             <label>课程名：</label>
             <br>
-            <input type="text" name="CourseName" class="btn btn-default">
+            <input type="text" name="CourseName" value="{$Course->name}" class="btn btn-default">
         </div>
 
         <hr>

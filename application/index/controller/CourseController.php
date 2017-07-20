@@ -42,6 +42,11 @@ class CourseController extends IsloginController
 
     public function addCourse(){
 
+        $Course       = new Course();
+        $Course->name = '';
+
+        $this->assign('Course' , $Course);
+
         return $this->fetch();
     }
 
@@ -62,6 +67,43 @@ class CourseController extends IsloginController
         }
 
         return $this->success('保存成功' , url('index'));
+    }
+
+    public function editCourse(){
+
+        $id     = Request::instance()->param('id');
+        $Course = Course::get($id);
+
+        $this->assign('Course' , $Course);
+
+        return $this->fetch('addCourse');
+    }
+
+    public function updateCourse(){
+
+        $id = Request::instance()->param('id');
+        $Course = Course::get($id);
+
+        if(!$Course->delete()){
+            return $this->error('原课程删除失败，更新失败');
+        }
+        
+        $CourseName   = $_POST['CourseName'];
+        $Course       = new Course();
+        $Course->name = $CourseName;
+        $Course->id   = $id;
+
+        if(!$Course->checkName($CourseName)){
+
+            return $this->error('更新失败');
+        }
+
+        if(!$Course->save()){
+
+            return $this->error('课程保存失败，更新失败' . $Course->getError());
+        }
+
+        return $this->success('更新成功' , url('index'));
     }
 
     public function delete(){
