@@ -9,7 +9,7 @@ namespace app\index\model;
 */
 class CourseTerm
 {
-    function __construct($Courseid, $Termid){
+    function __construct($Courseid = 0, $Termid = 0){
         $this->Course = $Courseid;
         $this->Term = $Termid;
     }
@@ -18,7 +18,7 @@ class CourseTerm
         $days = [];
         for($temp = 1 ; $temp <= 7 ; $temp ++) {
             
-            $Day = new Day($temp , $this->Course , $this->Term);
+            $Day      = new Day($temp , $this->Course , $this->Term);
             $Day->Day = $temp;
             array_push($days, $Day);
         }
