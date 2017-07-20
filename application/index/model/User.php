@@ -168,20 +168,37 @@ class User extends Model
      */
     static public function isLogin()
     {
+        // 获取session中用户名信息
         $username = session('username');
+
+        // session中没有用户名信息
+        if (is_null($username)) {
+            return 2;
+        }
+
+        // 获取数据表中用户名
         $user = User::get($username);
+
+        // 数据表中没有对应用户名信息
+        if (is_null($user)) {
+            return 2;
+        }
+
         $power = $user->power;
-        $pageURL = $_SERVER['PHP_SELF'];
-        if(request()->controller() == 'AskLeave'){
-            if($power==0){
+
+        // 访问用户界面，权限为0，登录
+        if (request()->controller() == 'AskLeave') {
+            if ($power === 0) {
                 return true;
-            }else{
+            } else {
                 return false;
             }
-        }else{
-            if($power==1){
+
+        // 访问管理员界面，权限为1，登录
+        } else {
+            if ($power == 1) {
                 return true;
-            }else{
+            } else {
                 return false;
             }
         }
