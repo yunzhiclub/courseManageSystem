@@ -19,9 +19,9 @@
                     </div>
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                         <ul class="nav navbar-nav">
-                            <li {eq name=':request()->controller()' value="Home"} class="active" {/eq}><a href="{:url('')}">首页</a></li>
+                            <li {eq name=':request()->controller()' value="Home"} class="active" {/eq}><a href="{:url('Home/index')}">首页</a></li>
 
-                            <li {eq name=':request()->controller()' value=""} class="active" {/eq}><a href="{:url('Eletivecourse/index')}">出勤统计</a></li>
+                            <li {eq name=':request()->controller()' value=""} class="active" {/eq}><a href="{}">出勤统计</a></li>
 
                             <li {eq name=':request()->controller()' value="User"} class="active" {/eq}><a href="{:url('User/index')}">用户管理</a></li>
 
