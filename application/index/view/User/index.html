@@ -45,6 +45,7 @@
                             <a href="{:url('edit?username=' . $user->getData('username'))}" class="btn btn-success"><i class="glyphicon glyphicon-pencil"></i>&nbsp;编辑</a>
                             <a href="{:url('delete?username=' . $user->getData('username'))}" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</a>
                             <a href="{:url('resetpassword?username=' . $user->getData('username'))}" class="btn btn-primary"><i class="glyphicon glyphicon-lock"></i>&nbsp;重置密码</a>
+                            <a href="{:url('Eletivecourse/index?name=' . $user->getData('name'))}" class="btn btn-warning"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;选课</a>
                         </td>
                     </tr>
                     {/volist}

@@ -3,28 +3,31 @@
 {block name="title"}选课管理
 {/block}
 {block name="content"}
-	<h1 class="text-center">选课管理</h1>
-	<br>
-	<form class="form-inline col-md-8 col-md-offset-1" method="post" action="{:url ('index');}">
-		<label class="sr-only" for="name">姓名</label>
-		<input name="name" type="text" class="form-control col-md-2" placeholder="{$User->name}">
-		<button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i>&nbsp;姓名查询</button>
-	</form>
-	<br>
-	<hr>
-	<form action="{:url ('save');}" method="post">
+<h1 class="text-center">选课管理</h1>
+<br>
+<form class="form-inline col-md-8 col-md-offset-1" method="post" action="{:url ('index');}">
+	<select class="form-control" name="name">
+	{volist name="users" id="user"}
+		<option value="{$user->name}" {eq name="$name" value="$user->name"} selected="selected"{/eq}>{$user->name}</option>
+	{/volist}
+	</select>
+	<button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i>&nbsp;姓名查询</button>
+</form>
+<br>
+<hr>
+<form action="{:url ('save');}" method="post">
 	<div class="col-md-offset-1">
 		<div class="col-md-offset-1 form-inline">
 			<input type="text" name="name" readonly="true" class="sr-only" value="{$User->username}" style="border:none;">
 			<!-- <input type="text" name="namea" readonly="true"  value="{$User->name}" style="border:none;"> -->
 			{volist name="courses" id="course"}
-	            <input type="checkbox" class="checkbox" name="course_id[]" id="UserCourse" value="{$course->id}" {eq name="User->getIsChecked($course)" value="true"} checked="checked"{/eq}/>
-	            <label for="UserCourse">{$course->name}&nbsp;&nbsp;</label>
-        	{/volist}
+			<input type="checkbox" class="checkbox" name="course_id[]" id="{$course->id}" value="{$course->id}" {eq name="User->getIsChecked($course)" value="true"} checked="checked"{/eq}/>
+			<label for="{$course->id}">{$course->name}</label>&nbsp;&nbsp;
+			{/volist}
 		</div>
 	</div>
 	<div class="col-md-offset-8">
 		<button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-pencil"></i>&nbsp;选课修改</button>
 	</div>
-	</form>		
+</form>		
 {/block}
