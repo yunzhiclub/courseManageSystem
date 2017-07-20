@@ -171,7 +171,6 @@ class User extends Model
         $username = session('username');
         $user = User::get($username);
         $power = $user->power;
-        $pageURL = $_SERVER['PHP_SELF'];
         if(request()->controller() == 'AskLeave'){
             if($power==0){
                 return true;
