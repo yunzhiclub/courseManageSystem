@@ -24,7 +24,7 @@
 
                             <li {eq name=':request()->controller()' value="User"} class="active" {/eq}><a href="{:url('User/index')}">用户管理</a></li>
 
-                            <li {eq name=':request()->controller()' value=""} class="active" {/eq}><a href="{:url('Term/index')}">学期管理</a></li>
+                            <li {eq name=':request()->controller()' value="Term"} class="active" {/eq}><a href="{:url('Term/index')}">学期管理</a></li>
 
                             <li {eq name=':request()->controller()' value="Course"} class="active" {/eq}><a href="{:url('Course/index')}">课程管理</a></li>
                         </ul>
@@ -36,7 +36,6 @@
             </nav>
         </div>
     </div>
-
     {block name="content"} {/block}
     {block name="page"} {/block}
 </body>
