@@ -4,7 +4,6 @@
 
 <head>
     <meta charset="UTF-8">
-    <link rel="shortcut icon" type="imag/icon" href="/courseManageSystem/public/static/bitbug_favicon.ico">
     <title>{block name="title"}标题{/block}</title>
     <link rel="stylesheet" type="text/css" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
 </head>
@@ -20,7 +19,9 @@
                     </div>
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                         <ul class="nav navbar-nav">
-                            <li {eq name=':request()->controller()' value="Home"} class="active" {/eq}><a href="{:url('Home/index')}">首页</a></li>
+                            <li {eq name=':request()->controller()' value="Home"} class="active" {/eq}><a href="{:url('')}">首页</a></li>
+
+                            <li {eq name=':request()->controller()' value=""} class="active" {/eq}><a href="{:url('Eletivecourse/index')}">出勤统计</a></li>
 
                             <li {eq name=':request()->controller()' value="User"} class="active" {/eq}><a href="{:url('User/index')}">用户管理</a></li>
 
@@ -36,6 +37,7 @@
             </nav>
         </div>
     </div>
+
     {block name="content"} {/block}
     {block name="page"} {/block}
 </body>
