@@ -40,7 +40,7 @@ class Course extends Model
         return $Courses;
     }
 
-    public function saveCourseTime($Term,$day,$knob,$weeks){
+    public static function saveCourseTime($course,$term,$day,$knob,$weeks){
 
         $w = sizeof($weeks);
 
@@ -48,8 +48,8 @@ class Course extends Model
 
             $Coursetime = new Coursetime();
 
-            $Coursetime->course_id = $this->id;
-            $Coursetime->term_id   = $Term->id;
+            $Coursetime->course_id = $course;
+            $Coursetime->term_id   = $term;
             $Coursetime->day       = $day;
             $Coursetime->knob      = $knob;
             $Coursetime->week      = (int)$weeks[$temp];

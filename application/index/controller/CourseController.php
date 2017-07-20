@@ -42,6 +42,11 @@ class CourseController extends IsloginController
 
     public function addCourse(){
 
+        $Course       = new Course();
+        $Course->name = '';
+
+        $this->assign('Course' , $Course);
+
         return $this->fetch();
     }
 
@@ -62,6 +67,43 @@ class CourseController extends IsloginController
         }
 
         return $this->success('保存成功' , url('index'));
+    }
+
+    public function editCourse(){
+
+        $id     = Request::instance()->param('id');
+        $Course = Course::get($id);
+
+        $this->assign('Course' , $Course);
+
+        return $this->fetch('addCourse');
+    }
+
+    public function updateCourse(){
+
+        $id = Request::instance()->param('id');
+        $Course = Course::get($id);
+
+        if(!$Course->delete()){
+            return $this->error('原课程删除失败，更新失败');
+        }
+        
+        $CourseName   = $_POST['CourseName'];
+        $Course       = new Course();
+        $Course->name = $CourseName;
+        $Course->id   = $id;
+
+        if(!$Course->checkName($CourseName)){
+
+            return $this->error('更新失败');
+        }
+
+        if(!$Course->save()){
+
+            return $this->error('课程保存失败，更新失败' . $Course->getError());
+        }
+
+        return $this->success('更新成功' , url('index'));
     }
 
     public function delete(){
@@ -128,41 +170,38 @@ class CourseController extends IsloginController
         $Course = Course::get($map);
         $map    = ['id' => $term];
         $Term   = Term::get($map);
-        $Week   = new Week();
         $Day    = new Day($day);
         $Knob   = new Knob($knob);
 
-        $this->assign('Course' , $Course);
-        $this->assign('Term'   , $Term);
-        $this->assign('Week'   , $Week);
-        $this->assign('Day'    , $Day);
-        $this->assign('Knob'   , $Knob);
+        $CourseTerm = new CourseTerm();
+
+        $this->assign('Course'     , $Course);
+        $this->assign('Term'       , $Term);
+        $this->assign('Day'        , $Day);
+        $this->assign('Knob'       , $Knob);
+        $this->assign('CourseTerm' , $CourseTerm);
 
         return $this->fetch();
     }
 
     public function save(){
 
-        $course = Request::instance()->post('course');
-        $term   = Request::instance()->post('term');
+        $course = Request::instance()->param('courseId');
+        $term   = Request::instance()->param('termId');
         $day    = Request::instance()->post('day');
         $knob   = Request::instance()->post('knob');
         $weeks  = Request::instance()->post('week/a');
 
-        $map    = ['name' => $course];
-        $Course = Course::get($map);
+        $Course = Course::get($course);
 
-        $map    = ['name' => $term];
-        $Term   = Term::get($map);
-
-        if(!$Course->saveCourseTime($Term,$day,$knob,$weeks)){
+        if(!Course::saveCourseTime($course,$term,$day,$knob,$weeks)){
 
             return $this->error('保存失败');
         }
 
         return $this->success('保存成功' , url('inquiry' , [
-                'id'         =>  $Course->id,
-                'term_id'    =>  $Term->id
+                'id'         =>  $course,
+                'term_id'    =>  $term
             ]));
     }
 
@@ -179,33 +218,29 @@ class CourseController extends IsloginController
         $Term   = Term::get($map);
         $Day    = new Day($day);
         $Knob   = new Knob($knob , $course , $term , $day);
-        $Week   = new Week($Knob);
 
-        $this->assign('Course' , $Course);
-        $this->assign('Term'   , $Term);
-        $this->assign('Day'    , $Day);
-        $this->assign('Knob'   , $Knob);
-        $this->assign('Week'   , $Week);
+        $CourseTerm = new CourseTerm();
+
+        $this->assign('Course'     , $Course);
+        $this->assign('Term'       , $Term);
+        $this->assign('Day'        , $Day);
+        $this->assign('Knob'       , $Knob);
+        $this->assign('CourseTerm' , $CourseTerm);
 
         return $this->fetch('add');
     }
 
     public function update(){
 
-        $course = Request::instance()->post('course');
-        $term   = Request::instance()->post('term');
+        $course = Request::instance()->param('courseId');
+        $term   = Request::instance()->param('termId');
         $day    = Request::instance()->post('day');
         $knob   = Request::instance()->post('knob');
-        
-        $map    = ['name' => $course];
-        $Course = Course::get($map);
-        $map    = ['name' => $term];
-        $Term   = Term::get($map);
 
         $map    = array();
         $map    = [
-            'course_id' => $Course->id,
-            'term_id'   => $Term->id,
+            'course_id' => $course,
+            'term_id'   => $term,
             'day'       => $day,
             'knob'      => $knob
         ];
@@ -219,14 +254,14 @@ class CourseController extends IsloginController
 
         $weeks  = Request::instance()->post('week/a');
 
-        if(!$Course->saveCourseTime($Term,$day,$knob,$weeks)){
+        if(!Course::saveCourseTime($course,$term,$day,$knob,$weeks)){
 
             return $this->error('保存失败');
         }
 
         return $this->success('保存成功' , url('inquiry' , [
-                'id'         =>  $Course->id,
-                'term_id'    =>  $Term->id
+                'id'         =>  $course,
+                'term_id'    =>  $term
             ]));
     }
 }
