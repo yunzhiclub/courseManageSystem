@@ -34,6 +34,7 @@ class Course extends Model
         $Courses    = $this->paginate($pageSize , false , [
             'query' => [
                 'name' => $CourseName,
+                'pageSize' => $pageSize
                 ],
             ]);
 
