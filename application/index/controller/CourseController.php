@@ -34,8 +34,10 @@ class CourseController extends IsloginController
         $getSize    = Request::instance()->get('pageSize');
 
         if(is_null($getSize)){
+
             $pageSize   = 5;
         } else {
+
             $pageSize   = $getSize;
         }
 
