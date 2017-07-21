@@ -37,14 +37,16 @@
             <th>姓名</th>
             <th>病假数</th>
             <th>事假数</th>
+            <th>旷课数</th>
             <th>加时数</th>
         </tr>
 
         {volist name="$Users" id="user"}
             <tr>
                 <td>{$user->name}</td>
-                <td>{$user->getSickLeave()}</td>
-                <td>{$user->getEventLeave()}</td>
+                <td>{$user->getSickLeave($Term->id)}</td>
+                <td>{$user->getEventLeave($Term->id)}</td>
+                <td>{$user->getAbsent($Term->id)}</td>
                 <td>{$user->getOvertime($Term->id)}</td>
             </tr>
         {/volist}
