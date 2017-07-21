@@ -251,6 +251,9 @@ class User extends Model
     */
     public function getAbsent($termId){
 
+        $Absent = new Absent();
+
+        return $Absent->getAbsent($this->username , $termId);
     }
 
     /*
