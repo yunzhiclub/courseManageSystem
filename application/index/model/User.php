@@ -207,4 +207,14 @@ class User extends Model
     {
         return $_SESSION['think']['username'];
     }
+    public static function isLeave($leave) // 判断是否过请假。
+    {
+        $Leave = new Leave();
+        $result = $Leave->where('username = "'.$leave->username.'" and term_id = '.User::getWeek('termId').' and week = '.$leave->week.' and day = '.$leave->day.' and knob = '.$leave->knob)->select();
+        if ($result == null)
+            return true;
+        else
+            return false;
+        
+    }
 }

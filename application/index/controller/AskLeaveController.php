@@ -43,9 +43,10 @@ class AskLeaveController extends IsloginController
             if (array_key_exists("reason", $_POST)==null)
                 $_POST['reason'] = null ;
             $Leave->reason = $_POST['reason'].':'.$_POST['explain'];
+            if (User::isLeave($Leave))
             $Leave->save();
         }
-        $Week = new ALWeek(User::getWeek('weekTime'),session('username'),User::getWeek('termId'));
+        $Week = new ALWeek($_POST['weekTime'],session('username'),User::getWeek('termId'));
         $this->assign('ALWeek', $Week);
         return $this->fetch('AskLeave/index');
     }
@@ -56,7 +57,7 @@ class AskLeaveController extends IsloginController
         if($leave == null)
             return $this->error('未找到相关记录', url('index'));
         $leave->delete();
-        $Week = new ALWeek(User::getWeek('weekTime'),session('username'),User::getWeek('termId'));
+        $Week = new ALWeek($_GET['weekTime'],session('username'),User::getWeek('termId'));
         $this->assign('ALWeek', $Week);
         return $this->fetch('AskLeave/index');
     }
