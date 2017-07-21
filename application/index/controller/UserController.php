@@ -13,18 +13,26 @@ class UserController extends IsloginController
 	public function index()
 	{
 		// 获取查询信息
-		$name = input('name');
-		// 获取查询信息
         $name = Request::instance()->get('name');
+        $size = Request::instance()->get('pagesize');
 
-        $pageSize = 5;
-
+        if ($size === ''||is_null($size)) {
+        	$pageSize = 5;
+        } else {
+        	$pageSize = $size;
+        }
+        
 		// 实例化空对象
 		$User = new User;
 		
-		$users = $User->where('name' , 'like' , '%' . $name . '%')->where('power','=','0')->paginate($pageSize,false,[
+		$users = $User
+				->where('name' , 'like' , '%' . $name . '%')
+				->where('power','<>','1')
+				
+				->paginate($pageSize,false,[
 				'query'=>[
 					'name' => $name,
+					'pagesize' =>$pageSize
 				],
 			]);
 		
@@ -173,6 +181,49 @@ class UserController extends IsloginController
 		}
 
 		return $this->success('重置成功，新密码为' . $User->password, url('index'));
+	}
+
+	/**
+	 * 用户冻结
+	 * @author poshichao
+	 */
+	public function freeze()
+	{
+		// 获取要冻结的用户名
+		$username = Request::instance()->param('username');
+
+		$User = User::get($username);
+
+		// 将用户权限改为冻结
+		$User->power = '2';
+
+		// 更新冻结权限，返回更新结果
+		if(false === $User->isUpdate(true)->save()) {
+			return $this->error('冻结失败！' . $User->getError());
+		}
+
+		return $this->success('用户' . $User->username . '成功冻结', url('index'));
+	}
+
+	/**
+	 * 用户解冻
+	 * @author poshichao
+	 */
+	public function thaw()
+	{
+		// 获取要解冻的用户名
+		$username = Request::instance()->param('username');
+
+		$User = User::get($username);
+
+		// 将用户权限改为正常
+		$User->power = '0';
+
+		// 更新正常状态，返回更新结果
+		if (false === $User->isUpdate(true)->save()) {
+			return $this->error('解冻失败！');
+		}
+		return $this->success('用户' . $User->username . '成功解冻', url('index'));
 	}
 
 	/**
