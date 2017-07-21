@@ -46,6 +46,7 @@ class ALDay
                 $this->char = null;
                 $this->style = 'hidden';
                 $this->state = null;
+                Leave::checkingLeave($this->userName , $this->weekTime , $this->day , $this->konb);
             }
             else
             {
@@ -85,21 +86,19 @@ class ALDay
     {
         $Term = new Term();
         $result = $Term->get($this->termId);    
-        $weekTime = ceil((time()-strtotime($result['start_time']))/(7*24*60*60));
-        if ($this->weekTime < $weekTime)
+        $startTime = strtotime($result['start_time'])- date('w',strtotime($result['start_time'])-1)*(24*60*60);
+
+        $askTime = $startTime + ($this->weekTime-1)*7*24*60*60 + ($this->day)*24*60*60;
+        if (time() > $askTime)
         {
+            $this->style = 'hidden';
             if($this->char == '取消')
             {
                 $this->color = 'btn-danger';
                 $this->state = '#';
+                $this->style = null;
             }
-        }
-
-        
-        $askTime = strtotime($result['start_time']) + ($this->weekTime-1)*7*24*60*60 + ($this->day)*24*60*60;
-        if (time() > $askTime)
-        {
-            $this->style = 'hidden';
+            
         }
     }
 }

@@ -33,6 +33,7 @@
                         <th>姓名</th>
                         <th>用户名</th>
                         <th>电话</th>
+                        <th>状态</th>
                         <th>操作</th>
                     </tr>
                     {volist name="users" id="user" key="key"}
@@ -42,10 +43,22 @@
                         <td>{$user->getData('username')}</td>
                         <td>{$user->getData('phone')}</td>
                         <td>
-                            <a href="{:url('edit?username=' . $user->getData('username'))}" class="btn btn-success"><i class="glyphicon glyphicon-pencil"></i>&nbsp;编辑</a>
-                            <a href="{:url('delete?username=' . $user->getData('username'))}" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</a>
-                            <a href="{:url('resetpassword?username=' . $user->getData('username'))}" class="btn btn-primary"><i class="glyphicon glyphicon-lock"></i>&nbsp;重置密码</a>
+                            {eq name="$user->power" value="2"}
+                            <span class="badge"">冻结</span>
+                            {else /}
+                            <span class="badge" style="background-color: #85db18">正常</span>
+                            {/eq}
+                        </td>
+                        <td>
+                            <a href="{:url('edit?username=' . $user->getData('username'))}" class="btn btn-success"><i class="glyphicon glyphicon-pencil"></i>&nbsp;编辑</a>&nbsp;
+                            <a href="{:url('delete?username=' . $user->getData('username'))}" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</a>&nbsp;
+                            <a href="{:url('resetpassword?username=' . $user->getData('username'))}" class="btn btn-primary"><i class="glyphicon glyphicon-lock"></i>&nbsp;重置密码</a>&nbsp;
                             <a href="{:url('Eletivecourse/index?name=' . $user->getData('name'))}" class="btn btn-warning"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;选课</a>
+                            {eq name="$user->power" value="2"}
+                            <a href="{:url('thaw?username=' . $user->getData('username'))}" class="btn btn-info"><i class="glyphicon glyphicon-ok-sign"></i>&nbsp;解冻</a>
+                            {else/}
+                            <a href="{:url('freeze?username=' . $user->getData('username'))}" class="btn btn-info"><i class="glyphicon glyphicon-remove-sign"></i>&nbsp;冻结</a>
+                            {/eq}
                         </td>
                     </tr>
                     {/volist}
