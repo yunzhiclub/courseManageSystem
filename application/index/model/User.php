@@ -231,14 +231,25 @@ class User extends Model
 
     /*
     * 张喜硕
-    * @getSickLeave获取该对象请的病假数
+    * @getSickLeave获取该对象某学期请的病假数
     */
-    public function getSickLeave(){
-
+    public function getSickLeave($termId){
 
     }
 
-    public function getEventLeave(){
+    /*
+    * 张喜硕
+    * @getEventLeave获取该对象某学期请的事假数
+    */
+    public function getEventLeave($termId){
+
+    }
+
+    /*
+    * 张喜硕
+    * @getEventLeave获取该对象某学期的旷课数
+    */
+    public function getAbsent($termId){
 
     }
 
