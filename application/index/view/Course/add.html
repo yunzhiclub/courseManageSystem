@@ -15,27 +15,53 @@
         }
     {/php}
     
-    <form action="{:url($action)}" method="post">
+    <form action="{:url($action , [
+                'courseId' => $Course->id,
+                'termId'   => $Term->id])}" method="post">
+
         <div class="row">
             <label>课程名：</label>
             
-            <input type="text" name="course" value="{$Course->name}" class="btn btn-default" readonly="true">
+            <input type="text" value="{$Course->name}" class="btn btn-default" disabled="true">
 
             <label>学期：</label>
             
-            <input type="text" name="term" value="{$Term->name}" class="btn btn-default" readonly="true">
+            <input type="text" value="{$Term->name}" class="btn btn-default" disabled="true">
         </div>
 
         <hr>
 
         <div class="row">
-            <label>星&nbsp;&nbsp;&nbsp;&nbsp;期：</label>
-            
-            <input type="text" name="day" value="{$Day->Day}" class="btn btn-default" readonly="true">
+            <label>星期：</label>
+
+            <select name="day" class="btn btn-default">
+
+                {volist name="$CourseTerm->getDays()" id="day"}
+                <option {eq name="$day->Day" value="$Day->Day"}selected="true"{/eq} value="{$day->Day}">
+                    {eq name="$day->Day" value="1"}一{/eq}
+                    {eq name="$day->Day" value="2"}二{/eq}
+                    {eq name="$day->Day" value="3"}三{/eq}
+                    {eq name="$day->Day" value="4"}四{/eq}
+                    {eq name="$day->Day" value="5"}五{/eq}
+                    {eq name="$day->Day" value="6"}六{/eq}
+                    {eq name="$day->Day" value="7"}日{/eq}
+                </option>
+                {/volist}
+            </select>
 
             <label>节数：</label>
             
-            <input type="text" name="knob" value="{$Knob->Knob}" class="btn btn-default" readonly="true">
+            <select name="knob" class="btn btn-default">
+                {volist name="$Day->getKnobs()" id="knob"}
+                <option {eq name="$knob->Knob" value="$Knob->Knob"}selected="true"{/eq} value="{$knob->Knob}">
+                    {eq name="$knob->Knob" value="1"}一{/eq}
+                    {eq name="$knob->Knob" value="2"}二{/eq}
+                    {eq name="$knob->Knob" value="3"}三{/eq}
+                    {eq name="$knob->Knob" value="4"}四{/eq}
+                    {eq name="$knob->Knob" value="5"}五{/eq}
+                </option>
+                {/volist}
+            </select>
         </div>
 
         <hr>
@@ -49,6 +75,7 @@
             {volist name="$Knob->getItsWeeks()" id="week"}
                 <input type="checkbox" name="week[]" id="{$week->Week}" value="{$week->Week}" {eq name="$week->getIsChecked($week->Week)" value="true"} checked="true" {/eq}>
                 <label for="{$week->Week}">{$week->Week}</label>
+                &nbsp;&nbsp;&nbsp;&nbsp;
             {/volist}
         </div>
 

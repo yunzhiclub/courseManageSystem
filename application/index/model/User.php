@@ -7,6 +7,7 @@ use app\index\model\Leave;
 
 class User extends Model
 { 
+    // 返回请假理由
     public function getleavereason($week)
     {
         $map = [
@@ -17,7 +18,6 @@ class User extends Model
         ];
         $leave = Leave::get($map);
         return $leave->reason;
-
     }
     public static function selected($day) 
     {
@@ -47,7 +47,8 @@ class User extends Model
     {
         $Term = new Term();
         $result = $Term->where('state = 1')->select();
-        $weekTime = ceil((time() - strtotime($result[0]['start_time']))/(7*24*60*60));
+        $startTime = strtotime($result[0]['start_time'])- date('w',strtotime($result[0]['start_time'])-1)*(24*60*60);
+        $weekTime = ceil((time() - $startTime)/(7*24*60*60));
         if ($code == 'weekTime')
             return $weekTime;
         if ($code == 'termId')
@@ -113,7 +114,6 @@ class User extends Model
     // 检查是否请假 澍
     public function CheckedLeave($week)
     {
-        $map = array();
         $map = [
             'week' => $week,
             'term_id' => $this->term,
@@ -185,7 +185,6 @@ class User extends Model
         }
 
         $power = $user->power;
-
         // 访问用户界面，权限为0，登录
         if (request()->controller() == 'AskLeave') {
             if ($power === 0) {
