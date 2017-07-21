@@ -16,7 +16,7 @@ class UserController extends IsloginController
         $name = Request::instance()->get('name');
         $size = Request::instance()->get('pagesize');
 
-        if ($size === '') {
+        if ($size === ''||is_null($size)) {
         	$pageSize = 5;
         } else {
         	$pageSize = $size;
@@ -32,6 +32,7 @@ class UserController extends IsloginController
 				->paginate($pageSize,false,[
 				'query'=>[
 					'name' => $name,
+					'pagesize' =>$pageSize
 				],
 			]);
 		
