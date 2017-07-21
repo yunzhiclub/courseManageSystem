@@ -7,8 +7,11 @@ use app\index\controller\IsloginController;
 * 出勤统计
 * @author 朱晨澍
 */
-class WorkmamgeController extends IsloginController
+class WorkmanageController extends IsloginController
 {
-	
-	return $this->fetch();
+	public function index()
+	{
+		
+		return $this->fetch();
+	}
 }
