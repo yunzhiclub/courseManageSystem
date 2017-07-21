@@ -35,7 +35,7 @@ class ALDay
         if (!$coursetime == null)
         {
             $Courseid = $coursetime[0]['course_id'];
-            $User_course = new User_course();
+            $User_course = new UserCourse();
             $result = $User_course->where('username = "'.$userName.'" and course_id = '.$Courseid)->select();
             if (!$result == null)
             {
