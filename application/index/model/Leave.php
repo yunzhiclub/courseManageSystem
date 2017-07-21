@@ -23,7 +23,7 @@ class Leave extends Model
 
         $map = [
             'username' => $username,
-            'term_id'     => $termId,
+            'term_id'  => $termId,
             'reason'   => '病假'
         ];
 
@@ -40,7 +40,7 @@ class Leave extends Model
 
         $map = [
             'username' => $username,
-            'term_id'     => $termId,
+            'term_id'  => $termId,
             'reason'   => '事假'
         ];
 
