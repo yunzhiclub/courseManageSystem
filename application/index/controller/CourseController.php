@@ -31,7 +31,14 @@ class CourseController extends IsloginController
     public function index(){
 
         $CourseName = Request::instance()->get('CourseName');
-        $pageSize   = 5;
+        $getSize    = Request::instance()->get('pageSize');
+
+        if(is_null($getSize)){
+            $pageSize   = 5;
+        } else {
+            $pageSize   = $getSize;
+        }
+
         $Course     = new Course();
         $Courses    = $Course->search($pageSize , $CourseName);
 
