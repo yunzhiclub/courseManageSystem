@@ -5,6 +5,7 @@ use app\index\model\Eletivecourse;
 use app\index\model\Course;
 use app\index\model\User;
 use app\index\model\Term;
+use app\index\model\Absent;
 use app\index\model\UserCourse;
 use think\Request;
 use app\index\model\Week;
@@ -36,5 +37,27 @@ class HomeController extends IsloginController
 			$this->assign('week',$weeke);
 		}
 		return $this->fetch();
+	}
+	public function miss()
+	{
+		$term = Request::instance()->param('term');
+		$week = Request::instance()->param('week');
+		$knob = Request::instance()->param('knob');
+		$day  = Request::instance()->param('day');
+		$username = Request::instance()->param('username');
+
+		$absent = new Absent;
+		$absent->term_id = $term;
+		$absent->week = $week;
+		$absent->knob = $knob;
+		$absent->day = $day;
+		$absent->username = $username;
+
+		$absent->save();
+
+		if(!$absent->save()){
+
+			return $this->error('写入失败' . $absent->getError());
+		}
 	}
 }

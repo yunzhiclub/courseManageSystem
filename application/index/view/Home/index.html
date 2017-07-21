@@ -47,8 +47,14 @@
                             {case value="2"}有课<span  style="background-color: green;" class="badge">{$user->name}</span>{/case}
                             {case value="3"}加班<span  style="background-color: #FFAC38;" class="badge">{$user->name}</span>{/case}
                             {case value="4"}休息<span  style="background-color: #B28B71;" class="badge">{$user->name}</span>{/case}
-                            {case value="5"}上班<span  style="background-color: blue;" class="badge">{$user->name}</span>{/case}
-                            {case value="6"}缺班<span  style="background-color: red;" class="badge">{$user->name}</span>{/case}
+                            {case value="5"}上班<a href="{:url('miss' , [
+                                'term'    => $user->term,
+                                'day'     => $user->day,
+                                'knob'    => $user->knob,
+                                'week'    => $week,
+                                'username'=>$user->username
+                            ])}" style="background-color: blue;" class="badge">{$user->name}</a>{/case}
+                            {case value="6"}缺班<span  style="background-color: black;" class="badge">{$user->name}</span>{/case}
                         {/switch}
                         <br>
                     {/volist}

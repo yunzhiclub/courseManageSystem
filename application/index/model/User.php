@@ -94,7 +94,7 @@ class User extends Model
             'day'     => $this->day,
             'knob'    => $this->knob
         ];
-        var_dump($map);
+        
         // 请假
         $leave = new Leave;
         $leaves = $leave->where($map)->select();
@@ -115,12 +115,20 @@ class User extends Model
         // 加班
         // $time = new Overtime;
         $times = Overtime::where($map)->select();
-        var_dump($times);
+        
         $worklength = sizeof($times);
-        var_dump($worklength);
+        
 
         // 缺班
         $miss=0;
+        $absent = new Absent;
+        $absebts = $absent->where($map)->select();
+        $absentlength = sizeof($absebts);
+        for($x=0;$x<$absentlength;$x++){
+            if($absebts[$x]->username==$this->username){
+                $miss = 1;
+            }
+        }
 
         // 检查是否请假
         $leavec= 0;
@@ -176,48 +184,6 @@ class User extends Model
                 return 6;
             }
         }
-    }
-    // 检查是否请假 澍
-    public function CheckedLeave($week)
-    {
-        $map = [
-            'week' => $week,
-            'term_id' => $this->term,
-            'day' => $this->day,
-            'knob' => $this->knob
-        ];
-        $leave = new Leave;
-        $leaves = $leave->where($map)->select();
-        
-        $leavelength = sizeof($leaves);
-        
-        for($l=0;$l<$leavelength;$l++){
-            if($leaves[$l]->username==$this->username){
-                return true;
-            }
-        }
-        return false;
-    }
-    // 检查是否加班 澍
-    public function CheckedWork($week)
-    {
-        $map = [
-            'week' => $week,
-            'term' => $this->term,
-            'day' => $this->day,
-            'knob' => $this->knob
-        ];
-        $time = new Overtime;
-        $times = $time->where($map)->select();
-        
-        $leavelength = sizeof($times);
-        
-        for($l=0;$l<$leavelength;$l++){
-            if($times[$l]->username==$this->username){
-                return true;
-            }
-        }
-        return false;
     }
 
     /**
