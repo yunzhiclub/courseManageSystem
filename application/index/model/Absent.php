@@ -15,7 +15,7 @@ class Absent extends Model
 
         $map = [
             'username' => $username,
-            'term'     => $termId
+            'term_id'  => $termId
         ];
 
         $Absents = Absent::where($map)->select();

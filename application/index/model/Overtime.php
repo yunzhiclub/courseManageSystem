@@ -15,7 +15,7 @@ class Overtime extends Model
 
         $map = [
             'username' => $username,
-            'term'     => $termId
+            'term_id'  => $termId
         ];
 
         $Overtimes = Overtime::where($map)->select();
