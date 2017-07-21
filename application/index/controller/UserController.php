@@ -27,8 +27,8 @@ class UserController extends IsloginController
 		
 		$users = $User
 				->where('name' , 'like' , '%' . $name . '%')
-				->where('power','=','0')
-				->whereOr('power','=','2')
+				->where('power','<>','1')
+				
 				->paginate($pageSize,false,[
 				'query'=>[
 					'name' => $name,
