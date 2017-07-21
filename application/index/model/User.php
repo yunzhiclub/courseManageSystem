@@ -245,6 +245,9 @@ class User extends Model
     */
     public function getSickLeave($termId){
 
+        $Leave = new Leave();
+
+        return $Leave->getSickLeave($this->username , $termId);
     }
 
     /*
@@ -253,6 +256,9 @@ class User extends Model
     */
     public function getEventLeave($termId){
 
+        $Leave = new Leave();
+
+        return $Leave->getEventLeave($this->username , $termId);
     }
 
     /*
