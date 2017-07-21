@@ -46,6 +46,7 @@ class ALDay
                 $this->char = null;
                 $this->style = 'hidden';
                 $this->state = null;
+                Leave::checkingLeave($this->userName , $this->weekTime , $this->day , $this->konb);
             }
             else
             {

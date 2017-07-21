@@ -207,4 +207,79 @@ class User extends Model
     {
         return $_SESSION['think']['username'];
     }
+
+    public static function isLeave($leave) // 判断是否过请假。
+    {
+        $Leave = new Leave();
+        $result = $Leave->where('username = "'.$leave->username.'" and term_id = '.User::getWeek('termId').' and week = '.$leave->week.' and day = '.$leave->day.' and knob = '.$leave->knob)->select();
+        if ($result == null)
+            return true;
+        else
+            return false;
+    }   
+
+    /*
+    * 张喜硕
+    * @getUsualUsers获取未被冻结的正常用户
+    */
+    public static function getUsualUsers(){
+
+        $Users      = [];
+        $tempUsers  = User::all();
+        $Length     = sizeof($tempUsers);
+
+        for($vol = 0 ; $vol < $Length ; $vol ++){
+
+            if($tempUsers[$vol]->power == 0){
+
+                array_push($Users , $tempUsers[$vol]);
+            }
+        }
+
+        return $Users;
+    }
+
+    /*
+    * 张喜硕
+    * @getSickLeave获取该对象某学期请的病假数
+    */
+    public function getSickLeave($termId){
+
+        $Leave = new Leave();
+
+        return $Leave->getSickLeave($this->username , $termId);
+    }
+
+    /*
+    * 张喜硕
+    * @getEventLeave获取该对象某学期请的事假数
+    */
+    public function getEventLeave($termId){
+
+        $Leave = new Leave();
+
+        return $Leave->getEventLeave($this->username , $termId);
+    }
+
+    /*
+    * 张喜硕
+    * @getEventLeave获取该对象某学期的旷课数
+    */
+    public function getAbsent($termId){
+
+        $Absent = new Absent();
+
+        return $Absent->getAbsent($this->username , $termId);
+    }
+
+    /*
+    * 张喜硕
+    * @getOvertime获取当前对象某学期的加时数
+    */
+    public function getOvertime($termId){
+
+        $Overtime = new Overtime();
+
+        return $Overtime->getOvertime($this->username , $termId);
+    }
 }
