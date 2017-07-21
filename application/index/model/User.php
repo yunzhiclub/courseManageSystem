@@ -67,6 +67,7 @@ class User extends Model
         $UserCourse = UserCourse::get($username);
         return $UserCourse;
     }
+
     // 判断用户已选课程 澍
     public function getIsChecked(Course &$Course)
     {
@@ -88,11 +89,18 @@ class User extends Model
     {
         $map = array();
         $map = [
-            'week' => $week,
+            'week'    => $week,
             'term_id' => $this->term,
-            'day' => $this->day,
-            'knob' => $this->knob
+            'day'     => $this->day,
+            'knob'    => $this->knob
         ];
+        
+        // 请假
+        $leave = new Leave;
+        $leaves = $leave->where($map)->select();
+        $leavelength = sizeof($leaves);
+        
+        // 上课
         $coursetime = new Coursetime;
         $course = $coursetime->where($map)->select();
         $map = ['username' => $this->username];
@@ -100,37 +108,82 @@ class User extends Model
         $courseids = $usercourse->where($map)->select();
         $usid = sizeof($courseids);
         $ctid = sizeof($course);
+
+        // 休息
+
+
+        // 加班
+        // $time = new Overtime;
+        $times = Overtime::where($map)->select();
+        
+        $worklength = sizeof($times);
+        
+
+        // 缺班
+        $miss=0;
+        $absent = new Absent;
+        $absebts = $absent->where($map)->select();
+        $absentlength = sizeof($absebts);
+        for($x=0;$x<$absentlength;$x++){
+            if($absebts[$x]->username==$this->username){
+                $miss = 1;
+            }
+        }
+
+        // 检查是否请假
+        $leavec= 0;
+        for($l=0;$l<$leavelength;$l++){
+            if($leaves[$l]->username==$this->username){
+                $leavec = 1;
+            }
+        }
+        // 检查是否有课
+        $coursec = 0;
         for($a=0;$a <$usid;$a++){
                 for($b=0;$b<$ctid;$b++){
                     // var_dump($course[$b]);
                     // var_dump($courseids[$a]);
                     if($course[$b]->course_id==$courseids[$a]->course_id){
-                        return true;
+                        $coursec = 1;
                     }
                 }
             }
-        return false;
-    }
-    // 检查是否请假 澍
-    public function CheckedLeave($week)
-    {
-        $map = [
-            'week' => $week,
-            'term_id' => $this->term,
-            'day' => $this->day,
-            'knob' => $this->knob
-        ];
-        $leave = new Leave;
-        $leaves = $leave->where($map)->select();
-        
-        $leavelength = sizeof($leaves);
-        
-        for($l=0;$l<$leavelength;$l++){
-            if($leaves[$l]->username==$this->username){
-                return true;
+        // 检查是否加班
+        $workc=0;
+        for($l=0;$l<$worklength;$l++){
+            if($times[$l]->username==$this->username){
+                $workc = 1;
             }
         }
-        return false;
+        // 检查是否休息
+        $rest = 0;
+        if($this->day==7){
+            $rest = 1;
+        }
+        // 请假判断
+        if($leavec==1){
+            return 1;
+        }
+        // 课程判断
+        if($coursec == 1){
+            return 2;
+        }
+        // 休息判断
+        if($rest == 1){
+            // 加班判断
+            if($workc==0){
+                return 4;
+            }else{
+                return 3;
+            }
+        }else{
+            // 缺班判断
+            if($miss==0){
+                return 5;
+            }else{
+                return 6;
+            }
+        }
     }
 
     /**
