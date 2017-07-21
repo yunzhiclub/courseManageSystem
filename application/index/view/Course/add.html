@@ -48,11 +48,6 @@
                 </option>
                 {/volist}
             </select>
-        </div>
-
-        <hr>
-
-        <div class="row">
 
             <label>节数：</label>
             
@@ -80,7 +75,7 @@
             {volist name="$Knob->getItsWeeks()" id="week"}
                 <input type="checkbox" name="week[]" id="{$week->Week}" value="{$week->Week}" {eq name="$week->getIsChecked($week->Week)" value="true"} checked="true" {/eq}>
                 <label for="{$week->Week}">{$week->Week}</label>
-                &nbsp;&nbsp;&nbsp;
+                &nbsp;&nbsp;&nbsp;&nbsp;
             {/volist}
         </div>
 

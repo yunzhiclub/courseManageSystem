@@ -3,7 +3,6 @@
 namespace app\index\controller;
 
 use think\Request;
-use think\Controller;
 use app\index\model\Day;
 use app\index\model\Week;
 use app\index\model\Knob;
