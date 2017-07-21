@@ -39,7 +39,7 @@
                     {volist name="$knob->getUsers()" id="user"}
                         <span
                         {eq name="$user->CheckedLeave($week)" value="true"} style="background-color: red;" class="badge" title="{$user->getleavereason($week)}"{/eq}
-                        {eq name="$user->CheckedCourse($week)" value="true"} style="color: green;" {else /} class="badge" style="background-color: blue;" {/eq}
+                        {eq name="$user->CheckedCourse($week)" value="true"} class="badge" style="background-color: green;" {else /} class="badge" style="background-color: blue;" {/eq}
                         >{$user->name}</span><br>
                     {/volist}
                     </td>
