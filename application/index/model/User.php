@@ -47,7 +47,8 @@ class User extends Model
     {
         $Term = new Term();
         $result = $Term->where('state = 1')->select();
-        $weekTime = ceil((time() - strtotime($result[0]['start_time']))/(7*24*60*60));
+        $startTime = strtotime($result[0]['start_time'])- date('w',strtotime($result[0]['start_time'])-1)*(24*60*60);
+        $weekTime = ceil((time() - $startTime)/(7*24*60*60));
         if ($code == 'weekTime')
             return $weekTime;
         if ($code == 'termId')
