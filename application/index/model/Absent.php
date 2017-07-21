@@ -18,7 +18,7 @@ class Absent extends Model
             'term'     => $termId
         ];
 
-        $Absents = Absent::get($map);
+        $Absents = Absent::where($map)->select();
 
         return sizeof($Absents);
     }

@@ -23,8 +23,13 @@ class Leave extends Model
 
         $map = [
             'username' => $username,
-            'term'     => $termId
+            'term_id'     => $termId,
+            'reason'   => '病假'
         ];
+
+        $SickLeaves = Leave::where($map)->select();
+
+        return sizeof($SickLeaves);
     }
 
     /*
@@ -35,7 +40,12 @@ class Leave extends Model
 
         $map = [
             'username' => $username,
-            'term'     => $termId
+            'term_id'     => $termId,
+            'reason'   => '事假'
         ];
+
+        $EventLeaves = Leave::where($map)->select();
+
+        return sizeof($EventLeaves);
     }
 }
