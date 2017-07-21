@@ -207,4 +207,49 @@ class User extends Model
     {
         return $_SESSION['think']['username'];
     }
+
+    /*
+    * 张喜硕
+    * @getUsualUsers获取未被冻结的正常用户
+    */
+    public static function getUsualUsers(){
+
+        $Users      = [];
+        $tempUsers  = User::all();
+        $Length     = sizeof($tempUsers);
+
+        for($vol = 0 ; $vol < $Length ; $vol ++){
+
+            if($tempUsers[$vol]->power == 0){
+
+                array_push($Users , $tempUsers[$vol]);
+            }
+        }
+
+        return $Users;
+    }
+
+    /*
+    * 张喜硕
+    * @getSickLeave获取该对象请的病假数
+    */
+    public function getSickLeave(){
+
+
+    }
+
+    public function getEventLeave(){
+
+    }
+
+    /*
+    * 张喜硕
+    * @getOvertime获取当前对象某学期的加时数
+    */
+    public function getOvertime($termId){
+
+        $Overtime = new Overtime();
+
+        return $Overtime->getOvertime($this->username , $termId);
+    }
 }
