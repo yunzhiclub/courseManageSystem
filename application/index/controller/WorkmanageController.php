@@ -1,17 +1,33 @@
 <?php
 namespace app\index\controller;
 
-use app\index\controller\IsloginController;
+use think\Request;
+use app\index\model\User;
+use app\index\model\Term;
 
 /**
-* 出勤统计
-* @author 朱晨澍
+* 张喜硕 出勤统计
+* 
 */
 class WorkmanageController extends IsloginController
 {
-	public function index()
-	{
-		
-		return $this->fetch();
-	}
+
+    public function index(){
+
+        $termId   = Request::instance()->get('termId');
+        $Users    = User::getUsualUsers();
+
+        if(is_null($termId)){
+
+            $Term  = Term::getCurrentTerm();
+        } else {
+
+            $Term  = Term::get($termId);
+        }
+
+        $this->assign('Users' , $Users);
+        $this->assign('Term'  , $Term);
+
+        return $this->fetch();
+    }
 }
