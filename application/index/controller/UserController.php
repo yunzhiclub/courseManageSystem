@@ -13,12 +13,15 @@ class UserController extends IsloginController
 	public function index()
 	{
 		// 获取查询信息
-		$name = input('name');
-		// 获取查询信息
         $name = Request::instance()->get('name');
+        $size = Request::instance()->get('pagesize');
 
-        $pageSize = 5;
-
+        if ($size === '') {
+        	$pageSize = 5;
+        } else {
+        	$pageSize = $size;
+        }
+        
 		// 实例化空对象
 		$User = new User;
 		
