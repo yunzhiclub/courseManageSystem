@@ -7,6 +7,7 @@ use app\index\model\Leave;
 
 class User extends Model
 { 
+    // 返回请假理由
     public function getleavereason($week)
     {
         $map = [
@@ -17,7 +18,6 @@ class User extends Model
         ];
         $leave = Leave::get($map);
         return $leave->reason;
-
     }
     public static function selected($day) 
     {
@@ -114,7 +114,6 @@ class User extends Model
     // 检查是否请假 澍
     public function CheckedLeave($week)
     {
-        $map = array();
         $map = [
             'week' => $week,
             'term_id' => $this->term,
