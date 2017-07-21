@@ -60,7 +60,7 @@ class CourseController extends IsloginController
 
     public function saveCourse(){
 
-        $CourseName   = $_POST['CourseName'];
+        $CourseName   = Request::instance()->post('CourseName');
         $Course       = new Course();
         $Course->name = $CourseName;
 
@@ -95,8 +95,8 @@ class CourseController extends IsloginController
         if(!$Course->delete()){
             return $this->error('原课程删除失败，更新失败');
         }
-        
-        $CourseName   = $_POST['CourseName'];
+
+        $CourseName   = Request::instance()->post('CourseName');
         $Course       = new Course();
         $Course->name = $CourseName;
         $Course->id   = $id;
@@ -140,7 +140,7 @@ class CourseController extends IsloginController
 
     public function inquiry(){
 
-        $id = Request::instance()->param('id/d');
+        $id     = Request::instance()->param('id/d');
         $Course = Course::get($id);
 
         if(is_null(Request::instance()->post('Termid'))&&is_null(Request::instance()->param('term_id/d'))) {
