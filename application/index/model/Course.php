@@ -12,13 +12,14 @@ class Course extends Model
 {
     
     public function checkName($CourseName) {
-        if($CourseName=='') {
+        if($CourseName == '') {
             return false;
         }
 
-        $map =['name' => $CourseName];
+        $map    = ['name' => $CourseName];
         $Course = Course::get($map);
-        if(!is_null($Course)){
+
+        if(!is_null($Course)) {
             return false;
         }
 
@@ -33,7 +34,7 @@ class Course extends Model
 
         $Courses    = $this->paginate($pageSize , false , [
             'query' => [
-                'name' => $CourseName,
+                'name'     => $CourseName,
                 'pageSize' => $pageSize
                 ],
             ]);

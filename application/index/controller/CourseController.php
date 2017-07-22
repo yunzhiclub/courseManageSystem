@@ -41,8 +41,8 @@ class CourseController extends IsloginController
             $pageSize   = $getSize;
         }
 
-        $Course     = new Course();
-        $Courses    = $Course->search($pageSize , $CourseName);
+        $Course   = new Course();
+        $Courses  = $Course->search($pageSize , $CourseName);
 
         $this->assign('Courses',$Courses);
         return $this->fetch();
