@@ -259,7 +259,7 @@ class User extends Model
         }
     }
     
-    public static function getCurrentLoginUser()
+    public static function getCurrentLoginUser() 
     {
         return $_SESSION['think']['username'];
     }
@@ -338,11 +338,32 @@ class User extends Model
 
         return $Overtime->getOvertime($this->username , $termId);
     }
-    public function getDay()
+    public static function getDay()
     {
         if(date('w') == 0)
             return 7;
         else
             return date('w'); 
+    }
+    public static function getAsktime($weekTime , $day , $konb)
+    {
+        $Term = new Term();
+        $result = $Term->get($this->getWeek('termId'));    
+        $startTime = strtotime($result['start_time'])- date('w',strtotime($result['start_time'])-1)*(24*60*60);
+        $askTime = $startTime + ($weekTime-1)*7*24*60*60 + ($day-1)*24*60*60 + $this->knonTime($konb);
+        return $askTime;
+    }
+    public function knonTime($knob)
+    {
+        if ($knob == 1)
+        return 8*60*60+30*60;
+        if ($knob == 2)
+        return 10*60*60+5*60;
+        if ($knob == 3)
+        return 14*60*60;
+        if ($knob == 4)
+        return 16*60*60;
+        if ($knob == 5)
+        return 20*60*60;
     }
 }

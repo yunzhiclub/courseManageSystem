@@ -28,8 +28,9 @@ class ALDay
         $this->day = $day;
         $this->Day = $this->makeDay($konb , $weekTime , $day , $userName);
         $this->leave();
-        $this->isPastTime();
         $this->addCourse();
+        $this->isPastTime();
+        
     }
 
     public function makeDay($konb , $weekTime , $day , $userName)
@@ -109,19 +110,25 @@ class ALDay
     }
     public function isPastTime()  // 时间过了就不能取消请假
     {
-        $Term = new Term();
-        $result = $Term->get($this->termId);    
-        $startTime = strtotime($result['start_time'])- date('w',strtotime($result['start_time'])-1)*(24*60*60);
-
-        $askTime = $startTime + ($this->weekTime-1)*7*24*60*60 + ($this->day)*24*60*60;
+        $askTime = $this->getAsktime();
         if (time() > $askTime)
         {
             $this->style = 'hidden';
-            if($this->char == '取消')
+            if ($this->char == '取消')
             {
-                $this->color = 'btn-danger';
+                if ($this->color == 'btn-warning')
+                {
+                    $this->color = 'btn-danger';
+                    $this->char = '已假';    
+                }
+                else
+                {
+                    $this->color = 'btn-success';
+                    $this->char = '已补';  
+
+                }
                 $this->state = '#';
-                $this->style = null;
+                $this->style = null;   
             }
             
         }
@@ -135,5 +142,26 @@ class ALDay
             $this->char = '取消';
             $this->state = '/courseManageSystem/public/index.php/index/ask_leave/unaddCourse.html?weekTime='.$this->weekTime.'&&day='.$this->day.'&&konb='.$this->konb;
         }
+    }
+    public function knonTime($knob)
+    {
+        if ($knob == 1)
+        return 8*60*60+30*60;
+        if ($knob == 2)
+        return 10*60*60+5*60;
+        if ($knob == 3)
+        return 14*60*60;
+        if ($knob == 4)
+        return 16*60*60;
+        if ($knob == 5)
+        return 20*60*60;
+    }
+    public function getAsktime()
+    {
+        $Term = new Term();
+        $result = $Term->get($this->termId);    
+        $startTime = strtotime($result['start_time'])- date('w',strtotime($result['start_time'])-1)*(24*60*60);
+        $askTime = $startTime + ($this->weekTime-1)*7*24*60*60 + ($this->day-1)*24*60*60 + $this->knonTime($this->konb);
+        return $askTime;
     }
 }
