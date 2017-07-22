@@ -5,6 +5,7 @@ use app\index\model\ALWeek;
 use think\Request;
 use app\index\model\User;
 use app\index\model\Leave;
+use app\index\model\Overtime;
 
 class AskLeaveController extends IsloginController
 {
@@ -44,9 +45,8 @@ class AskLeaveController extends IsloginController
             $Leave->knob = $konb;
             $Leave->term_id = User::getWeek('termId');
             $Leave->username = User::getCurrentLoginUser();
-            if (array_key_exists("reason", $postData)==null)
-                $postData['reason'] = null ;
-            $Leave->reason = $postData['reason'].':'.$postData['explain'];
+            $Leave->reason = $postData['reason'];
+            $Leave->explain = $postData['explain'];
             if (User::isLeave($Leave))
             $Leave->save();
         }
@@ -62,6 +62,32 @@ class AskLeaveController extends IsloginController
         if($leave == null)
             return $this->error('未找到相关记录', url('index'));
         $leave->delete();
+        $Week = new ALWeek($getData['weekTime'],User::getCurrentLoginUser(),User::getWeek('termId'));
+        $this->assign('ALWeek', $Week);
+        return $this->fetch('AskLeave/index');
+    }
+    public function addCourse()
+    {
+        $getData = Request::instance()->get();  
+        $Overtime = new Overtime();
+        $Overtime->week = $getData['weekTime'];
+        $Overtime->day = $getData['day'];
+        $Overtime->knob = $getData['konb'];
+        $Overtime->term_id = User::getWeek('termId');
+        $Overtime->username = User::getCurrentLoginUser();
+        $Overtime->save();
+        $Week = new ALWeek($getData['weekTime'],User::getCurrentLoginUser(),User::getWeek('termId'));
+        $this->assign('ALWeek', $Week);
+        return $this->fetch('AskLeave/index');
+    }
+    public function unaddCourse()
+    {
+        $getData = Request::instance()->get();
+        $map = ['week'=>$getData['weekTime'],'day'=>$getData['day'],'knob'=>$getData['konb'],'term_id'=>User::getWeek('termId'), 'username'=>User::getCurrentLoginUser()];
+        $Overtime = Overtime::get($map);
+        if($Overtime == null)
+            return $this->error('未找到相关记录', url('index'));
+        $Overtime->delete();
         $Week = new ALWeek($getData['weekTime'],User::getCurrentLoginUser(),User::getWeek('termId'));
         $this->assign('ALWeek', $Week);
         return $this->fetch('AskLeave/index');

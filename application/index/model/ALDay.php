@@ -5,6 +5,7 @@ use app\index\model\User_course;
 use app\index\model\Course;
 use app\index\model\Leave;
 use app\index\model\Term;
+use app\index\model\Overtime;
 /**
 * 周杰
 */
@@ -26,6 +27,9 @@ class ALDay
         $this->weekTime = $weekTime;
         $this->day = $day;
         $this->Day = $this->makeDay($konb , $weekTime , $day , $userName);
+        $this->leave();
+        $this->isPastTime();
+        $this->addCourse();
     }
 
     public function makeDay($konb , $weekTime , $day , $userName)
@@ -55,8 +59,7 @@ class ALDay
                 $this->char = '请假';
                 $this->style = null;
                 $this->state = "/courseManageSystem/public/index.php/index/ask_leave/leave.html?weekTime=".$this->weekTime.'&&day='.$this->day.'&&konb='.$this->konb;
-                $this->leave();
-                $this->isPastTime();
+                
             }
         }
         else
@@ -66,12 +69,34 @@ class ALDay
             $this->char = '请假';
             $this->style = null;
             $this->state = "/courseManageSystem/public/index.php/index/ask_leave/leave.html?weekTime=".$this->weekTime.'&&day='.$this->day.'&&konb='.$this->konb;
-            $this->leave();
-            $this->isPastTime();
+           
         }
     }
 
-    public function leave()
+    public function addCourse() // 放假时间的补课按钮添加出来
+    {
+        if ($this->day == 7) 
+        {
+            $this->char = '补课';
+            $this->color = 'btn-info';
+            $this->state = "/courseManageSystem/public/index.php/index/ask_leave/addCourse.html?weekTime=".$this->weekTime.'&&day='.$this->day.'&&konb='.$this->konb;
+            Leave::checkingLeave($this->userName , $this->weekTime , $this->day , $this->konb);
+            $this->addedCourse();
+        }
+        if ($this->day == 6)
+        {
+            if ($this->konb <= 2)
+            {
+                $this->char = '补课';
+                $this->color = 'btn-info';
+                $this->state = "/courseManageSystem/public/index.php/index/ask_leave/addCourse.html?weekTime=".$this->weekTime.'&&day='.$this->day.'&&konb='.$this->konb;
+                Leave::checkingLeave($this->userName , $this->weekTime , $this->day , $this->konb);
+                $this->addedCourse();
+            }
+        }
+    }
+
+    public function leave()  // 检查是否请假
     {
         $Leave = new Leave();
         $result = $Leave->where('username = "'.$this->userName.'" and week = '.$this->weekTime.' and day = '.$this->day.' and knob = '.$this->konb.' and term_id = '.$this->termId)->select();
@@ -82,7 +107,7 @@ class ALDay
             $this->state = '/courseManageSystem/public/index.php/index/ask_leave/unLeave.html?weekTime='.$this->weekTime.'&&day='.$this->day.'&&konb='.$this->konb;
         }
     }
-    public function isPastTime()
+    public function isPastTime()  // 时间过了就不能取消请假
     {
         $Term = new Term();
         $result = $Term->get($this->termId);    
@@ -99,6 +124,16 @@ class ALDay
                 $this->style = null;
             }
             
+        }
+    }
+    public function addedCourse()
+    {
+        $Overtime = new Overtime();
+        $result = $Overtime->where('username = "'.$this->userName.'" and week = '.$this->weekTime.' and day = '.$this->day.' and knob = '.$this->konb.' and term_id = '.$this->termId)->select();
+        if (!$result == null)
+        {
+            $this->char = '取消';
+            $this->state = '/courseManageSystem/public/index.php/index/ask_leave/unaddCourse.html?weekTime='.$this->weekTime.'&&day='.$this->day.'&&konb='.$this->konb;
         }
     }
 }
