@@ -84,53 +84,37 @@ class User extends Model
             return true;
         }
     }
-    // 检查user是否有课 澍
-    public function CheckedCourse($week)
+    // 检查user的状态 澍
+    public function CheckedState($week)
     {
-        $map = array();
+        // 现在时间的数组
         $map = [
+            'knob'    => $this->knob,
             'week'    => $week,
-            'term_id' => $this->term,
             'day'     => $this->day,
-            'knob'    => $this->knob
+            'term_id' => $this->term
+        ];        
+       
+        // 检查缺班
+        $mapr = [
+            'knob'    => $this->knob,
+            'week'    => $week,
+            'day'     => $this->day,
+            'term_id' => $this->term
         ];
-        
-        // 请假
-        $leave = new Leave;
-        $leaves = $leave->where($map)->select();
-        $leavelength = sizeof($leaves);
-        
-        // 上课
-        $coursetime = new Coursetime;
-        $course = $coursetime->where($map)->select();
-        $map = ['username' => $this->username];
-        $usercourse = new UserCourse;
-        $courseids = $usercourse->where($map)->select();
-        $usid = sizeof($courseids);
-        $ctid = sizeof($course);
-
-        // 休息
-
-
-        // 加班
-        // $time = new Overtime;
-        $times = Overtime::where($map)->select();
-        
-        $worklength = sizeof($times);
-        
-
-        // 缺班
         $miss=0;
         $absent = new Absent;
-        $absebts = $absent->where($map)->select();
+        $absebts = $absent->where($mapr)->select();
         $absentlength = sizeof($absebts);
         for($x=0;$x<$absentlength;$x++){
             if($absebts[$x]->username==$this->username){
                 $miss = 1;
             }
         }
-
         // 检查是否请假
+        $leave = new Leave;
+        $leaves = $leave->where($map)->select();
+        $leavelength = sizeof($leaves);
         $leavec= 0;
         for($l=0;$l<$leavelength;$l++){
             if($leaves[$l]->username==$this->username){
@@ -138,6 +122,13 @@ class User extends Model
             }
         }
         // 检查是否有课
+        $coursetime = new Coursetime;
+        $course = $coursetime->where($map)->select();
+        $map = ['username' => $this->username];
+        $usercourse = new UserCourse;
+        $courseids = $usercourse->where($map)->select();
+        $usid = sizeof($courseids);
+        $ctid = sizeof($course);
         $coursec = 0;
         for($a=0;$a <$usid;$a++){
                 for($b=0;$b<$ctid;$b++){
@@ -149,6 +140,15 @@ class User extends Model
                 }
             }
         // 检查是否加班
+        $mapa = [
+            'knob'    => $this->knob,
+            'week'    => $week,
+            'day'     => $this->day,
+            'term_id' => $this->term
+        ];
+        $times = Overtime::where($mapa)->select();
+        
+        $worklength = sizeof($times);
         $workc=0;
         for($l=0;$l<$worklength;$l++){
             if($times[$l]->username==$this->username){
