@@ -48,7 +48,12 @@ class AskLeaveController extends IsloginController
             $Leave->reason = $postData['reason'];
             $Leave->explain = $postData['explain'];
             if (User::isLeave($Leave))
-            $Leave->save();
+            {
+                if ($postData['weekTime'] > User::getWeek('weekTime'))  
+                $Leave->save();
+                if ($postData['weekTime'] == User::getWeek('weekTime')&&$postData['day'] >=date('w'))  
+                $Leave->save();
+            } 
         }
         $Week = new ALWeek($postData['weekTime'],User::getCurrentLoginUser(),User::getWeek('termId'));
         $this->assign('ALWeek', $Week);
