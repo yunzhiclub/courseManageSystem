@@ -338,4 +338,11 @@ class User extends Model
 
         return $Overtime->getOvertime($this->username , $termId);
     }
+    public function getDay()
+    {
+        if(date('w') == 0)
+            return 7;
+        else
+            return date('w'); 
+    }
 }
