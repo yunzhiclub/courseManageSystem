@@ -53,11 +53,34 @@ class HomeController extends IsloginController
 		$absent->day = $day;
 		$absent->username = $username;
 
-		$absent->save();
-
+		
 		if(!$absent->save()){
 
-			return $this->error('写入失败' . $absent->getError());
+			return $this->error('失败');
 		}
+			return $this->success('设置缺课成功');
+	}
+	public function delete()
+	{
+		$term = Request::instance()->param('term');
+		$week = Request::instance()->param('week');
+		$knob = Request::instance()->param('knob');
+		$day  = Request::instance()->param('day');
+		$username = Request::instance()->param('username');
+
+		$map = [
+            'knob'    => $knob,
+            'week'    => $week,
+            'day'     => $day,
+            'term_id' => $term,
+            'username'=> $username
+        ];
+
+        $absent = Absent::get($map);
+        if(!$absent->delete()){
+
+			return $this->error('失败');
+		}
+			return $this->success('取消缺课成功');
 	}
 }
