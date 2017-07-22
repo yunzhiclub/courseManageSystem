@@ -49,9 +49,8 @@ class AskLeaveController extends IsloginController
             $Leave->explain = $postData['explain'];
             if (User::isLeave($Leave))
             {
-                if ($postData['weekTime'] > User::getWeek('weekTime'))  
-                $Leave->save();
-                if ($postData['weekTime'] == User::getWeek('weekTime')&&$postData['day'] >=date('w'))  
+                $asktime = User::getAsktime($postData['weekTime'] , $postData['day'] , $konb);
+                if(time() > $asktime)
                 $Leave->save();
             } 
         }
