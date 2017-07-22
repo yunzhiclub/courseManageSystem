@@ -1,8 +1,8 @@
 <?php
 namespace app\index\controller;
 use app\index\controller\IsloginController;
-use app\index\model\User;
 use app\index\model\UserCourse;
+use app\index\model\User;
 use think\Request;
 
 class UserController extends IsloginController
@@ -17,23 +17,22 @@ class UserController extends IsloginController
         $name = Request::instance()->get('name');
         $size = Request::instance()->get('pagesize');
 
-        if ($size === ''||is_null($size)) {
+        if ($size === '' || is_null($size)) {
         	$pageSize = 5;
         } else {
         	$pageSize = $size;
         }
         
 		// 实例化空对象
-		$User = new User;
+		$User = new User();
 		
 		$users = $User
-				->where('name' , 'like' , '%' . $name . '%')
-				->where('power','<>','1')
-				
-				->paginate($pageSize,false,[
-				'query'=>[
-					'name' => $name,
-					'pagesize' =>$pageSize
+				 ->where('name' , 'like' , '%' . $name . '%')
+				 ->where('power','<>','1')
+				 ->paginate($pageSize,false,[
+				 'query'=>[
+					'name' 		=> $name,
+					'pagesize' 	=> $pageSize,
 				],
 			]);
 		
@@ -51,7 +50,7 @@ class UserController extends IsloginController
 	public function add()
 	{
 		// 实例化空对象
-		$User = new User;
+		$User = new User();
 
 		// 设置默认值
 		$User->username = '';
@@ -81,7 +80,7 @@ class UserController extends IsloginController
         	return $this->error('新增失败:' . $User->getError());
         }
         	
-        return  $this->success('用户' . $User->username . '新增成功', url('index'));
+        return  $this->success('用户' . $User->username . '新增成功!', url('index'));
 
 	}
 
@@ -126,10 +125,10 @@ class UserController extends IsloginController
 
         // 返回更新结果
         if (false === $this->saveUser($User)) {	
-            return $this->error('更新失败' . $User->getError());
+            return $this->error('更新失败!' . $User->getError());
         }
 
-        return $this->success('更新成功', url('index'));
+        return $this->success('更新成功!', url('index'));
 	}
 
 	/**
@@ -162,11 +161,11 @@ class UserController extends IsloginController
             		return $this->error('删除失败:' . $User->getError());
         		}
 
-        		return $this->success('删除成功', url('index'));
+        		return $this->success('删除成功!', url('index'));
         	}
         }
 
-        return $this->error('未获取到用户名信息');  
+        return $this->error('未获取到用户名信息!');  
 	}
 
 	/**
@@ -178,6 +177,10 @@ class UserController extends IsloginController
 		// 获取重置密码的用户名
 		$username = Request::instance()->param('username');
 		
+		if (is_null($username)) {
+			return $this->error('未获取到用户名信息！');
+		}
+
 		// 获取当前对象
 		$User = User::get($username);
 
@@ -186,10 +189,10 @@ class UserController extends IsloginController
 
 		// 更新
 		if (false === $User->isUpdate(true)->save()) {
-			return $this->error('重置失败' . $User->getError());
+			return $this->error('重置失败!' . $User->getError());
 		}
 
-		return $this->success('重置成功，新密码为' . $User->password, url('index'));
+		return $this->success('重置成功!新密码为' . $User->password, url('index'));
 	}
 
 	/**
@@ -200,6 +203,10 @@ class UserController extends IsloginController
 	{
 		// 获取要冻结的用户名
 		$username = Request::instance()->param('username');
+
+		if (is_null($username)) {
+			return $this->error('未获取到用户名信息！');
+		}
 
 		$User = User::get($username);
 
@@ -222,6 +229,10 @@ class UserController extends IsloginController
 	{
 		// 获取要解冻的用户名
 		$username = Request::instance()->param('username');
+
+		if (is_null($username)) {
+			return $this->error('未获取到用户名信息！');
+		}
 
 		$User = User::get($username);
 

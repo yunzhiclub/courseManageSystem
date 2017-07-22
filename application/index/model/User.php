@@ -196,12 +196,15 @@ class User extends Model
      */
     static public function log($username, $password)
     {
-        $map = array('username'  => $username);
+        $map  = array('username'  => $username);
         $User = self::get($map);
+
         // $User要么是一个对象，要么是null。
         if (!is_null($User)) {
+
             // 验证密码是否正确
             if ($User->getData('password') === $password) {
+                
                 // 用户名密码正确，将UserId存session。
                 session('username', $User->getData('username'));
                 if ($User->getData('power') == 0)
