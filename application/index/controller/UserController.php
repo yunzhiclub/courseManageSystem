@@ -2,6 +2,7 @@
 namespace app\index\controller;
 use app\index\controller\IsloginController;
 use app\index\model\User;
+use app\index\model\UserCourse;
 use think\Request;
 
 class UserController extends IsloginController
@@ -147,6 +148,14 @@ class UserController extends IsloginController
 
         	// 要删除的对象存在
         	if (!is_null($User)) {
+
+        		// 实例化空对象
+        		$UserCourse = new UserCourse();
+        		
+        		// 判断用户是否绑定课程，绑定就无法删除
+        		if ($UserCourse->userIsChecked($username)) {
+        			return $this->error('该用户已绑定课程，不能删除！');
+        		}
 
             	// 删除对象
         		if (!$User->delete()) {
