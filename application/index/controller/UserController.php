@@ -13,22 +13,26 @@ class UserController extends IsloginController
 	public function index()
 	{
 		// 获取查询信息
-		$name = input('name');
-		// 获取查询信息
         $name = Request::instance()->get('name');
+        $size = Request::instance()->get('pagesize');
 
-        $pageSize = 5;
-
+        if ($size === ''||is_null($size)) {
+        	$pageSize = 5;
+        } else {
+        	$pageSize = $size;
+        }
+        
 		// 实例化空对象
 		$User = new User;
 		
 		$users = $User
 				->where('name' , 'like' , '%' . $name . '%')
-				->where('power','=','0')
-				->whereOr('power','=','2')
+				->where('power','<>','1')
+				
 				->paginate($pageSize,false,[
 				'query'=>[
 					'name' => $name,
+					'pagesize' =>$pageSize
 				],
 			]);
 		
