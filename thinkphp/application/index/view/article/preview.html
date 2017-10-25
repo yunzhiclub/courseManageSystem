@@ -1,0 +1,24 @@
+{extend name="index" /}
+{block name="title"}预览{/block}
+
+{block name="content"}
+<div class="main-row">
+		<h1>洛克旅行</h1>
+		<div class="main_frame">
+			<iframe class="frame-border scroll-pane" src="{:ROOT_DOMAIN}/index/article/main?articleId={$articleId}" frameborder="0"></iframe>
+		</div>
+	</div>
+<div style="text-align: center;">
+    <h1>分享微信功能</h1>
+    <div class="social-share" data-sites="wechat"></div>
+    <script>
+        var $config = {
+            url: 'http://192.168.0.108:80/index/article//main?articleId={$articleId}',       // 网址，默认使用 window.location.href
+            image: '',                          // 图片, 默认取网页中第一个img标签
+            title: '',                          // 标题，默认读取 document.title 或者 <meta name="title" content="share.js" />
+            description: '',                    // 描述, 默认读取head标签：<meta name="description" content="PHP弱类型的实现原理分析" />
+        };
+        $('.social-share').share($config);
+    </script>
+</div>
+{/block}

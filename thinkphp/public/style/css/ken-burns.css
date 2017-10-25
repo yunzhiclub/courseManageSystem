@@ -1,0 +1,97 @@
+/*
+    StyleSheet For Responsive Bootstrap Carousel Effect Ken Burns
+    Author: Razboynik
+    Author URI: http://filwebs.ru
+    Description: Bootstrap Carousel Effect Ken Burns
+*/
+.carousel-caption.kb_caption {
+    text-shadow: none;
+    padding: 2em 0;
+}
+.kb_control_left,.kb_control_right
+{
+    top:40%;
+    z-index:2;
+    opacity:0;
+    width:35px;
+    height:35px;
+    text-align:center;
+    -webkit-transition:all ease-in-out .3s;
+    transition:all ease-in-out .3s;
+}
+.carousel-control.kb_control_left,.carousel-control.kb_control_right{
+    background: none;
+}
+.kb_wrapper:hover .kb_control_left,.kb_wrapper:hover .kb_control_right
+{
+    opacity:.8;
+}
+.kb_icons
+{
+    line-height:50px;
+    font-size:34px!important;
+    font-weight:normal!important;
+}
+.kb_control_left
+{
+    left:12% !important;
+}
+.kb_control_right
+{
+    right:12% !important;
+}
+ 
+.kb_elastic
+{
+    opacity:1;
+    -webkit-transform:scale3d(1,1,1);
+    transform:scale3d(1,1,1);
+}
+.kb_elastic .item
+{
+    top:0;
+    z-index:1;
+    opacity:0;
+    width:100%;
+    position:absolute;
+    left:0!important;
+    display:block!important;
+    -webkit-transform:scale3d(2,1,2);
+    transform:scale3d(2,1,2);
+    -webkit-transition:-webkit-transform .7s ease-in-out 0s,opacity ease-in-out .7s;
+    transition:transform .7s ease-in-out 0s,opacity ease-in-out .7s;
+}
+.kb_elastic .item:first-child
+{
+    top:auto;
+    position:relative;
+}
+.kb_elastic .item.active
+{
+    opacity:1;
+    z-index:2;
+    -webkit-transform:scale3d(1,1,1);
+    transform:scale3d(1,1,1);
+    -webkit-transition:-webkit-transform .7s ease-in-out 0s,opacity ease-in-out .7s;
+    transition:transform .7s ease-in-out 0s,opacity ease-in-out .7s;
+}
+.kb_caption h3 {
+    color: #8b008b;
+    background: #fff;
+    padding: 0.5em 1em;
+    font-size: 1.5em;
+    display: inline-block; 
+}
+
+
+@media(max-width:480px){
+.kb_control_left, .kb_control_right {
+    top: 29%; 
+}
+.kb_control_left {
+    left: 3% !important;
+}
+.kb_control_right {
+    right:3% !important;
+}
+}

@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>洛克旅行</title>
+    <!-- For-Mobile-Apps-and-Meta-Tags -->
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="keywords" content="" />
+    <!-- Custom Theme files -->
+    <link href="{:__ROOT__}/style/css/bootstrap.css" type="text/css" rel="stylesheet" media="all">
+    <link href="{:__ROOT__}/style/css/style.css" type="text/css" rel="stylesheet" media="all">
+    <link href="{:__ROOT__}/style/css/Timelinestyle.css" type="text/css" rel="stylesheet" media="all">
+    <!-- Slider Show css-->
+    <link rel="stylesheet" href="{:__ROOT__}/style/css/ken-burns.css" type="text/css" media="all" />
+    <!-- //Custom Theme files -->
+    <script src="{:__ROOT__}/style/js/jquery-2.1.1.min.js"></script>
+    <!-- nice scroll-js -->
+    <script src="{:__ROOT__}/style/js/jquery.nicescroll.min.js"></script>
+    <script>
+    $(document).ready(function() {
+
+        var nice = $("html").niceScroll(); // The document page (body)
+
+        $("#div1").html($("#div1").html() + ' ' + nice.version);
+
+        $("#boxscroll").niceScroll({ cursorborder: "", cursorcolor: "#00F", boxzoom: true }); // First scrollable DIV
+    });
+    </script>
+    <script src="{:__ROOT__}/style/js/bootstrap.js"></script>
+    <!-- nice scroll-js -->
+    <script src="{:__ROOT__}/style/js/custom.js"></script>
+</head>
+
+<body class="bg" style="overflow-x: hidden;position: absolute">
+    <div class="agile-main">
+        <div class="content-wrap">
+            <!-- 紫色顶部 -->
+            <div class="header">
+                <div class="menu-icon">
+                    <button class="menu-button"></button>
+                </div>
+                <div class="logo">
+                    <h2><a>洛克</a></h2>
+                    <!-- 可以换成洛克酒店的logo -->
+                </div>
+                <div class="login">
+                    <span class="sign-in popup-top-anim glyphicon glyphicon-user menu-button"></span>
+                </div>
+                <div class="clearfix"></div>
+            </div>
+            <div class="welcome">
+                    <h3 class="w3ls-title" style="color: #81be32;">{$article->title}</h3>
+                    <br>
+                    <div>
+                        <img src="{:__ROOT__}/upload/{$article->cover}" height="150" width="97%">
+                    </div>
+                    <p class="w3title-text" style="text-align: left;">&nbsp;&nbsp;{$article->summery}</p>
+                    <br>
+                </div>
+
+            <div class="content">
+              <h3 class="w3ls-title" style="color: #8b008b;">线路概述</h3>
+                <section id="cd-timeline" class="cd-container">
+                    {volist name="attractions" id="attraction" key="key"}
+                    <div class="cd-timeline-block">
+                        <div class="cd-timeline-img cd-movie">
+                            <img src="{:__ROOT__}/style/images/cd-icon-location.svg" alt="Location">
+                        </div>
+                        <div class="cd-timeline-content">
+                            <h4>{$attraction->trip}</h4>
+                            {volist name="$attraction->getMaterials()" id="material" key="i"}
+                            <p style="display: inline;">
+                                {$filter->limitPreviewWordNumber($material->designation, 5)}
+                            </p>&nbsp;&nbsp;
+                            {/volist}
+                        </div>
+                    </div>
+                     {/volist}
+                </section>
+                {volist name="paragraphUps" id="pragraph"}
+                <div class="about">
+                    <h3 style="text-align: center;" class="w3ls-title">{$pragraph->title}</h3> {$pragraph->content}
+                    <div class="properties-img" {eq name="$pragraph->image" value="" }style="display: none"{/eq}>
+                        <img src="{:__ROOT__}/upload/{$pragraph->image}" alt="" {eq name="$pragraph->image" value="" }style="display: none"{/eq}>
+                    </div>
+                </div>
+                {/volist}
+                <!-- 旅游行程 -->
+                <br><br>
+                <div class="w3agile properties">
+                    <h3 class="w3ls-title" style="color: #8b008b;">旅游线路</h3>
+                    {volist name="attractions" id="attraction" key="mainKey"}
+                    <div class="properties-bottom">
+                        <div class="properties-img">
+                            <img src="{:__ROOT__}/upload/{$attraction->getOneImage()}" alt="">
+                            <div class="w3ls-buy">
+                                <a href="single.html">Day{$mainKey}</a>
+                            </div>
+                            <div class="view-caption">
+                                <h4><span class="glyphicon glyphicon-map-marker"></span>{$attraction->trip} </h4>
+                            </div>
+                        </div>
+                        <div class="w3ls-text">
+                            <p><b class="pfont">日期 :</b> {$attraction->date} </p>
+                            <p><b class="pfont">用餐 :</b> {$attraction->getMeals()} </p>
+                            <p><b class="pfont">用车 :</b> {$attraction->getCar()} </p>
+                            <p><b class="pfont">酒店 :</b> {$attraction->getHotelDesignation()} </p>
+                            <p><b class="pfont">导游 :</b> {$attraction->guide} </p>
+                            <p><b class="pfont">景点 :</b></p>
+                                <!--弹窗-->
+                                {volist name="$attraction->getMaterials()" id="material" key="i"}
+                                <!-- Button trigger modal -->
+                                <a class="btn btn-default btn-xs" data-toggle="modal" data-target="#myModal-{$mainKey}-{$i}">
+                                {$filter->limitPreviewWordNumber($material->designation, 5)}
+                                </a>
+                                {/volist}
+                                <!--弹窗-->
+                                {volist name="$attraction->getMaterials()" id="material" key="i"}
+                                    <div class="modal fade" id="myModal-{$mainKey}-{$i}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" style="position: relative">
+                                        <div role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                                    <h4 class="modal-title" id="myModalLabel">{$material->designation}</h4>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <!--轮播图-->
+                                                    <div id="carousel-example-generic-{$mainKey}-{$i}" class="carousel slide" data-ride="carousel">
+                                                        <ol class="carousel-indicators">
+                                                            {volist name="$material->getMaterialImages()" id="image" key="minorKey"}
+                                                            <li data-target="#carousel-example-generic-{$mainKey}-{$i}" data-slide-to="{$mainKey}-{$i}-{$minorKey}" class="{eq name="$minorKey" value="1"}active{/eq}"></li>
+                                                            {/volist}
+                                                        </ol>
+                                                        <div class="carousel-inner" role="listbox">
+                                                            {volist name="$material->getMaterialImages()" id="image" key="leastKey"}
+                                                            <div class="item {eq name='$leastKey' value='1'}active{/eq}">
+                                                            <img src="{:__ROOT__}/upload/{$image}" alt="" style="width:100%;height: 45vw">
+                                                            </div>
+                                                            {/volist}
+                                                        </div>
+                                                        <a class="left carousel-control" href="#carousel-example-generic-{$mainKey}-{$i}" data-slide="prev">
+                                                            <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                                                            <span class="sr-only">Previous</span>
+                                                        </a>
+                                                        <a class="right carousel-control" href="#carousel-example-generic-{$mainKey}-{$i}" data-slide="next">
+                                                            <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                                                            <span class="sr-only">Next</span>
+                                                        </a>
+                                                    </div>
+                                                    <!--轮播图-->
+                                                    <p>{$material->content | $filter->limitWordNumber}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {/volist}
+                            <p><b class="pfont">描述 :</b> {$attraction->description} </p>
+                        </div>
+                    </div>
+                    
+                    {/volist}
+                    <div class="clearfix"></div>
+                </div>
+                {volist name="paragraphDowns" id="_pragraph"}
+                <div class="about">
+                    <h3 style="text-align: center;" class="w3ls-title">{$_pragraph->title}</h3> {$_pragraph->content}
+                    <div class="properties-img" {eq name="$_pragraph->image" value="" }style="display: none"{/eq}>
+                         <img src="{:__ROOT__}/upload/{$_pragraph->image}">
+                    </div>
+                </div>
+                {/volist}
+                <!-- //旅游行程 -->
+
+                <div class="contact">
+                    <!-- 定制师信息 -->
+                    {eq name="$contractor" value=""} {else/}
+                    <div class="contact-form" >
+                        <br>
+                        <p class="pcontact1">定制师信息</p>
+                        <table class="table table-bordered">
+                            <tr>
+                                <th>名&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;字</th>
+                                <td>{$contractor->designation}</td>
+                            </tr>
+                            <tr>
+                                <th>电话号码</th>
+                                <td>{$contractor->phone}</td>
+                            </tr>
+                            <tr>
+                                <th>传真号码</th>
+                                <td>{$contractor->fax}</td>
+                            </tr>
+                            <tr>
+                                <th>手机号码</th>
+                                <td>{$contractor->mobile}</td>
+                            </tr>
+                            <tr>
+                                <th>电子邮件</th>
+                                <td><a href="mailto:{$contractor->email}">{$contractor->email}</a></td>
+                            </tr>
+                            <br>
+                        </table>
+                    </div>
+                    {/eq}
+                    <br>
+                    <!-- 定制师信息 -->
+
+                    <!-- 方案报价 -->
+                    {volist name="plans" id="plan"}
+                    <div class="contact-form">
+                        <p class="pcontact2">方案报价</p>
+                        <p><b>出行人数 :</b> {$plan->adult_num}成人 {$plan->child_num}儿童 </p>
+                        <p><b>币种 :</b> {$plan->currency} </p>
+                        <p><b>总费用 :</b> {$plan->total_cost | $filter->moneyFilter} </p>
+                        <p><b>最晚付款时间 :</b> {$plan->last_pay_time} </p>
+                        <p><b>收费分类 :</b></p>
+                        <table class="table table-bordered" style="text-align: right;">
+                            <tr>
+                                <th>类型</th>
+                                <th>机票</th>
+                                <th>签证</th>
+                                <th>旅游</th>
+                                <th>保险</th>
+                            </tr>
+                            <tr>
+                                <th>成人单价</th>
+                                <td>{$plan->getDetail('plane', $plan)->adult_unit_price | $filter->moneyFilter}</td>
+                                <td>{$plan->getDetail('visa', $plan)->adult_unit_price | $filter->moneyFilter}</td>
+                                <td>{$plan->getDetail('tourism', $plan)->adult_unit_price | $filter->moneyFilter}</td>
+                                <td>{$plan->getDetail('insurance', $plan)->adult_unit_price | $filter->moneyFilter}</td>
+                            </tr>
+                            <tr>
+                                <th>儿童单价</th>
+                                <td>{$plan->getDetail('plane', $plan)->child_unit_price | $filter->moneyFilter}</td>
+                                <td>{$plan->getDetail('visa', $plan)->child_unit_price | $filter->moneyFilter}</td>
+                                <td>{$plan->getDetail('tourism', $plan)->child_unit_price | $filter->moneyFilter}</td>
+                                <td>{$plan->getDetail('insurance', $plan)->child_unit_price | $filter->moneyFilter}</td>
+                            </tr>
+                            <tr>
+                                <th>总价</th>
+                                <td>{$plan->getDetail('plane', $plan)->total_price | $filter->moneyFilter}</td>
+                                <td>{$plan->getDetail('visa', $plan)->total_price | $filter->moneyFilter}</td>
+                                <td>{$plan->getDetail('tourism', $plan)->total_price | $filter->moneyFilter}</td>
+                                <td>{$plan->getDetail('insurance', $plan)->total_price | $filter->moneyFilter}</td>
+                            </tr>
+                            <tr>
+                                <th>备注</th>
+                                <td>{$plan->getDetail('plane', $plan)->remark}</td>
+                                <td>{$plan->getDetail('visa', $plan)->remark}</td>
+                                <td>{$plan->getDetail('tourism', $plan)->remark}</td>
+                                <td>{$plan->getDetail('insurance', $plan)->remark}</td>
+                            </tr>
+                        </table>
+                    </div>
+                    {/volist}
+                    <br>
+                    <!-- 方案报价 -->
+                    
+                    <!--酒店信息-->
+                    <div class="contact-form">
+                    <br>
+                        <p class="pcontact2">酒店信息</p> {volist name="hotels" id="hotel" key="key"}
+                        <p class="title"><b><i class="glyphicon glyphicon-glass"></i> {$hotel->designation} :</b></p>
+                        <p><b>酒店城市：</b>{$hotel->city}</p>
+                        <p><b>星级：</b>{$hotel->star_level}</p>
+                        <p><b>备注：</b>{$hotel->remark}</p>
+                        {/volist}
+                        <p>本报价按照欧元兑换人民币汇率7.98核算</p>
+                        <br>
+                    </div>
+                    <!--酒店信息-->
+
+                    <!-- footer -->
+                    <div class="w3agile footer">
+                        <div class="footer-text">
+                            <p>&copy; 2016 洛克旅行 . All Rights Reserved | Design by 梦云智</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
