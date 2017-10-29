@@ -13,16 +13,16 @@ return [
     // 数据库类型
     'type'            => 'mysql',
     // 服务器
-    'hostname'        => 'www.mengyunzhi.cn',
+    'hostname'        => '127.0.0.1',
 
     // 数据库名
-    'database'        => 'K1RslPvDqQ1recqx',
+    'database'        => 'coursemanage',
     // 用户名
-    'username'        => 'duty',
+    'username'        => 'root',
     // 密码
-    'password'        => 'K1RslPvDqQ1recqx',
+    'password'        => '',
     // 端口
-    'hostport'        => '3633',
+    'hostport'        => '3306',
     // 连接dsn
     'dsn'             => '',
     // 数据库连接参数

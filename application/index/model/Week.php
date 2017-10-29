@@ -47,7 +47,7 @@ class Week
         return false;
     }
 
-    public function WeekDay($startTimestamp,$currentTimestamp){
+    public function WeekDay($startTimestamp, $currentTimestamp) {
 
         $TimeInterval = $currentTimestamp - $startTimestamp;
 
@@ -55,6 +55,16 @@ class Week
 
         $Week = (int)($DayInterval / 7) + 1;
         return $Week;
+    }
+
+    public function getCurrentDay($startTimestamp, $currentTimestamp) {
+
+        $TimeInterval = $currentTimestamp - $startTimestamp;
+
+        $DayInterval = $TimeInterval / 86400;
+
+        $Day = (int)($DayInterval % 7);
+        return $Day;
     }
 
 }

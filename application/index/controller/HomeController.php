@@ -10,6 +10,7 @@ use app\index\model\UserCourse;
 use think\Request;
 use app\index\model\Week;
 use app\index\controller\IsloginController;
+
 /**
 * 教师主页
 * @author 朱晨澍
