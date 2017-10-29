@@ -6,7 +6,7 @@ class IndexController extends Controller
 {
     public function index()
     {
-        return $this->fetch('Login/index');
+        return $this->fetch('login/index');
     }
 
     public function login()
