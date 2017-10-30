@@ -13,14 +13,14 @@ class AskLeaveController extends IsloginController
     {
     	$Week = new ALWeek(User::getWeek('weekTime'),User::getCurrentLoginUser(),User::getWeek('termId'));
     	$this->assign('ALWeek', $Week);
-        return $this->fetch('AskLeave/index');
+        return $this->fetch('ask_leave/index');
     }
     public function query()
     {
         $postData = Request::instance()->post();
         $Week = new ALWeek($postData['weekTime'],User::getCurrentLoginUser(),User::getWeek('termId'));
         $this->assign('ALWeek', $Week);
-        return $this->fetch('AskLeave/index');
+        return $this->fetch('ask_leave/index');
     }
     public function leave()
     {
@@ -28,7 +28,7 @@ class AskLeaveController extends IsloginController
         $this->assign('days', User::selected($getData['day']));
         $this->assign('weekTime', $getData['weekTime']);
         $this->assign('konbs', User::checked($getData['konb']));
-        return $this->fetch('AskLeave/leave');
+        return $this->fetch('ask_leave/leave');
     }
     public function checkLeave()
     {
@@ -56,7 +56,7 @@ class AskLeaveController extends IsloginController
         }
         $Week = new ALWeek($postData['weekTime'],User::getCurrentLoginUser(),User::getWeek('termId'));
         $this->assign('ALWeek', $Week);
-        return $this->fetch('AskLeave/index');
+        return $this->fetch('ask_leave/index');
     }
     public function unLeave()
     {
@@ -68,7 +68,7 @@ class AskLeaveController extends IsloginController
         $leave->delete();
         $Week = new ALWeek($getData['weekTime'],User::getCurrentLoginUser(),User::getWeek('termId'));
         $this->assign('ALWeek', $Week);
-        return $this->fetch('AskLeave/index');
+        return $this->fetch('ask_leave/index');
     }
     public function addCourse()
     {
@@ -82,7 +82,7 @@ class AskLeaveController extends IsloginController
         $Overtime->save();
         $Week = new ALWeek($getData['weekTime'],User::getCurrentLoginUser(),User::getWeek('termId'));
         $this->assign('ALWeek', $Week);
-        return $this->fetch('AskLeave/index');
+        return $this->fetch('ask_leave/index');
     }
     public function unaddCourse()
     {
@@ -94,6 +94,6 @@ class AskLeaveController extends IsloginController
         $Overtime->delete();
         $Week = new ALWeek($getData['weekTime'],User::getCurrentLoginUser(),User::getWeek('termId'));
         $this->assign('ALWeek', $Week);
-        return $this->fetch('AskLeave/index');
+        return $this->fetch('ask_leave/index');
     }
 }

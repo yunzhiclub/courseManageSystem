@@ -14,9 +14,9 @@ class IndexController extends Controller
     	$User = new User();
     	$power = $User->log($_POST['username'], $_POST['password']);
         if ($power == 0)
-        	return $this->success('login success', url('AskLeave/index'));
+        	return $this->success('login success', url('ask_leave/index'));
         else if ($power == 1) 
-        	return $this->success('login success', url('Home/index'));
+        	return $this->success('login success', url('home/index'));
         else
         	return $this->error('password incrrect or no right', url('index'));
     }
