@@ -1,7 +1,7 @@
 {
-    "name": "topthink/think",
+    "name": "topthink/framework",
     "description": "the new thinkphp framework",
-    "type": "project",
+    "type": "think-framework",
     "keywords": [
         "framework",
         "thinkphp",
@@ -17,13 +17,15 @@
     ],
     "require": {
         "php": ">=5.4.0",
-        "topthink/framework": "*"
+        "topthink/think-installer": "~1.0"
     },
-    "extra": {
-        "think-path": "thinkphp"
-    },
-    "minimum-stability": "dev",
-    "config": {
-        "preferred-install": "dist"
+    "require-dev": {
+        "phpunit/phpunit": "4.8.*",
+        "johnkary/phpunit-speedtrap": "^1.0",
+        "mikey179/vfsStream": "~1.6",
+        "phploc/phploc": "2.*",
+        "sebastian/phpcpd": "2.*",
+        "squizlabs/php_codesniffer": "2.*",
+        "phpdocumentor/reflection-docblock": "^2.0"
     }
 }

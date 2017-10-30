@@ -53,7 +53,7 @@
                             <a href="{:url('edit?username=' . $user->getData('username'))}" class="btn btn-success"><i class="glyphicon glyphicon-pencil"></i>&nbsp;编辑</a>&nbsp;
                             <a href="{:url('delete?username=' . $user->getData('username'))}" class="btn btn-danger"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</a>&nbsp;
                             <a href="{:url('resetpassword?username=' . $user->getData('username'))}" class="btn btn-primary"><i class="glyphicon glyphicon-lock"></i>&nbsp;重置密码</a>&nbsp;
-                            <a href="{:url('Eletivecourse/index?name=' . $user->getData('name'))}" class="btn btn-warning"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;选课</a>
+                            <a href="{:url('eletivecourse/index?name=' . $user->getData('name'))}" class="btn btn-warning"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;选课</a>
                             {eq name="$user->power" value="2"}
                             <a href="{:url('thaw?username=' . $user->getData('username'))}" class="btn btn-info"><i class="glyphicon glyphicon-ok-sign"></i>&nbsp;解冻</a>
                             {else/}

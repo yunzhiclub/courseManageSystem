@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <title>{block name="title"}标题{/block}</title>
-    <link rel="stylesheet" type="text/css" href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/courseManageSystem/public/static/bootstrap-3.3.7-dist/css/bootstrap.min.css">
     <link rel="shortcut icon" type="imag/icon" href="/courseManageSystem/public/static/img/bitbug_favicon.ico">
 </head>
 
@@ -16,22 +16,22 @@
             <nav class="navbar navbar-default" role="navigation">
                 <div class="container-fluid">
                     <div class="navbar-header">
-                        <a class="navbar-brand" href="{:url('Home/index')}">梦云智</a>
+                        <a class="navbar-brand" href="{:url('home/index')}">梦云智</a>
                     </div>
                     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                         <ul class="nav navbar-nav">
-                            <li {eq name=':request()->controller()' value="Home"} class="active" {/eq}><a href="{:url('Home/index')}">首页</a></li>
+                            <li {eq name=':request()->controller()' value="Home"} class="active" {/eq}><a href="{:url('home/index')}">首页</a></li>
 
-                            <li {eq name=':request()->controller()' value="Workmanage"} class="active" {/eq}><a href="{:url('Workmanage/index')}">出勤管理</a></li>
+                            <li {eq name=':request()->controller()' value="Workmanage"} class="active" {/eq}><a href="{:url('workmanage/index')}">出勤管理</a></li>
 
-                            <li {eq name=':request()->controller()' value="User"} class="active" {/eq}><a href="{:url('User/index')}">用户管理</a></li>
+                            <li {eq name=':request()->controller()' value="User"} class="active" {/eq}><a href="{:url('user/index')}">用户管理</a></li>
 
-                            <li {eq name=':request()->controller()' value="Term"} class="active" {/eq}><a href="{:url('Term/index')}">学期管理</a></li>
+                            <li {eq name=':request()->controller()' value="Term"} class="active" {/eq}><a href="{:url('term/index')}">学期管理</a></li>
 
-                            <li {eq name=':request()->controller()' value="Course"} class="active" {/eq}><a href="{:url('Course/index')}">课程管理</a></li>
+                            <li {eq name=':request()->controller()' value="Course"} class="active" {/eq}><a href="{:url('course/index')}">课程管理</a></li>
                         </ul>
                         <ul class="nav navbar-nav navbar-right">
-                            <li><a href="{:url('Index/logout')}"><i class="glyphicon glyphicon-log-out"></i>&nbsp;注销</a></li>
+                            <li><a href="{:url('index/logout')}"><i class="glyphicon glyphicon-log-out"></i>&nbsp;注销</a></li>
                         </ul>
                     </div>
                 </div>
