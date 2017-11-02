@@ -47,7 +47,7 @@ class Week
         return false;
     }
 
-    public function WeekDay($startTimestamp, $currentTimestamp) {
+    public function WeekDay($startTimestamp,$currentTimestamp){
 
         $TimeInterval = $currentTimestamp - $startTimestamp;
 

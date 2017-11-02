@@ -16,11 +16,11 @@ class IsloginController extends Controller
 
         // 验证用户是否登陆
         if (User::isLogin() === 2) {
-        	return $this->error('为获取到用户名信息！', url('Index/index'));
+        	return $this->error('为获取到用户名信息！', url('index/index'));
         }
 
 		if (!User::isLogin()) {
-		    return $this->error('请先登录', url('Index/index'));
+		    return $this->error('请先登录', url('index/index'));
 		}
 
     }

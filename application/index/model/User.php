@@ -348,12 +348,12 @@ class User extends Model
     public static function getAsktime($weekTime , $day , $konb)
     {
         $Term = new Term();
-        $result = $Term->get($this->getWeek('termId'));    
+        $result = $Term->get(self::getWeek('termId'));    
         $startTime = strtotime($result['start_time'])- date('w',strtotime($result['start_time'])-1)*(24*60*60);
-        $askTime = $startTime + ($weekTime-1)*7*24*60*60 + ($day-1)*24*60*60 + $this->knonTime($konb);
+        $askTime = $startTime + ($weekTime-1)*7*24*60*60 + ($day-1)*24*60*60 + self::knonTime($konb);
         return $askTime;
     }
-    public function knonTime($knob)
+    public static function knonTime($knob)
     {
         if ($knob == 1)
         return 8*60*60+30*60;

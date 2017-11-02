@@ -143,7 +143,7 @@ class ALDay
             $this->state = '/courseManageSystem/public/index.php/index/ask_leave/unaddCourse.html?weekTime='.$this->weekTime.'&&day='.$this->day.'&&konb='.$this->konb;
         }
     }
-    public function knonTime($knob)
+    public static function knonTime($knob)
     {
         if ($knob == 1)
         return 8*60*60+30*60;
