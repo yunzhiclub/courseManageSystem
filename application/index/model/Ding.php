@@ -39,7 +39,7 @@ class Ding {
         $term  = Term::getCurrentTerm();
         $week  = new Week();
         $currentWeek = $week->WeekDay(strtotime($term->start_time),time());
-        $currentDay  = $week->getCurrentDay(strtotime($term->start_time),time());
+        $currentDay  = User::getDay();
 
         foreach ($users as $user) {
             $user->term = $term->id;
@@ -96,6 +96,7 @@ class Ding {
         return $dingMsg;
     }
 
+    // 根据user中已有的方法获取返回值添加状态
     public function getStateByKnob($user, $week, $knob) {
 
         $user->knob = $knob;
@@ -130,9 +131,27 @@ class Ding {
         return $message;
     }
 
+    // 数据格式化
     public function dataFormat($key, $user, $message) {
 
         $temp = '' . $key + 1 . '.' . $user->name . ' ' . $message;
         return $temp;
+    }
+
+    // 钉钉Hook推送消息方法
+    public function pushDing($message) {
+
+        $webhook = "https://oapi.dingtalk.com/robot/send?access_token=99979e34710037a4c4e8cbf7eee40dde748a82b2abb8690f4964e046be5fb5ee";
+
+        $data = array (
+            'msgtype'  => 'text',
+            'text'     => array (
+                'content' => $message
+            )
+        );
+
+        $data_string = json_encode($data);
+
+        $result = $this->request_by_curl($webhook, $data_string);
     }
 }
