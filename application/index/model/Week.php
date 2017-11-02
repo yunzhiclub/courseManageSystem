@@ -56,5 +56,4 @@ class Week
         $Week = (int)($DayInterval / 7) + 1;
         return $Week;
     }
-
 }
