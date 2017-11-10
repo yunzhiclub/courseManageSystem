@@ -9,7 +9,7 @@ class DingController extends Controller {
     /**
      * 自动推送钉钉消息方法
      */
-    public function autoPushMsg() {
+    public function push() {
 
         $ding = new Ding();
 
@@ -19,22 +19,20 @@ class DingController extends Controller {
         // 上午
         if ($time <= 600) {
 
-            $message = $ding->getMessageByTimenode(0);
-            $ding->pushDing($message);
-        
+            $message = $ding->getMessage('morning');
+            $ding->autoPush($message);
         }
         // 下午
         else if ($time >= 20700 && $time <= 21300) {
 
-            $message = $ding->getMessageByTimenode(1);
-            $ding->pushDing($message);
-
+            $message = $ding->getMessage('afternoon');
+            $ding->autoPush($message);
         }
         // 晚上
         else if ($time >= 35700 && $time <= 36300) {
 
-            $message = $ding->getMessageByTimenode(2);
-            $ding->pushDing($message);
+            $message = $ding->getMessage('night');
+            $ding->autoPush($message);
         }
     }
 }
