@@ -238,4 +238,7 @@ return [
         'var_page'  => 'page',
         'list_rows' => 15,
     ],
+
+    //钉钉机器人Hook地址
+    'hook' => 'https://oapi.dingtalk.com/robot/send?access_token=2d75c5f335b4a327e2dcaceb7b35341ef5abb6c987912687093ac531fbc0d8c1',
 ];
