@@ -84,7 +84,7 @@ class CourseController extends IsloginController
 
         $this->assign('Course' , $Course);
 
-        return $this->fetch('addCourse');
+        return $this->fetch('addcourse');
     }
 
     public function updateCourse(){
