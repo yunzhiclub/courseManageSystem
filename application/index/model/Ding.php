@@ -12,11 +12,47 @@ use app\index\model\Week;
  */
 
 class Ding {
+    // 定义节次
+    static $knobs = [
+        '[第一节]',
+        '[第二节]',
+        '[第三节]',
+        '[第四节]',
+        '[第五节]'
+    ];
+
+    /**
+     * 推送钉钉消息
+     * updateBy: panjie
+     */
+    static function pushDingMessage() {
+        $hour = (int) date("G");
+        $sectionNum = 0;
+
+        // 根据当前的时间，获取节次
+        if ($hour >= 7 && $hour < 9) {
+            $sectionNum = 1;
+        } else if ($hour < 12) {
+            $sectionNum = 2;
+        } else if ($hour < 15) {
+            $sectionNum = 3;
+        } else if ($hour < 17) {
+            $sectionNum = 4;
+        } else if ($hour < 21) {
+            $sectionNum = 5;
+        }
+
+        // 如果当前
+        if ($sectionNum > 0) {
+            $message = self::getMessage($sectionNum);
+            self::autoPush($message);
+        }
+    }
 
     /**
      * 钉钉Hook推送消息方法
      */
-    public function autoPush($message) {
+    static public function autoPush($message) {
 
         $webhook = config('hook');
 
@@ -29,7 +65,7 @@ class Ding {
 
         $data_string = json_encode($data);
 
-        $result = $this->request_by_curl($webhook, $data_string);
+        $result = self::request_by_curl($webhook, $data_string);
 
         echo $result;
     }
@@ -37,7 +73,7 @@ class Ding {
     /**
      * 官方提供的推送方法
      */
-    public function request_by_curl($remote_server, $post_string) {
+    static public function request_by_curl($remote_server, $post_string) {
 
         $ch = curl_init();  
         curl_setopt($ch, CURLOPT_URL, $remote_server);
@@ -54,18 +90,12 @@ class Ding {
     }
 
     /**
-    * 根据时间获取相应消息
-    */
-    public function getMessage($timeMsg) {
-
-        $knobs = [
-            '[第一节]',
-            '[第二节]',
-            '[第三节]',
-            '[第四节]',
-            '[第五节]'
-        ];
-
+     * 获取当天某个节次的课程表
+     * @param $sectionNum 节次 （1 - 5）
+     * @return string
+     * updateBy: panjie
+     */
+    static public function getMessage($sectionNum) {
         $users = User::getUsualUsers();
         $term  = Term::getCurrentTerm();
         $week  = new Week();
@@ -79,19 +109,10 @@ class Ding {
             $user->day  = $current_day;
         }
 
+        // 显示本节以后的课表
         $messages = [];
-
-        if ($timeMsg == 'morning') {
-
-            $messages = $this->putMessage($messages, $knobs, $users, $current_week, 1);
-            $messages = $this->putMessage($messages, $knobs, $users, $current_week, 2);
-        } else if ($timeMsg == 'afternoon') {
-
-            $messages = $this->putMessage($messages, $knobs, $users, $current_week, 3);
-            $messages = $this->putMessage($messages, $knobs, $users, $current_week, 4);
-        } else if ($timeMsg == 'night') {
-
-            $messages = $this->putMessage($messages, $knobs, $users, $current_week, 5);
+        for (; $sectionNum <= 5; $sectionNum++) {
+            $messages = self::putMessage($messages, $users, $current_week, $sectionNum);
         }
 
         $dingMsg = "";
@@ -107,14 +128,14 @@ class Ding {
     /**
     * 拼接用户课程状态字符串
     */
-    public function putMessage($messages, $knobs, $users, $week, $knob) {
+    static public function putMessage($messages, $users, $week, $knob) {
 
-        array_push($messages, $knobs[$knob - 1]);
+        array_push($messages, self::$knobs[$knob - 1]);
 
         foreach ($users as $key => $user) {
             
-            $message = $this->getState($user, $week, $knob);
-            $message = $this->dataFormat($key, $user, $message);
+            $message = self::getState($user, $week, $knob);
+            $message = self::dataFormat($key, $user, $message);
 
             array_push($messages, $message);
         }
@@ -125,7 +146,7 @@ class Ding {
     /**
     * 获取用户状态信息
     */
-    public function getState($user, $week, $knob) {
+    static public function getState($user, $week, $knob) {
 
         $user->knob = $knob;
 
@@ -163,7 +184,7 @@ class Ding {
     /**
     * 格式化数据
     */
-    public function dataFormat($key, $user, $message) {
+    static public function dataFormat($key, $user, $message) {
 
         $temp = '' . $key + 1 . '.' . $user->name . ' ' . $message;
         return $temp;
