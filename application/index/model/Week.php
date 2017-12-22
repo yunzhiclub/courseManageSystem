@@ -47,7 +47,7 @@ class Week
         return false;
     }
 
-    public function WeekDay($startTimestamp,$currentTimestamp){
+    static public function WeekDay($startTimestamp, $currentTimestamp){
 
         $TimeInterval = $currentTimestamp - $startTimestamp;
 
@@ -55,5 +55,15 @@ class Week
 
         $Week = (int)($DayInterval / 7) + 1;
         return $Week;
+    }
+
+    /**
+     * 获取本周是第多少周
+     * @author panjie
+     */
+    static public function getCurrentWeekNumber() {
+        $term  = Term::getCurrentTerm();
+        $time  = strtotime($term->start_time);
+        return self::WeekDay($time, time());
     }
 }
