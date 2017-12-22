@@ -10,23 +10,24 @@ use app\index\model\Week;
  * 张喜硕
  * 钉钉推送类
  */
-
-class Ding {
+class Ding
+{
     // 定义节次
     static $knobs = [
-        '[第一节]',
-        '[第二节]',
-        '[第三节]',
-        '[第四节]',
-        '[第五节]'
+        '第一节',
+        '第二节',
+        '第三节',
+        '第四节',
+        '第五节'
     ];
 
     /**
      * 推送钉钉消息
      * updateBy: panjie
      */
-    static function pushDingMessage() {
-        $hour = (int) date("G");
+    static function pushDingMessage($test = false)
+    {
+        $hour = (int)date("G");
         $sectionNum = 0;
 
         // 根据当前的时间，获取节次
@@ -44,21 +45,54 @@ class Ding {
 
         // 如果当前
         if ($sectionNum > 0) {
-            $message = self::getMessage($sectionNum);
-            self::autoPush($message);
+            // 获取课表信息
+            $timetables = self::getTimetablesBySectionNum($sectionNum);
+
+            // 转换为dingding信息推送需要的二维数据
+            $dingTimeTable = self::getColumnTimetablesByTimetables($timetables);
+
+            // 进行消息拼接
+            $message = self::getDingTimetablesByArray($dingTimeTable);
+            if (!$test) {
+                self::autoPush($message);
+            } else {
+                dump($message);
+            }
         }
+    }
+
+    /**
+     * 将数组转换为DINGDING想需要的格式
+     * @param $array
+     * @return string
+     * panjie
+     */
+    static public function getDingTimetablesByArray($array) {
+        $message = '';
+        foreach ($array as $row) {
+            foreach ($row as $unit) {
+                $message .= $unit . '   ';
+                if (strlen($unit) === 6) {
+                    $message .= '   ';
+                }
+            }
+            $message .= "\n";
+        }
+
+        return $message;
     }
 
     /**
      * 钉钉Hook推送消息方法
      */
-    static public function autoPush($message) {
+    static public function autoPush($message)
+    {
 
         $webhook = config('hook');
 
-        $data = array (
-            'msgtype'  => 'text',
-            'text'     => array (
+        $data = array(
+            'msgtype' => 'text',
+            'text' => array(
                 'content' => $message
             )
         );
@@ -73,20 +107,111 @@ class Ding {
     /**
      * 官方提供的推送方法
      */
-    static public function request_by_curl($remote_server, $post_string) {
+    static public function request_by_curl($remote_server, $post_string)
+    {
 
-        $ch = curl_init();  
+        $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $remote_server);
-        curl_setopt($ch, CURLOPT_POST, 1); 
-        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5); 
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array ('Content-Type: application/json;charset=utf-8'));
+        curl_setopt($ch, CURLOPT_POST, 1);
+        curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json;charset=utf-8'));
         curl_setopt($ch, CURLOPT_POSTFIELDS, $post_string);
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 
         $data = curl_exec($ch);
-        curl_close($ch);  
-                   
-        return $data;  
+        curl_close($ch);
+
+        return $data;
+    }
+
+    /**
+     * 获取课表
+     * 先填充第一行，再第二行，依次填充。最后，将行列进行数据互换
+     * @param $timetables [users] => 用户信息 [datas] => 状态信息
+     * @return array
+     * panjie
+     */
+    static public function getColumnTimetablesByTimetables($timetables)
+    {
+        $users = $timetables['users'];
+
+        $rows = [];
+        $rows[0][] = "      ";
+        foreach ($users as $key => $user) {
+            $name = $user->name;
+            if (strlen($name === 6)) {
+                $name .= '  ';
+            }
+            $rows[0][$user->username] = $name;
+        }
+
+        foreach ($timetables['datas'] as $key => $timetable) {
+            $row = [];
+            array_push($row, self::$knobs[$key - 1]);
+
+            foreach ($users as $user) {
+                $row[$user->username] = $timetable[$user->username];
+            }
+            array_push($rows, $row);
+        }
+
+        return self::flip($rows);
+    }
+
+    /**
+     * 行列互换
+     * 例：
+     * 1 2
+     * 3 4
+     * 互换后：
+     * 1 3
+     * 2 4
+     * @param $arr
+     * @return array
+     */
+    static public function flip($arr)
+    {
+        $out = array();
+
+        foreach ($arr as $key => $subArr) {
+            foreach ($subArr as $subKey => $subValue) {
+                $out[$subKey][$key] = $subValue;
+            }
+        }
+
+        return $out;
+    }
+
+    /**
+     * 通过传入的节次获取当前的课程表
+     * @param $sectionNum 节次
+     * @return array
+     * @Author panjie
+     */
+    static public function getTimetablesBySectionNum($sectionNum)
+    {
+        // 获取初始化信息
+        $users = User::getUsualUsers();
+        $week = Week::getCurrentWeekNumber();
+        $term = Term::getCurrentTerm();
+        $weekDay = date("w") == 0 ? 7 : date("w");
+        $timetables = ['users' => $users, 'datas' => []];
+        $array = [];
+
+        // 今次获取当天每节课的状态信息
+        while ($sectionNum <= 5) {
+            $row = [];
+            foreach ($users as $key => $user) {
+                $status = $user->getStateByWeekAndDayAndKnobAndTermId($week, $weekDay, $sectionNum, $term->id);
+                $row[$user->username] = $status;
+            }
+            $array[$sectionNum] = $row;
+            $sectionNum++;
+        }
+
+        $timetables['datas'] = $array;
+
+        return $timetables;
     }
 
     /**
@@ -95,18 +220,20 @@ class Ding {
      * @return string
      * updateBy: panjie
      */
-    static public function getMessage($sectionNum) {
+    static public function getMessage($sectionNum)
+    {
         $users = User::getUsualUsers();
-        $term  = Term::getCurrentTerm();
-        $week  = new Week();
-        $time  = strtotime($term->start_time);
+        $term = Term::getCurrentTerm();
+        $week = new Week();
+        $time = strtotime($term->start_time);
 
-        $current_day  = User::getDay();
+        dump($term);
+        $current_day = User::getDay();
         $current_week = $week->WeekDay($time, time());
 
         foreach ($users as $key => $user) {
             $user->term = $term->id;
-            $user->day  = $current_day;
+            $user->day = $current_day;
         }
 
         // 显示本节以后的课表
@@ -126,14 +253,15 @@ class Ding {
     }
 
     /**
-    * 拼接用户课程状态字符串
-    */
-    static public function putMessage($messages, $users, $week, $knob) {
+     * 拼接用户课程状态字符串
+     */
+    static public function putMessage($messages, $users, $week, $knob)
+    {
 
         array_push($messages, self::$knobs[$knob - 1]);
 
         foreach ($users as $key => $user) {
-            
+
             $message = self::getState($user, $week, $knob);
             $message = self::dataFormat($key, $user, $message);
 
@@ -144,9 +272,10 @@ class Ding {
     }
 
     /**
-    * 获取用户状态信息
-    */
-    static public function getState($user, $week, $knob) {
+     * 获取用户状态信息
+     */
+    static public function getState(User $user, $week, $knob)
+    {
 
         $user->knob = $knob;
 
@@ -156,7 +285,7 @@ class Ding {
             case 1:
                 $message = '请假';
                 break;
-            
+
             case 2:
                 $message = '有课';
                 break;
@@ -182,9 +311,10 @@ class Ding {
     }
 
     /**
-    * 格式化数据
-    */
-    static public function dataFormat($key, $user, $message) {
+     * 格式化数据
+     */
+    static public function dataFormat($key, $user, $message)
+    {
 
         $temp = '' . $key + 1 . '.' . $user->name . ' ' . $message;
         return $temp;
