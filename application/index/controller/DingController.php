@@ -13,4 +13,8 @@ class DingController extends Controller {
         // 直接调用M层的方法
         Ding::pushDingMessage();
     }
+
+    public function pushTest() {
+        Ding::pushDingMessage(true);
+    }
 }
