@@ -17,8 +17,8 @@ class ContributionController extends Controller {
      * 贡献值管理-主页
      */
     public function index() {
-        $users = User::getUsualUsers();
-        $this->assign('users', $users);
+        $users = User::getUsualUsers();                    // 获取正常用户
+        $this->assign('users', $users);                    // 传入视图层
         return $this->fetch();
     }
 
