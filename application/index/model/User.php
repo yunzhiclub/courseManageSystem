@@ -463,4 +463,19 @@ class User extends Model
         if ($knob == 5)
             return 20 * 60 * 60;
     }
+
+    /**
+     * 为用户添加贡献值
+     */
+    public static function addContribution($username, $contribution) {
+        $map['username'] = $username;                   // 定义线索
+        $user = self::get($map);                        // 获取用户
+        $user->contribution += $contribution;           // 添加贡献值
+
+        try {
+            $user->save();                              // 保存
+        } catch (\Exception $e) {
+            echo 'error' . $e->getMessage();
+        }
+    }
 }
