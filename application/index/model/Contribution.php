@@ -15,8 +15,9 @@ class Contribution
     public static function count($json) {
         $data = json_decode($json);           // json反序列化
         if (self::isMerged($data)) {          // 如果该提交被合并
-            $num  = self::getNum($data);      // 获取本次贡献值
             $name = self::getUsername($data); // 获取提交代码的用户名
+            $num  = self::getNum($data);      // 获取本次贡献值
+            User::addContribution($name, $num);  // 为用户增加贡献值
         }
     }
 
