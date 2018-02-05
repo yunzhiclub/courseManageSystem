@@ -10,12 +10,14 @@
 
 新建数据表`yunzhi_contribution`。
 
-字段 | 数据类型 | 属性 | 注释
-- | :-: | :-: | -:
-id | int | 主键、非空、自增 | 主键id
-username | varchar(255) | 非空、外键 | 对应user表中的username
-state | float | 非空 | 用户贡献值状态
-time | int | 非空 | 时间戳
+---
+| 字段 | 数据类型 | 属性 | 注释 |
+| - | :-: | :-: | -: |
+| id | int | 主键、非空、自增 | 主键id |
+| username | varchar(255) | 非空、外键 | 对应user表中的username |
+| state | float | 非空 | 用户贡献值状态 |
+| time | int | 非空 | 时间戳 |
+---
 
 ### 如何使用
 
