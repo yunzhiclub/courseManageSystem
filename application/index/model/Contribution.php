@@ -157,8 +157,7 @@ class Contribution extends Model
         $ch     = curl_init();                               // 初始化
         curl_setopt($ch, CURLOPT_URL, $url);                 // 设置url
         curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');      // 设置方法为get
-        $header = array('User-Agent:' => $info);             // 拼接header信息
-        curl_setopt($ch, CURLOPT_HTTPHEADER, $header);       // 设置header
+        curl_setopt($ch, CURLOPT_HTTPHEADER, array('User-Agent:' . $info));  // 设置header
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);      // 设置将信息以字符串返回
         $return = curl_exec($ch);                            // 执行并获取返回值
         curl_close($ch);                                     // 关闭
