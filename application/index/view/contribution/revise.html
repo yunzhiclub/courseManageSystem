@@ -1,0 +1,26 @@
+<!-- 张喜硕 贡献值修改页面 -->
+{extend name="index"/}
+{block name="title"}
+贡献值修改
+{/block}
+{block name="content"}
+<h2 style="text-align: center">贡献值修改</h2>
+<hr>
+<form action="{:url('save?username=' . $user->username)}" method="post">
+    <div class="form-group">
+        <label for="num" class="col-md-1 col-md-offset-1">{$user->name}</label>
+        <div class="col-md-3">
+            <select name="action" class="form-control">
+                <option value="add">增加</option>
+                <option value="minus">减少</option>
+            </select>
+        </div>
+        <div class="col-md-4">
+            <input type="number" class="form-control" name="number" id="num" placeholder="0.00" step="0.01">
+        </div>
+        <div class="col-md-2">
+            <button class="btn btn-default">提交</button>
+        </div>
+    </div>
+</form>
+{/block}
