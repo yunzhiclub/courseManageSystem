@@ -466,6 +466,7 @@ class User extends Model
 
     /**
      * 为用户添加贡献值
+     * zhangxishuo
      */
     public static function addContribution($username, $contribution) {
         $map['username'] = $username;                   // 定义线索
