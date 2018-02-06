@@ -1,0 +1,31 @@
+<!-- 张喜硕 贡献值管理主页面 -->
+{extend name="index"/}
+{block name="title"}
+贡献值管理
+{/block}
+{block name="content"}
+    <h2 style="text-align: center">贡献值详细信息 - {$user->name}</h2>
+
+    <hr>
+
+    <table class="table table-hover table-bordered">
+
+        <tr class="info">
+            <th>序号</th>
+            <th>时间</th>
+            <th>贡献值状态</th>
+        </tr>
+
+        {volist name="info" id="_info" key="key"}
+        <tr>
+            <td>{$key}</td>
+            <td>{$_info->time}</td>
+            <td>{$_info->state}</td>
+        </tr>
+        {/volist}
+
+    </table>
+{/block}
+{block name="page"}
+    {$info->render()}
+{/block}

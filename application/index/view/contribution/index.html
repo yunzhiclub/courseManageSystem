@@ -13,12 +13,23 @@
         <tr class="info">
             <th>姓名</th>
             <th>贡献值</th>
+            <th>操作</th>
         </tr>
 
         {volist name="users" id="user"}
         <tr>
             <td>{$user->name}</td>
             <td>{$user->contribution}</td>
+            <td>
+                <a class="btn btn-xs btn-default" href="{:url('contribution/view?username=' . $user->username)}">
+                    <i class="glyphicon glyphicon-list"></i>
+                    &nbsp;详细信息
+                </a>
+                <a class="btn btn-xs btn-primary" href="{:url('contribution/revise?username=' . $user->username)}">
+                    <i class="glyphicon glyphicon-pencil"></i>
+                    &nbsp;修改贡献值
+                </a>
+            </td>
         </tr>
         {/volist}
 
