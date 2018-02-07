@@ -11,6 +11,7 @@ use think\Model;
 
 class Contribution extends Model
 {
+    public $name;
     protected $autoWriteTimestamp = true;                    // 设置自动写入时间戳
     protected $updateTime         = false;                   // 不启用更新时间
     protected $createTime         = 'time';                  // 创建时间的字段名为time
@@ -220,10 +221,30 @@ class Contribution extends Model
      * 根据用户名查询相关贡献值记录
      * zhangxishuo
      */
-    public static function searchByUsername($name) {
-        $pageSize = config('paginate')['list_rows'];         // 获取分页信息
+    public static function searchByUsername($name, $pageSize) {
         /* 查询数据，按时间戳逆序排序并分页 */
         $infos = self::where('username', $name)->order('time desc')->paginate($pageSize);
         return $infos;
+    }
+
+    public static function hasRecentContribution() {
+        $recent     = self::max('time');
+        $current    = time();
+        $difference = $current - $recent;
+        if ($difference <= 3600) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public static function getRecentContribution($size) {
+        $info = self::order('time', 'desc')->limit($size)->select();
+        foreach ($info as $key => $value) {
+            $user = User::get($value->username);
+            $data = $user->data;
+            $value->name = $data['name'];
+        }
+        return $info;
     }
 }

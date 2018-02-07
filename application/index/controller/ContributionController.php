@@ -35,7 +35,8 @@ class ContributionController extends Controller {
     public function view() {
         $name = $this->request->param('username');           // 获取url中的参数username
         $user = User::get($name);                            // 获取用户
-        $info = Contribution::searchByUsername($name);       // 查询该用户相关的贡献值记录
+        $size = config('paginate')['list_rows'];
+        $info = Contribution::searchByUsername($name, $size);       // 查询该用户相关的贡献值记录
         $this->assign('user', $user);                        // 传入视图层
         $this->assign('info', $info);                        // 传入视图层
         return $this->fetch();
