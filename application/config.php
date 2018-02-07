@@ -260,4 +260,9 @@ return [
         'action'  => 'contribute',
         'keyword' => 'h'
     ],
+
+    'mobile'                 => [
+        'list_rows'  => 5,
+        'size'       => 5
+    ],
 ];
