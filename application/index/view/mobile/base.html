@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="zh-hans">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{:__ROOT__}/static/styles/weui.min.css">
+    <link rel="stylesheet" href="{:__ROOT__}/static/styles/base.css">
+    <title>{block name="title"}梦云智贡献值管理系统{/block}</title>
+</head>
+
+<body>
+    <div class="page__hd">
+        <a href="{:url('mobile/index')}">
+            <h1 class="page__title">
+                <img src="{:__ROOT__}/static/images/yunzhi-logo.jpg" alt="梦云智" height="42px">
+            </h1>
+        </a>
+        <h2 class="page__desc">梦云智贡献值管理系统</h2>
+        {block name="moreInfo"}{/block}
+    </div>
+    {block name="content"}{/block}
+    <div class="weui-footer">
+        <p class="weui-footer__links">
+            <a href="http://www.mengyunzhi.com/" class="weui-footer__link">梦云智</a>
+        </p>
+        <p class="weui-footer__text">Copyright &copy; www.mengyunzhi.com</p>
+    </div>
+</body>
+
+</html>
