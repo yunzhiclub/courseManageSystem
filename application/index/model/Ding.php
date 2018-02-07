@@ -320,4 +320,7 @@ class Ding
         return $temp;
     }
 
+    public static function pushContributionMessage() {
+        //
+    }
 }
