@@ -261,13 +261,13 @@ return [
         'keyword' => 'h',
         // 0 => sunday
         'push'    => [
-            'Monday',
-            'Tuesday',
-            'Wednesday',
-            'Thursday',
-            'Friday',
-            'Saturday',
-            'Sunday'
+            'Monday'
+            // 'Tuesday'
+            // 'Wednesday'
+            // 'Thursday'
+            // 'Friday'
+            // 'Saturday'
+            // 'Sunday'
         ]
     ],
 
