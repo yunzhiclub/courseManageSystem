@@ -244,7 +244,7 @@ return [
     // +----------------------------------------------------------------------
     // | 钉钉机器人Hook配置
     // +----------------------------------------------------------------------
-    'hook'       => 'https://oapi.dingtalk.com/robot/send?access_token=2d75c5f335b4a327e2dcaceb7b35341ef5abb6c987912687093ac531fbc0d8c1',
+    'hook'       => 'https://oapi.dingtalk.com/robot/send?access_token=6121782cc3d16375f1ec6be5a81dd0227332c057f771978aa32319d7a70287f8',
 
     // +----------------------------------------------------------------------
     // | github配置，访问github提供的接口时，需要的header信息
@@ -258,7 +258,17 @@ return [
     // +----------------------------------------------------------------------
     'contribute'             => [
         'action'  => 'contribute',
-        'keyword' => 'h'
+        'keyword' => 'h',
+        // 0 => sunday
+        'push'    => [
+            'Monday',
+            'Tuesday',
+            'Wednesday',
+            'Thursday',
+            'Friday',
+            'Saturday',
+            'Sunday'
+        ]
     ],
 
     'mobile'                 => [
