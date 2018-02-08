@@ -11,11 +11,12 @@ class DingController extends Controller {
      */
     public function push() {
         // 直接调用M层的方法
-        Ding::pushDingMessage();
+        // Ding::pushDingMessage();
         Ding::pushContributionMessage();
     }
 
     public function pushTest() {
-        Ding::pushDingMessage(true);
+        // Ding::pushDingMessage(true);
+        Ding::pushContributionMessage(true);
     }
 }

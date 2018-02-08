@@ -21,6 +21,16 @@ class Ding
         '第五节'
     ];
 
+    static $days = [
+        'Sunday',
+        'Monday',
+        'Tuesday',
+        'Wednesday',
+        'Thursday',
+        'Friday',
+        'Saturday'
+    ];
+
     /**
      * 推送钉钉消息
      * updateBy: panjie
@@ -320,7 +330,39 @@ class Ding
         return $temp;
     }
 
-    public static function pushContributionMessage() {
-        //
+    public static function pushContributionMessage($test = false) {
+        if (self::isPushTime()) {
+            $message = self::getContributionMessage();
+            if (!$test) {
+                self::autoPush($message);
+            } else {
+                var_dump($message);
+            }
+        }
+    }
+
+    public static function isPushTime() {
+        $index    = date('w');
+        $weekday  = self::$days[$index];
+        $pushDays = config('contribute')['push'];
+        foreach ($pushDays as $key => $day) {
+            if ($weekday === $day) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static function getContributionMessage() {
+        $users = User::getUsualUsers();
+        $infos = "姓名     | 贡献值\n";
+        foreach ($users as $key => $user) {
+            $name = $user->name;
+            if (strlen($name) === 6) {
+                $name .= "   ";
+            }
+            $infos .= $name . "  |    " . $user->contribution . "\n";
+        }
+        return $infos;
     }
 }
