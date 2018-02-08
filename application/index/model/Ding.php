@@ -21,6 +21,7 @@ class Ding
         '第五节'
     ];
 
+    // 定义星期
     static $days = [
         'Sunday',
         'Monday',
@@ -330,39 +331,52 @@ class Ding
         return $temp;
     }
 
+    /**
+     * 钉钉推送贡献值消息
+     * zhangxishuo
+     */
     public static function pushContributionMessage($test = false) {
-        if (self::isPushTime()) {
-            $message = self::getContributionMessage();
+        if (self::isPushTime()) {                          // 如果当前时间为推送时间
+            $message = self::getContributionMessage();     // 获取贡献值信息
             if (!$test) {
-                self::autoPush($message);
+                self::autoPush($message);                  // 如果非测试，直接推送
             } else {
-                var_dump($message);
+                var_dump($message);                        // 打印数据
             }
         }
     }
 
+    /**
+     * 判断是否为推送时间
+     * zhangxishuo
+     */
     public static function isPushTime() {
-        $index    = date('w');
-        $weekday  = self::$days[$index];
-        $pushDays = config('contribute')['push'];
+        $index    = (int)date('w');                        // 获取星期
+        $hour     = (int)date("G");                        // 获取小时
+        $weekday  = self::$days[$index];                   // 获取星期几的字符串
+        $pushDays = config('contribute')['push'];          // 获取配置
         foreach ($pushDays as $key => $day) {
-            if ($weekday === $day) {
-                return true;
+            if ($weekday === $day && $hour >= 7 && $hour < 9) {
+                return true;                               // 如果是相应天并且相应时间，返回真
             }
         }
-        return false;
+        return false;                                      // 返回假
     }
 
+    /**
+     * 获取贡献值信息
+     * zhangxishuo
+     */
     public static function getContributionMessage() {
-        $users = User::getUsualUsers();
-        $infos = "姓名     | 贡献值\n";
+        $users = User::getUsualUsers();                    // 获取状态为正常的用户
+        $infos = "姓名     | 贡献值\n";                      // 表头
         foreach ($users as $key => $user) {
-            $name = $user->name;
-            if (strlen($name) === 6) {
-                $name .= "   ";
+            $name = $user->name;                           // 获取姓名
+            if (strlen($name) === 6) {                     // 如果名字为两个字
+                $name .= "   ";                            // 拼接空格保持对齐
             }
-            $infos .= $name . "  |    " . $user->contribution . "\n";
+            $infos .= $name . "  |    " . $user->contribution . "\n";   // 拼接信息
         }
-        return $infos;
+        return $infos;                                     // 返回
     }
 }
