@@ -1,0 +1,24 @@
+{extend name="mobile/base" /}
+{block name="title"}
+最近消息
+{/block}
+{block name="content"}
+<a href="{:url('mobile/index')}" class="weui-btn weui-btn_mini weui-btn_primary">
+    返回
+</a>
+<div class="weui-cells">
+    {volist name="info" id="_info"}
+    <a class="weui-cell weui-cell_access">
+        <div class="weui-cell__bd">
+            <p>
+                {$_info->time}
+                {$_info->name}
+                <span style="float: right;">
+                    {$_info->state}
+                </span>
+            </p>
+        </div>
+    </a>
+    {/volist}
+</div>
+{/block}

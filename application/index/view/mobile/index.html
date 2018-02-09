@@ -1,0 +1,29 @@
+{extend name="mobile/base" /}
+{block name="title"}
+首页
+{/block}
+{block name="content"}
+<div class="page__bd page__bd_spacing">
+    <div class="weui-cells">
+        <a class="weui-cell weui-cell_access" href="{:url('mobile/recent')}">
+            <div class="weui-cell__bd">
+                <span style="vertical-align: middle">最新消息</span>
+                {eq name="$show" value="true"}
+                <span class="weui-badge" style="margin-left: 5px;">New</span>
+                {else /}
+                {/eq}
+            </div>
+            <div class="weui-cell__ft"></div>
+        </a>
+    </div>
+    <div class="weui-cells">
+        {volist name="users" id="user"}
+        <a class="weui-cell weui-cell_access" href="{:url('mobile/detail?username=' . $user->username)}">
+            <div class="weui-cell__bd">
+                <p>{$user->name}<span style="float: right;">{$user->contribution}点贡献值</span></p>
+            </div>
+        </a>
+        {/volist}
+    </div>
+</div>
+{/block}

@@ -11,6 +11,7 @@ use think\Model;
 
 class Contribution extends Model
 {
+    public $name;                                            // 该条贡献值对应的用户的姓名
     protected $autoWriteTimestamp = true;                    // 设置自动写入时间戳
     protected $updateTime         = false;                   // 不启用更新时间
     protected $createTime         = 'time';                  // 创建时间的字段名为time
@@ -220,10 +221,38 @@ class Contribution extends Model
      * 根据用户名查询相关贡献值记录
      * zhangxishuo
      */
-    public static function searchByUsername($name) {
-        $pageSize = config('paginate')['list_rows'];         // 获取分页信息
+    public static function searchByUsername($name, $pageSize) {
         /* 查询数据，按时间戳逆序排序并分页 */
         $infos = self::where('username', $name)->order('time desc')->paginate($pageSize);
         return $infos;
+    }
+
+    /**
+     * 是否有最近的贡献值修改记录
+     * zhangxishuo
+     */
+    public static function hasRecentContribution() {
+        $recent     = self::max('time');                     // 获取最新的修改时间
+        $current    = time();                                // 获取当前时间
+        $difference = $current - $recent;                    // 获取时间差
+        if ($difference <= 3600) {                           // 如果该条记录修改在一小时以内
+            return true;                                     // 返回真
+        } else {
+            return false;                                    // 返回假
+        }
+    }
+
+    /**
+     * 获取最近的贡献值修改
+     * zhangxishuo
+     */
+    public static function getRecentContribution($size) {
+        $info = self::order('time', 'desc')->limit($size)->select();  // 获取最新的记录
+        foreach ($info as $key => $value) {
+            $user = User::get($value->username);
+            $data = $user->data;
+            $value->name = $data['name'];                    // 将用户的姓名赋给该对象，方便在界面中使用
+        }
+        return $info;                                        // 返回
     }
 }
