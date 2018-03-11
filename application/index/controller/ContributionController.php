@@ -35,9 +35,9 @@ class ContributionController extends Controller {
      */
     public function view() {
         $name = $this->request->param('username');           // 获取url中的参数username
-        $user = User::get($name);                            // 获取用户
+        $user = User::get($name);                                  // 获取用户
         $size = config('paginate')['list_rows'];
-        $info = Contribution::searchByUsername($name, $size);// 查询该用户相关的贡献值记录
+        $info = Contribution::searchByUsername($name, $size);      // 查询该用户相关的贡献值记录
         $this->assign('user', $user);                        // 传入视图层
         $this->assign('info', $info);                        // 传入视图层
         return $this->fetch();
@@ -49,7 +49,7 @@ class ContributionController extends Controller {
      */
     public function revise() {
         $name = $this->request->param('username');           // 获取url中的参数username
-        $user = User::get($name);                            // 获取用户
+        $user = User::get($name);                                  // 获取用户
         $this->assign('user', $user);                        // 传入视图层
         return $this->fetch();
     }
@@ -61,9 +61,9 @@ class ContributionController extends Controller {
     public function save() {
         $state = Contribution::saveContribution($this->request);          // 保存贡献值
         if ($state) {
-            return $this->success('修改成功', url('contribution/index'));  // 成功，跳转
+            $this->success('修改成功', url('contribution/index'));  // 成功，跳转
         } else {
-            return $this->success('修改失败', url('contribution/index'));  // 失败，跳转
+            $this->success('修改失败', url('contribution/index'));  // 失败，跳转
         }
     }
 
@@ -75,7 +75,7 @@ class ContributionController extends Controller {
      * 解析Github数据的接口
      * zhangxishuo
      */
-    public function interface() {
+    public function countContribution() {
         $json = file_get_contents('php://input');            // 获取传来的json数据
         Contribution::count($json);                          // 调用count方法计数
     }
