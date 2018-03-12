@@ -298,7 +298,7 @@ class Ding
                 break;
 
             case 2:
-                $message = '有课';
+                $message = '--';
                 break;
 
             case 3:
