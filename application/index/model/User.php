@@ -11,7 +11,7 @@ class User extends Model
 {
      static $isCourseStatus = "有课";
      static $isLeaveStatus = "请假";
-     static $isFreeStatus = "无课";
+     static $isFreeStatus = "--";
 
     // 返回请假理由
     public function getleavereason($week)
