@@ -9,9 +9,9 @@ use app\index\model\Leave;
 
 class User extends Model
 {
-    private static $isCourseStatus = "有课";
-    private static $isLeaveStatus = "请假";
-    private static $isFreeStatus = "无课";
+     static $isCourseStatus = "有课";
+     static $isLeaveStatus = "请假";
+     static $isFreeStatus = "无课";
 
     // 返回请假理由
     public function getleavereason($week)

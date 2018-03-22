@@ -2,10 +2,6 @@
 
 namespace app\index\model;
 
-use app\index\model\Term;
-use app\index\model\User;
-use app\index\model\Week;
-
 /**
  * 张喜硕
  * 钉钉推送类
@@ -13,13 +9,13 @@ use app\index\model\Week;
 class Ding
 {
     // 定义节次
-    static $knobs = [
+    static $knobs = array(
         '第一节',
         '第二节',
         '第三节',
         '第四节',
         '第五节'
-    ];
+    );
 
     // 定义星期
     static $days = [
@@ -34,6 +30,7 @@ class Ding
 
     /**
      * 推送钉钉消息
+     * @param $test boolean 是否为测试状态
      * updateBy: panjie
      */
     static function pushDingMessage($test = false)
@@ -95,6 +92,7 @@ class Ding
 
     /**
      * 钉钉Hook推送消息方法
+     * @param $message string
      */
     static public function autoPush($message)
     {
@@ -195,7 +193,7 @@ class Ding
 
     /**
      * 通过传入的节次获取当前的课程表
-     * @param $sectionNum 节次
+     * @param $sectionNum int 节次
      * @return array
      * @Author panjie
      */
@@ -298,7 +296,7 @@ class Ding
                 break;
 
             case 2:
-                $message = '--';
+                $message = User::$isCourseStatus;
                 break;
 
             case 3:
@@ -310,7 +308,7 @@ class Ding
                 break;
 
             case 5:
-                $message = '无课';
+                $message = User::$isFreeStatus;
                 break;
 
             case 6:
@@ -378,5 +376,21 @@ class Ding
             $infos .= $name . "  |    " . $user->contribution . "\n";   // 拼接信息
         }
         return $infos;                                     // 返回
+    }
+
+    /**
+     * @return array
+     */
+    public static function getKnobs()
+    {
+        return self::$knobs;
+    }
+
+    /**
+     * @param array $knobs
+     */
+    public static function setKnobs($knobs)
+    {
+        self::$knobs = $knobs;
     }
 }
