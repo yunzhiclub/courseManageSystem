@@ -9,7 +9,7 @@ use app\index\model\Leave;
 
 class User extends Model
 {
-     static $isCourseStatus = "有课";
+     static $isCourseStatus = "  --  ";
      static $isLeaveStatus = "请假";
      static $isFreeStatus = "无课";
 
