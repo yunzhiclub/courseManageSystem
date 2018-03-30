@@ -33,6 +33,7 @@
                         <th>姓名</th>
                         <th>用户名</th>
                         <th>电话</th>
+                        <th>贡献值系数</th>
                         <th>状态</th>
                         <th>操作</th>
                     </tr>
@@ -42,6 +43,7 @@
                         <td>{$user->getData('name')}</td>
                         <td>{$user->getData('username')}</td>
                         <td>{$user->getData('phone')}</td>
+                        <td>{$user->coefficient}</td>
                         <td>
                             {eq name="$user->power" value="2"}
                             <span class="badge"">冻结</span>
