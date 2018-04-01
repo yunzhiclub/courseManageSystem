@@ -17,6 +17,8 @@
 | username | varchar(255) | 非空、外键 | 对应user表中的username |
 | state | float | 非空 | 用户贡献值状态 |
 | time | int | 非空 | 时间戳 |
+| source | varchar(255) | | 来源仓库 |
+| remark | varchar(255) | | 备注 |
 ---
 
 ### 如何使用
