@@ -8,6 +8,8 @@
 
 `User`表中添加字段`contribution`，数据类型为`float`，默认值为`0`。
 
+`User`表中添加字段`coefficient`，数据类型为`int`，默认值为`1`。
+
 新建数据表`yunzhi_contribution`。
 
 ---
