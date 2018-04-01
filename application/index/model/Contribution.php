@@ -2,6 +2,8 @@
 
 namespace app\index\model;
 
+use think\Exception;
+use think\exception\DbException;
 use think\Model;
 
 /**
@@ -27,8 +29,9 @@ class Contribution extends Model
      */
 
     /**
-     * 处理时间戳
-     * zhangxishuo
+     * 将时间戳转化为正常格式的时间
+     * @param $value              时间戳
+     * @return false|string       转化后的时间
      */
     public function getTimeAttr($value) {
         return date('Y-m-d H:i:s', $value);                  // 格式化时间戳
@@ -36,37 +39,36 @@ class Contribution extends Model
 
     /**
      * 处理贡献值的状态(将正负过滤为增加或减少)
-     * zhangxishuo
+     * @param $value         原贡献值的值
+     * @return string        拼接后的添加/减少 x贡献值
      */
     public function getStateAttr($value) {
         $message = self::$state['add'];                      // 初始化$message为增加
         if ($value < 0) {                                    // 如果值为负
             $message = self::$state['minus'];                // 将$message设置为减少
-            $value = -$value;                                // value值取反
+            $value   = -$value;                              // value值取反
         }
         return $message . $value . '点贡献值';                // 拼接字符串，返回
     }
 
     /**
-     * 以下为与贡献值相关的逻辑处理
-     * zhangxishuo
-     */
-
-    /**
-     * 累计贡献值
+     * 根据Github Json数据累计贡献值
+     * @param string $json    Github Json数据
+     * @return int|void
+     * @throws DbException
      * zhangxishuo
      */
     public static function count($json) {
         $data = json_decode($json);                          // json反序列化
         if (self::isMerged($data)) {                         // 如果该提交被合并
-            $name = self::getUsername($data);                // 获取提交代码的用户名
-            $num  = self::getNum($data);                     // 获取本次贡献值
-            self::revise($name, $num);                       // 修改贡献值
+            self::saveAllContribution($data);                // 保存所有贡献值数据
         }
     }
 
     /**
-     * 代码是否合并
+     * 代码是否被合并
+     * @param $data   Github推送对象
+     * @return bool   true是 | false否
      * zhangxishuo
      */
     public static function isMerged($data) {
@@ -78,181 +80,298 @@ class Contribution extends Model
     }
 
     /**
-     * 获取提交代码的贡献值
+     * 保存所有贡献值信息
+     * @param $data           Github推送对象
+     * @throws DbException
      * zhangxishuo
      */
-    public static function getNum($data) {
-        $message = self::getContributeStr($data);            // 获取贡献值相关字符串
-        return self::strFilter($message);                    // 从字符串中过滤出贡献值
+    public static function saveAllContribution($data) {
+
+        $source            = self::getSource($data);         // 获取仓库源
+
+        $user_name         = self::getUsername($data);       // 获取用户名
+        $user_contribution = self::getContribution($data);   // 获取贡献值
+
+        $user = User::get($user_name);                       // 获取用户
+        $user_contribution *= $user->coefficient;            // 乘以系数
+
+        $user_remark       = self::putGetContributionRemark($source, $user_contribution);   // 拼接备注
+
+        // 如果本次合并与他人分享贡献值
+        if (self::share($data)) {
+
+            $helper_name          = self::getShareName($data);         // 获取帮助人用户名
+            $helper_contribution  = self::getShareContribution($helper_name, $user_contribution, $data);  // 获取分享给帮助者的贡献值
+            $helper_remark        = self::putHelpContributionRemark($user_name, $helper_contribution);    // 拼接帮助人的备注
+
+            $user_contribution    = $user_contribution - $helper_contribution;  // 减掉当前用户的贡献值
+            $user_remark          = self::putShareContributionRemark($user_remark, $helper_name, $helper_contribution);  // 为当前用户不备注拼接分享信息
+
+            self::revise($helper_name, $helper_contribution, $source, $helper_remark);  // 修改帮助者贡献值
+        }
+        self::revise($user_name, $user_contribution, $source, $user_remark);  // 修改当前用户贡献值
     }
 
     /**
-     * 过滤字符串，获取贡献值
+     * 获取当前用户贡献值，从Pull Request标题中抓取
+     * @param $data              Github推送对象
+     * @return float             标题中的贡献值信息
      * zhangxishuo
      */
-    public static function strFilter($message) {
-        $action = config('contribute')['action'];            // 获取关键字
-        $length = strlen($message);                          // 获取信息长度
-        $actLen = strlen($action);                           // 获取关键字长度
-        $subLen = $length - $actLen - 1;                     // 计算截取长度
-        $str    = substr($message, $actLen, $subLen);        // 截取数字信息
-        return self::numFilter($str);                        // 过滤该数字字符串
+    public static function getContribution($data) {
+        $title = self::getTitle($data);                    // 获取标题
+        return self::getContributionInStr($title);         // 获取标题字符串中的数字
     }
 
     /**
-     * 过滤数字字符串
-     * 去空格同时转化为数字
+     * 获取分享给他人的贡献值
+     * @param $helper_name         帮助者用户名
+     * @param $contribution        当前用户贡献值
+     * @param $data                Github推送对象
+     * @return float|mixed         分享给帮助者的贡献值
+     * @throws DbException
      * zhangxishuo
      */
-    public static function numFilter($str) {
-        $str = trim($str);                                   // 去除前后空格
-        return (float) $str;                                 // 转化为浮点型数字
+    public static function getShareContribution($helper_name, $contribution, $data) {
+
+        $body = self::getBody($data);                                 // 获取Pull Request主体
+        $share_contribution = self::getContributionInStr($body);      // 获取主体字符串中的贡献值
+
+        $helper = User::get($helper_name);                            // 获取帮助者
+        $share_contribution *= $helper->coefficient;                  // 累计帮助者获得贡献值
+
+        // 三目运算符，如果分享的贡献值少于当前者的30%，则共享该贡献值，否则共享当前贡献值的30%
+        return $share_contribution / $contribution > 0.3 ? $contribution * 0.3 : $share_contribution;
     }
 
     /**
-     * 获取提交中与贡献值相关的字符串
+     * 判断Pull Request是否有与人分享字段
+     * @param $data               Github推送对象
+     * @return bool               true 是 false 否
      * zhangxishuo
      */
-    public static function getContributeStr($data) {
-        $message = self::getStr($data);                      // 获取本次合并的所有字符串
-        $action  = config('contribute')['action'];           // 获取关键字
-        $keyword = config('contribute')['keyword'];          // 获取关键字
-        $regular = self::getRegular($action, $keyword);      // 拼接正则表达式
-        preg_match($regular, $message, $array);              // 匹配正则
-        return $array[0];                                    // 返回匹配的字符串
+    public static function share($data) {
+        $body = self::getBody($data);                                 // 获取Pull Request主体
+        if (strpos($body, 'share') === false) {                // 如果字符串中没有share关键字
+            return false;                                             // 没有与人分享
+        } else {
+            return true;
+        }
     }
 
     /**
-     * 获取本次代码合并时提交的所有字符串
+     * 获取分享/帮助者的用户名
+     * @param $data               Github推送对象
+     * @return bool|string        帮助者的用户名
      * zhangxishuo
      */
-    public static function getStr($data) {
-        $url    = $data->repository->commits_url;            // 获取接口格式
-        $sha    = $data->pull_request->merge_commit_sha;     // 获取合并时提交的加密码
-        $url    = str_replace('{/sha}', '/' . $sha, $url);   // 根据接口格式拼接url
-        $header = config('github')['organization'];          // 获取配置中github相关的header信息
-        $return = self::curl($url, $header);                 // 访问该url
-        $object = json_decode($return);                      // 将结果反序列化
-        return $object->commit->message;                     // 返回信息
-    }
-
-    /**
-     * 根据关键字拼接正则表达式
-     * zhangxishuo
-     */
-    public static function getRegular($action, $keyword) {
-        /**
-         * 拼接正则表达式
-         * ([\s]|[^\s])+ : 空白符或非空白符匹配1次以上
-         *      i        : 不分区大小写
-         */
-        $regular = '/' . $action . '([\s]|[^\s])+' . $keyword . '/i';
-        return $regular;
-    }
-
-    /**
-     * 根据header信息访问url
-     * zhangxishuo
-     */
-    public static function curl($url, $info) {
-        $ch     = curl_init();                               // 初始化
-        curl_setopt($ch, CURLOPT_URL, $url);                 // 设置url
-        curl_setopt($ch, CURLOPT_CUSTOMREQUEST, 'GET');      // 设置方法为get
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array('User-Agent:' . $info));  // 设置header
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);      // 设置将信息以字符串返回
-        $return = curl_exec($ch);                            // 执行并获取返回值
-        curl_close($ch);                                     // 关闭
-        return $return;                                      // 返回
-    }
-
-    /**
-     * 获取用户名
-     * zhangxishuo
-     */
-    public static function getUsername($data) {
-        $name = $data->pull_request->user->login;            // 获取用户名
-        return $name;
+    public static function getShareName($data) {
+        $body = self::getBody($data);                                 // 获取Pull Request主体
+        return self::getHelperNameInStr($body);                       // 获取主体信息中的帮助者姓名
     }
 
     /**
      * 修改用户的贡献值
+     * @param $name                用户名
+     * @param $contribution        贡献值
+     * @param $source              来源仓库
+     * @param $remark              备注
+     * @return array
      * zhangxishuo
      */
-    public static function revise($name, $num) {
-        $contStatus = self::countContribution($name, $num);  // Contribution表添加数据
-        $userStatus = User::addContribution($name, $num);    // User表添加数据
-        if ($contStatus && $userStatus) {                    // 都成功
-            return true;                                     // 返回真
-        }
-        return false;                                        // 返回假
-    }
-
-    /**
-     * 为用户在Contribution表中保存记录
-     * zhangxishuo
-     */
-    public static function countContribution($name, $num) {
-        $contribution = model('Contribution');               // 用助手函数实例化一个对象
-        $contribution->username = $name;                     // 设置username
-        $contribution->state    = $num;                      // 设置state
+    public static function revise($name, $contribution, $source, $remark) {
+        $result = [];
+        $result['operate'] = true;
+        $result['message'] = '保存成功';                              // 初始化返回信息
         try {
-            $contribution->save();                           // 保存
-        } catch (\Exception $e) {
-            return false;                                    // 抛出异常，返回假
+            self::countContribution($name, $contribution, $source, $remark);   // 修改贡献值详情
+            User::addContribution($name, $contribution);                       // 修改用户所有贡献值
+        } catch (DbException $e) {
+            $result['operate'] = false;
+            $result['message'] = $e->getMessage();                             // 捕获异常
         }
-        return true;                                         // 返回真
+        return $result;
     }
 
     /**
-     * 保存贡献值
+     * 修改贡献值详情
+     * @param $name                 用户名
+     * @param $num                  贡献值
+     * @param $source               来源仓库
+     * @param $remark               备注
+     * @throws DbException
      * zhangxishuo
      */
-    public static function saveContribution($request) {
-        $name   = $request->param('username');               // 获取用户名
-        $action = $request->post('action');                  // 获取增加或者减少的操作
-        $number = $request->post('number/f');                // 获取操作贡献值点数
-        if ($action === 'minus') {                           // 如果操作为减小
-            $number = -$number;                              // 贡献值取负
+    public static function countContribution($name, $num, $source, $remark) {
+        $contribution = new self();                                // 新建贡献值对象
+        $contribution->username = $name;                           // 设置用户名
+        $contribution->state    = $num;                            // 设置贡献值状态
+        $contribution->source   = $source;                         // 设置来源仓库
+        $contribution->remark   = $remark;                         // 设置备注
+        if (false === $contribution->save()) {
+            throw new DbException('贡献值保存失败');         // 保存失败，抛出异常
         }
-        return self::revise($name, $number);                 // 进行修改操作
+    }
+
+    /**
+     * 获取字符串中的用户名
+     * share&zhangxishuo 2h
+     * @param $str                 标准字符串
+     * @return bool|string         标准字符串中的用户名
+     * zhangxishuo
+     */
+    public static function getHelperNameInStr($str) {
+        $relevantNameStr = self::matchRelevantNameStr($str);        // 匹配字符串中的有效部分
+        return self::subNameInStr($relevantNameStr);                // 截取，获得用户名信息
+    }
+
+    /**
+     * 获取字符串中的数字贡献值信息
+     * @param $str                字符串
+     * @return float              字符串中的数字信息
+     * zhangxishuo
+     */
+    public static function getContributionInStr($str) {
+        $relevantNumStr = self::matchRelevantNumStr($str);          // 匹配字符串中的有效部分
+        return self::subNumInStr($relevantNumStr);                  // 截取，获取贡献值信息
+    }
+
+    /**
+     * 截取字符串中的用户名信息
+     * @param $str                有效字符串
+     * @return bool|string        有效字符串中的用户名信息
+     * zhangxishuo
+     */
+    public static function subNameInStr($str) {
+        return substr($str, 1, strlen($str) - 2);       // 截取
+    }
+
+    /**
+     * 截取字符串中的贡献值信息
+     * @param $str                有效字符串
+     * @return float              有效字符串中的贡献值信息
+     * zhangxishuo
+     */
+    public static function subNumInStr($str) {
+        return (float)substr($str, 1, strlen($str) - 2);       // 截取
+    }
+
+    /**
+     * 匹配字符串中的用户名信息
+     * @param $str                字符串
+     * @return mixed              有效字符串
+     * zhangxishuo
+     */
+    public static function matchRelevantNameStr($str) {
+        $regular = '/&[a-z]+ /i';                              // 拼接正则表达式
+        preg_match($regular, $str, $array);          // 匹配
+        return $array[0];
+    }
+
+    /**
+     * 匹配字符串中的贡献值信息
+     * @param $str                字符串
+     * @return mixed              有效字符串
+     * zhangxishuo
+     */
+    public static function matchRelevantNumStr($str) {
+        $regular = '/ ([0-9]|.)+h/i';                          // 拼接正则表达式
+        preg_match($regular, $str, $array);          // 匹配
+        return $array[0];
+    }
+
+    /**
+     * 拼接贡献值备注详细信息
+     */
+    /**
+     * 拼接当前用户的Pull Request信息
+     * @param $source              源仓库
+     * @param $contribution        贡献值
+     * @return string              返回备注字符串
+     * zhangxishuo
+     */
+    public static function putGetContributionRemark($source, $contribution) {
+        return '从' . $source . '获取' . $contribution . '点贡献值';
+    }
+
+    /**
+     * 拼接帮助者的贡献值获取信息
+     * @param $username            帮助者
+     * @param $contribution        贡献值
+     * @return string              返回备注字符串
+     * zhangxishuo
+     */
+    public static function putHelpContributionRemark($username, $contribution) {
+        return '帮助' . $username . '获得' . $contribution . '点贡献值';
+    }
+
+    /**
+     * 拼接分享给别人的贡献值信息
+     * @param $remark              原备注
+     * @param $helper              帮助者
+     * @param $contribution        分享贡献值
+     * @return string              拼接好的备注
+     * zhangxishuo
+     */
+    public static function putShareContributionRemark($remark, $helper, $contribution) {
+        return $remark . ', 分享给' . $helper. ' ' . $contribution . '点贡献值';
+    }
+
+    /**
+     * 获取Github推送的字符串中的某些基础方法
+     */
+
+    /**
+     * 获取当前Pull Request的操作用户名
+     * @param $data                Github对象
+     * @return mixed               用户名
+     * zhangxishuo
+     */
+    public static function getUsername($data) {
+        return $data->pull_request->user->login;
+    }
+
+    /**
+     * 获取当前Pull Request的仓库名
+     * @param $data                Github对象
+     * @return mixed               仓库名
+     * zhangxishuo
+     */
+    public static function getSource($data) {
+        return $data->repository->name;
+    }
+
+    /**
+     * 获取当前Pull Request的标题信息
+     * @param $data                Github对象
+     * @return mixed               标题
+     * zhangxishuo
+     */
+    public static function getTitle($data) {
+        return $data->pull_request->title;
+    }
+
+    /**
+     * 获取当前Pull Request的主体信息
+     * @param $data                Github对象
+     * @return mixed               主体
+     * zhangxishuo
+     */
+    public static function getBody($data) {
+        return $data->pull_request->body;
     }
 
     /**
      * 根据用户名查询相关贡献值记录
+     * @param $name
+     * @param $pageSize
+     * @return \think\paginator\Collection
+     * @throws DbException
      * zhangxishuo
      */
     public static function searchByUsername($name, $pageSize) {
         /* 查询数据，按时间戳逆序排序并分页 */
         $infos = self::where('username', $name)->order('time desc')->paginate($pageSize);
         return $infos;
-    }
-
-    /**
-     * 是否有最近的贡献值修改记录
-     * zhangxishuo
-     */
-    public static function hasRecentContribution() {
-        $recent     = self::max('time');                     // 获取最新的修改时间
-        $current    = time();                                // 获取当前时间
-        $difference = $current - $recent;                    // 获取时间差
-        if ($difference <= 3600) {                           // 如果该条记录修改在一小时以内
-            return true;                                     // 返回真
-        } else {
-            return false;                                    // 返回假
-        }
-    }
-
-    /**
-     * 获取最近的贡献值修改
-     * zhangxishuo
-     */
-    public static function getRecentContribution($size) {
-        $info = self::order('time', 'desc')->limit($size)->select();  // 获取最新的记录
-        foreach ($info as $key => $value) {
-            $user = User::get($value->username);
-            $data = $user->data;
-            $value->name = $data['name'];                    // 将用户的姓名赋给该对象，方便在界面中使用
-        }
-        return $info;                                        // 返回
     }
 }

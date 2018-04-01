@@ -59,11 +59,19 @@ class ContributionController extends Controller {
      * zhangxishuo
      */
     public function save() {
-        $state = Contribution::saveContribution($this->request);          // 保存贡献值
-        if ($state) {
-            $this->success('修改成功', url('contribution/index'));  // 成功，跳转
+        $name   = $this->request->param('username');
+        $action = $this->request->post('action');
+        $value  = $this->request->post('value');
+        $source = '贡献值修改';
+        $remark = $this->request->post('remark');
+        if ($action === 'minus') {
+            $value = -$value;
+        }
+        $result = Contribution::revise($name, $value, $source, $remark);
+        if ($result['operate']) {
+            $this->success($result['message'], 'contribution/index');
         } else {
-            $this->success('修改失败', url('contribution/index'));  // 失败，跳转
+            $this->error($result['message'], 'contribution/index');
         }
     }
 

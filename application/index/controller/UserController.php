@@ -56,6 +56,7 @@ class UserController extends IsloginController
 		$User->username = '';
 		$User->name = '';
 		$User->phone = '';
+		$User->coefficient = 1;
 
 		$this->assign('User', $User);
 
@@ -261,6 +262,7 @@ class UserController extends IsloginController
 		}
 		$User->name = input('post.name');
 		$User->phone = input('post.phone');
+		$User->coefficient = input('post.coefficient');
 
 		// 更新或保存
 		return $User->validate(true)->save($User->getData());
