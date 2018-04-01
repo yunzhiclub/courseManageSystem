@@ -2,6 +2,7 @@
 
 namespace app\index\model;
 
+use think\exception\DbException;
 use think\Model;
 use app\index\model\UserCourse;
 use app\index\model\Coursetime;
@@ -472,11 +473,8 @@ class User extends Model
         $map['username'] = $username;                   // 定义线索
         $user = self::get($map);                        // 获取用户
         $user->contribution += $contribution;           // 添加贡献值
-        try {
-            $user->save();                              // 保存
-        } catch (\Exception $e) {
-            return false;
+        if (false === $user->save()) {
+            throw new DbException('贡献值保存失败');
         }
-        return true;
     }
 }
