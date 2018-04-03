@@ -25,7 +25,7 @@ class Contribution extends Model
     ];
 
     /**
-     * @param $number
+     * @param $number pull request号
      * @return bool
      * @throws DbException
      * @throws \think\db\exception\ModelNotFoundException
@@ -77,6 +77,11 @@ class Contribution extends Model
         return $message . $value . '点贡献值';                // 拼接字符串，返回
     }
 
+    /**
+     * @return int
+     * 获取状态的原始值，如果没有，则返回0
+     * panjie
+     */
     public function getState() {
         if (key_exists('state', $this->data)) {
             return $this->data['state'];
@@ -246,10 +251,10 @@ class Contribution extends Model
      * @param $num                  贡献值
      * @param $source               来源仓库
      * @param $remark               备注
-     * @param string $title
-     * @param string $url
-     * @param bool $isShare
-     * @param null $number
+     * @param string $title         标题
+     * @param string $url url
+     * @param bool $isShare 是否由别人分享获得
+     * @param null $number 请求号
      * @throws DbException zhangxishuo
      */
     public static function countContribution($name, $num, $source, $remark, $title = '', $url = "", $isShare = false, $number = null) {
