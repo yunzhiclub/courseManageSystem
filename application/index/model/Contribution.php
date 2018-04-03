@@ -2,6 +2,8 @@
 
 namespace app\index\model;
 
+use app\index\input\GithubInput;
+use think\db\exception\DataNotFoundException;
 use think\Exception;
 use think\exception\DbException;
 use think\Model;
@@ -21,6 +23,30 @@ class Contribution extends Model
         'add'   => '增加',
         'minus' => '减少'
     ];
+
+    /**
+     * @param $number pull request号
+     * @return bool
+     * @throws DbException
+     * @throws \think\db\exception\ModelNotFoundException
+     * 检测同样的NUMBER是否存在
+     */
+    private static function checkExistByNumber($number)
+    {
+        try {
+            $map = [];
+            $map['number'] = $number;
+            $contribution = self::where($map)->find();
+            if ($contribution === null) {
+                return false;
+            }
+        } catch (DataNotFoundException $exception) {
+            return false;
+        }
+
+        return true;
+    }
+
 
     /**
      * 以下为过滤器方法
@@ -49,6 +75,19 @@ class Contribution extends Model
             $value   = -$value;                              // value值取反
         }
         return $message . $value . '点贡献值';                // 拼接字符串，返回
+    }
+
+    /**
+     * @return int
+     * 获取状态的原始值，如果没有，则返回0
+     * panjie
+     */
+    public function getState() {
+        if (key_exists('state', $this->data)) {
+            return $this->data['state'];
+        } else {
+            return 0;
+        }
     }
 
     /**
@@ -84,18 +123,27 @@ class Contribution extends Model
      * @param $data           Github推送对象
      * @throws DbException
      * zhangxishuo
+     * @return String jsonString
      */
     public static function saveAllContribution($data) {
+        $githubInput =  GithubInput::fromJsonObject($data);
+        $number = $githubInput->getNumber();
+        if (self::checkExistByNumber($number)) {
+            return json_encode(['message' => '本次请求已添加', 'code'=> 200]);
+        }
+
+        $url = $githubInput->getUrl();
+        $title = $githubInput->getTitle();
+
 
         $source            = self::getSource($data);         // 获取仓库源
-
         $user_name         = self::getUsername($data);       // 获取用户名
         $user_contribution = self::getContribution($data);   // 获取贡献值
-
         $user = User::get($user_name);                       // 获取用户
         $user_contribution *= $user->coefficient;            // 乘以系数
+        $user_remark       = 'github';   // 拼接备注
 
-        $user_remark       = self::putGetContributionRemark($source, $user_contribution);   // 拼接备注
+
 
         // 如果本次合并与他人分享贡献值
         if (self::share($data)) {
@@ -107,9 +155,9 @@ class Contribution extends Model
             $user_contribution    = $user_contribution - $helper_contribution;  // 减掉当前用户的贡献值
             $user_remark          = self::putShareContributionRemark($user_remark, $helper_name, $helper_contribution);  // 为当前用户不备注拼接分享信息
 
-            self::revise($helper_name, $helper_contribution, $source, $helper_remark);  // 修改帮助者贡献值
+            self::revise($helper_name, $helper_contribution, $source, $helper_remark, $title, $url, true, $number);  // 修改帮助者贡献值
         }
-        self::revise($user_name, $user_contribution, $source, $user_remark);  // 修改当前用户贡献值
+        self::revise($user_name, $user_contribution, $source, $user_remark, $title, $url, false, $number);  // 修改当前用户贡献值
     }
 
     /**
@@ -176,15 +224,19 @@ class Contribution extends Model
      * @param $contribution        贡献值
      * @param $source              来源仓库
      * @param $remark              备注
+     * @param string $title
+     * @param string $url
+     * @param bool $isShare
+     * @param null $number
      * @return array
      * zhangxishuo
      */
-    public static function revise($name, $contribution, $source, $remark) {
+    public static function revise($name, $contribution, $source, $remark, $title = '', $url = '', $isShare = false, $number = null) {
         $result = [];
         $result['operate'] = true;
         $result['message'] = '保存成功';                              // 初始化返回信息
         try {
-            self::countContribution($name, $contribution, $source, $remark);   // 修改贡献值详情
+            self::countContribution($name, $contribution, $source, $remark, $title, $url, $isShare, $number);   // 修改贡献值详情
             User::addContribution($name, $contribution);                       // 修改用户所有贡献值
         } catch (DbException $e) {
             $result['operate'] = false;
@@ -199,15 +251,22 @@ class Contribution extends Model
      * @param $num                  贡献值
      * @param $source               来源仓库
      * @param $remark               备注
-     * @throws DbException
-     * zhangxishuo
+     * @param string $title         标题
+     * @param string $url url
+     * @param bool $isShare 是否由别人分享获得
+     * @param null $number 请求号
+     * @throws DbException zhangxishuo
      */
-    public static function countContribution($name, $num, $source, $remark) {
+    public static function countContribution($name, $num, $source, $remark, $title = '', $url = "", $isShare = false, $number = null) {
         $contribution = new self();                                // 新建贡献值对象
         $contribution->username = $name;                           // 设置用户名
         $contribution->state    = $num;                            // 设置贡献值状态
         $contribution->source   = $source;                         // 设置来源仓库
         $contribution->remark   = $remark;                         // 设置备注
+        $contribution->url      = $url;                            // 地址
+        $contribution->title    = $title;                          // 标题
+        $contribution->share    = $isShare;                         // 是否为共享得分
+        $contribution->number   = $number;                          // 对应github的序号
         if (false === $contribution->save()) {
             throw new DbException('贡献值保存失败');         // 保存失败，抛出异常
         }
