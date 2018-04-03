@@ -13,8 +13,9 @@
         <tr class="info">
             <th>序号</th>
             <th>时间</th>
-            <th>贡献值状态</th>
-            <th>来源仓库</th>
+            <th>标题</th>
+            <th>pull request</th>
+            <th>贡献值</th>
             <th>备注</th>
         </tr>
 
@@ -22,8 +23,9 @@
         <tr>
             <td>{$key}</td>
             <td>{$_info->time}</td>
-            <td>{$_info->state}</td>
-            <td>{$_info->source}</td>
+            <td>{$_info->title}</td>
+            <td>{$_info->source} <a href="{$_info->url}"> #{$_info->number}</a></td>
+            <td>{$_info->getState()}</td>
             <td>{$_info->remark}</td>
         </tr>
         {/volist}
