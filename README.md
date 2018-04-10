@@ -2,27 +2,6 @@
 
 ## 贡献值管理功能
 
-### 数据库配置
-
-在原数据库上略做修改。
-
-`User`表中添加字段`contribution`，数据类型为`float`，默认值为`0`。
-
-`User`表中添加字段`coefficient`，数据类型为`int`，默认值为`1`。
-
-新建数据表`yunzhi_contribution`。
-
----
-| 字段 | 数据类型 | 属性 | 注释 |
-| - | :-: | :-: | -: |
-| id | int | 主键、非空、自增 | 主键id |
-| username | varchar(255) | 非空、外键 | 对应user表中的username |
-| state | float | 非空 | 用户贡献值状态 |
-| time | int | 非空 | 时间戳 |
-| source | varchar(255) | | 来源仓库 |
-| remark | varchar(255) | | 备注 |
----
-
 ### 如何使用
 
 ![](image/contribution/0.png)
