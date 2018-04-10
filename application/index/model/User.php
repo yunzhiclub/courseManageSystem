@@ -477,4 +477,53 @@ class User extends Model
             throw new DbException('贡献值保存失败');
         }
     }
+
+    /**
+     * 获取本月累加贡献值
+     * zhangxishuo
+     */
+    public function getCurrentMonthContribution() {
+        $MONTH_START = $this->getMonthStartTimestamp();   // 获取本月起始时间戳
+        $currentMonthContribution = Contribution::countContributionByUsernameAndTimestamp($this->username, $MONTH_START);                                 // 获取本月累计贡献值
+        return $currentMonthContribution;                 // 返回
+    }
+
+    /**
+     * 获取本周累加贡献值
+     * zhangxishuo
+     */
+    public function getCurrentWeekContribution() {
+        $WEEK_START = $this->getWeekStartTimestamp();     // 获取本周起始时间戳
+        $currentWeekContribution = Contribution::countContributionByUsernameAndTimestamp($this->username, $WEEK_START);                                  // 获取本周累计贡献值
+        return $currentWeekContribution;                  // 返回
+    }
+
+    /**
+     * 获取本月起始时间戳
+     * zhangxishuo
+     */
+    public function getMonthStartTimestamp() {
+        $year  = date('Y');                                // 获取年
+        $month = date('m');                                // 获取月
+        $MONTH_START = mktime(0, 0, 0, $month, 1, $year);  // 获取本年本月1号的时间戳
+        return $MONTH_START;                               // 返回
+    }
+
+    /**
+     * 获取本周起始时间戳
+     * zhangxishuo
+     */
+    public function getWeekStartTimestamp() {
+        $year  = date('Y');                                // 获取年
+        $month = date('m');                                // 获取月
+        $day   = date('d');                                // 获取天
+        $index = date('w');                                // 获取星期 0表示周日 1-6依次表示周一至周六
+        // 三目运算符
+        // 如果为周日，则本周第一天设置为当前日期减6
+        // 如果非周日，则本周第一天设置为当前日期减去索引加1
+        // $startDay本周周一的日期
+        $startDay = $index == 0 ? $day - 6 : $day - $index + 1;
+        $WEEK_START = mktime(0, 0, 0, $month, $startDay, $year);   // 获取本周周一的时间戳
+        return $WEEK_START;
+    }
 }
