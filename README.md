@@ -10,7 +10,7 @@
 
 ![](image/contribution/1.png)
 
-依次填入我们接收数据的`url`(`C`层中的`interface`方法)，类型选择`application/json`，事件选择`Let me select individual events`。
+依次填入我们接收数据的`url`，类型选择`application/json`，事件选择`Let me select individual events`。
 
 ![](image/contribution/2.png)
 
