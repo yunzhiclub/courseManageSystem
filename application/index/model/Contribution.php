@@ -433,4 +433,16 @@ class Contribution extends Model
         $infos = self::where('username', $name)->order('time desc')->paginate($pageSize);
         return $infos;
     }
+
+    /**
+     * 获取用户从某时间戳开始至今累计的贡献值
+     * zhangxishuo
+     */
+    public static function countContributionByUsernameAndTimestamp($username, $timestamp) {
+        $map             = [];                              // 新建数组
+        $map['username'] = array('=', $username);           // 设置查询条件-用户名
+        $map['time']     = array('>', $timestamp);          // 设置查询条件-起始时间戳
+        $contribution    = self::where($map)->sum('state'); // 统计所有符合条件记录的state的和
+        return $contribution;                               // 返回
+    }
 }
