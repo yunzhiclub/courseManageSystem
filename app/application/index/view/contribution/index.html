@@ -23,9 +23,9 @@
         <tr>
             <td>{$user->name}</td>
             <td>{$user->contribution}</td>
-            <td>todo</td>
-            <td>todo</td>
-            <td>todo</td>
+            <td>{$user->getCurrentMonthContribution()}</td>
+            <td>{$user->getCurrentWeekContribution()}</td>
+            <td>{$user->coefficient}</td>
             <td>
                 <a class="btn btn-xs btn-default" href="{:url('contribution/view?username=' . $user->username)}">
                     <i class="glyphicon glyphicon-list"></i>
