@@ -1,0 +1,79 @@
+<!-- 张喜硕 课程管理主页面 -->
+{extend name="index"/}
+{block name="title"}
+课程管理
+{/block}
+{block name="content"}
+    <h2 style="text-align: center">课程管理</h2>
+
+    <hr>
+
+    <div class="row">
+        <!-- 顶部搜索框 -->
+        <div class="col-md-8">
+            <form class="form-inline">
+
+                <input class="form-control" type="text" name="CourseName" placeholder="课程名..." value="{:input('get.CourseName')}">
+
+                <label>每页条数</label>
+                <input type="text" name="pageSize" class="form-control" value="{:input('get.pageSize')}">
+
+                <button type="submit" class="btn btn-default">
+                    <i class="glyphicon glyphicon-search"></i>
+                    &nbsp;查找
+                </button>
+            </form>
+        </div>
+
+        <!-- 添加课程 -->
+        <div class="col-md-4 text-right">
+            <a href="{:url('addcourse')}" class="btn btn-primary">
+                <i class="glyphicon glyphicon-plus"></i>
+                &nbsp;添加
+            </a>
+        </div>
+        
+    </div>
+
+    <hr>
+
+    <table class="table table-hover table-bordered">
+
+        <tr class="info">
+            <th class="col-md-2">序号</th>
+            <th class="col-md-4">课程名</th>
+            <th class="col-md-6">操作</th>
+        </tr>
+
+        {volist name="Courses" id="course" key="key"}
+        <tr>
+            <td>
+                {$key}
+            </td>
+            <td>
+                {$course->name}
+            </td>
+            <td>
+                <a href="{:url('delete?id=' . $course->id)}" class="btn btn-danger">
+                    <i class="glyphicon glyphicon-trash"></i>
+                    &nbsp;删除课程
+                </a>
+
+                <a href="{:url('inquiry?id=' . $course->id)}" class="btn btn-primary">
+                    <i class="glyphicon glyphicon-search"></i>
+                    &nbsp;查看详情
+                </a>
+
+                <a href="{:url('editCourse?id=' . $course->id)}" class="btn btn-default">
+                    <i class="glyphicon glyphicon-pencil"></i>
+                    &nbsp;修改课程
+                </a>
+            </td>
+        </tr>
+        {/volist}
+
+    </table>
+{/block}
+{block name="page"}
+    {$Courses->render()}
+{/block}

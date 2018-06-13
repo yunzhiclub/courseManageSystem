@@ -1,0 +1,59 @@
+{extend name="index"}
+{block name="title"}课程表
+{/block} 
+{block name="content"}
+<div class="row">
+    <div class="col-md-12">
+    <h2 class="text-center">学期管理</h2>
+        <hr />
+        <div class="row">
+            <div class="col-md-8">
+                <form class="form-inline">
+                    <div class="form-group">
+                        <label class="sr-only" for="name">名称</label>
+                        <input name="name" type="text" class="form-control" placeholder="名称..." value="{:input('get.name')}">
+                    </div>
+                    <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-search"></i>&nbsp;查询</button>
+                </form>
+            </div>
+            <div class="col-md-4 text-right">
+                <a href="{:url('add')}" class="btn btn-primary"><i class="glyphicon glyphicon-plus"></i>&nbsp;增加</a>
+            </div>
+        </div>
+        <hr />
+        <table class="table table-hover table-bordered">
+            <tr class="info">
+                <th>编号</th>
+                <th>学期名称</th>
+                <th>起始时间</th>
+                <th>结束时间</th>
+                <th>状态</th>
+                <th>操作</th>
+            </tr>
+            {volist name="terms" id="term" key="key"}
+            <tr>
+                <td>{$key}</td>
+                <td>{$term->name}</td>
+                <td>{$term->start_time}</td>
+                <td>{$term->end_time}</td>
+                <td>
+                {eq name="$term['state']" value="1"}
+                <span class="badge" style="background: #286090">进行中</span>
+                {else/}
+                <span class="badge badge-default" >未进行</span>
+                {/eq}
+               
+                </td>
+                <td>
+                {eq name="$term['state']" value="1"}
+                <a class="btn btn-sm btn-primary" href="{:url('edit?id=' . $term->getData('id'))}"><i class="glyphicon glyphicon-pencil"></i>&nbsp;编辑</a>
+                {else/}
+                <a class="btn btn-sm btn-primary active" href="{:url('setstate?id=' . $term->getData('id'))}"><i class="glyphicon glyphicon-off"></i>&nbsp;激活</a>&nbsp;<a class="btn btn-sm btn-primary" href="{:url('edit?id=' . $term->getData('id'))}"><i class="glyphicon glyphicon-pencil"></i>&nbsp;编辑</a>&nbsp;<a class="btn btn-danger btn-sm" href="{:url('delete?id=' . $term->getData('id'))}"><i class="glyphicon glyphicon-trash"></i>&nbsp;删除</a>
+                {/eq}
+                </td>
+            </tr>
+            {/volist}
+        </table>
+    </div>
+</div>
+{/block}

@@ -1,0 +1,27 @@
+# 版本号
+version: '3'
+
+# 定义服务
+services:
+  thinkphp5:
+    build:
+      context: ./thinkphp5
+    ports:
+      - "82:80"
+    volumes:
+      - ./../app:/var/www/html
+    environment:
+      APACHE_DOCUMENT_ROOT: /var/www/html/public
+    depends_on:
+      - mysql56
+    links:
+      - mysql56
+
+  mysql56:
+    build:
+      context: ./mysql56
+    ports:
+      - "3308:3306"
+    environment:
+      - MYSQL_ALLOW_EMPTY_PASSWORD=true
+      - MYSQL_DATABASE=duty

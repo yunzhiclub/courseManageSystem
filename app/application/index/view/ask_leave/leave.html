@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" type="text/css" href="{:__ROOT__}/static/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <meta charset="utf-8">
+    <title></title>
+</head>
+
+<body>
+    <center>
+        <h1>请假表</h1></center>
+    <form method="post" action="{:url('checkLeave')}">
+        <div class="row">
+            <div class="col-sm-4"></div>
+            <div class="col-sm-4">
+                <center>
+                    <label>第
+                        <input type="number" min="1" max="20" name="weekTime" value="{$weekTime}">周</label>
+                </center>
+                <br>
+                <select class="form-control" name="day">
+                    <option value="1" {$days[1]}>星期一</option>
+                    <option value="2" {$days[2]}>星期二</option>
+                    <option value="3" {$days[3]}>星期三</option>
+                    <option value="4" {$days[4]}>星期四</option>
+                    <option value="5" {$days[5]}>星期五</option>
+                    <option value="6" {$days[6]}>星期六</option>
+                    <option value="7" {$days[7]}>星期天</option>
+                </select>
+                <br>
+                <label>节：</label>
+                <label class="checkbox-inline">
+                    <input type="checkbox" name="konbs[]" value="1" {$konbs[1]}>1</label>&emsp;&ensp;
+                <label class="checkbox-inline">
+                    <input type="checkbox" name="konbs[]" value="2" {$konbs[2]}>2</label>&emsp;&ensp;
+                <label class="checkbox-inline">
+                    <input type="checkbox" name="konbs[]" value="3" {$konbs[3]}>3</label>&emsp;&ensp;
+                <label class="checkbox-inline">
+                    <input type="checkbox" name="konbs[]" value="4" {$konbs[4]}>4</label>&emsp;&ensp;
+                <label class="checkbox-inline">
+                    <input type="checkbox" name="konbs[]" value="5" {$konbs[5]}>5</label>&emsp;&ensp;
+                <br>
+                <hr>
+                <label>
+                    <p>请假原因：</p>
+                </label>
+                <label class="checkbox-inline">
+                    <input type="radio" name="reason" value="病假">病假</label>
+                <label class="checkbox-inline">
+                    <input type="radio" name="reason" value="事假" checked="true">事假</label>
+                <br>
+                <label class="control-label" for="inputSuccess4">说明：</label>
+                <input type="text" class="form-control" aria-describedby="inputSuccess4Status"
+                name="explain">
+                <br>
+                <center>
+                    <button type="submit" class="btn btn-primary">确定</button>
+                </center>
+            </div>
+            <div class="col-sm-4"></div>
+        </div>
+    </form>
+</body>
+
+</html>

@@ -1,0 +1,56 @@
+{extend name="edit"} {block name="title"} {eq name="User->username" value=""}新增用户信息{else /}编辑用户信息{/eq} {/block} {block name="content"} {php}$action = request()->action() === 'add' ? 'save' : 'update';{/php}
+<h3 class="text-center">
+    {eq name="User->username" value=""}新增用户信息{else /}编辑用户信息{/eq} 
+</h3>
+<div class="col-md-12">
+    <div class="text-center">
+        <form class="form-horizontal" action="{:url($action)}" method="post" name=SearchForm onSubmit="return doSubmit()">
+            {eq name="User->username" value=""}
+            <div class="form-group">
+                <label class="col-md-5 control-label">用户名</label>
+                <div class="col-md-2">
+                    <input type="text" class="form-control" placeholder="username..." name="username" value="{$User->getData('username')}" maxlength="25" minlength="4">
+                </div>
+            </div>
+            {else /} {/eq}
+            
+            <div class="form-group">
+                <label class="col-md-5 control-label">姓名</label>
+                {eq name="User->username" value=""}
+                {else /}
+                <input type="hidden" name="username" value="{$User->getData('username')}">
+                {/eq}
+                <div class="col-md-2">
+                    <input type="text" class="form-control" name="name" value="{$User->getData('name')}" placeholder="name..." maxlength="25" minlength="2" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-5 control-label">电话</label>
+                <div class="col-md-2">
+                    <input type="tel" class="form-control" name="phone" value="{$User->getData('phone')}" placeholder="phone..." minlength="11" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-md-5 control-label">贡献值系数</label>
+                <div class="col-md-2">
+                    <input type="number" class="form-control" name="coefficient" value="{$User->coefficient}" placeholder="贡献值系数" />
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-md-offset-6 col-md-1">
+                    <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-ok"></i>&nbsp;提交</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<SCRIPT language=JavaScript>
+function doSubmit(){
+        if (document.SearchForm.username.value === ""||document.SearchForm.name.value === ""||document.SearchForm.phone.value === ""){
+                alert("添加信息不能为空！");
+                return false;
+        }
+        
+}
+</SCRIPT>
+{/block}

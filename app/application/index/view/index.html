@@ -1,0 +1,48 @@
+<!-- 张喜硕 管理员界面模板文件 请继承管理员顶部导航栏 -->
+<!DOCTYPE html>
+<html lang="zh-cn">
+
+<head>
+    <meta charset="UTF-8">
+    <title>{block name="title"}标题{/block}</title>
+    <link rel="stylesheet" type="text/css" href="{:__ROOT__}/static/bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <link rel="shortcut icon" type="imag/icon" href="{:__ROOT__}/static/img/bitbug_favicon.ico">
+</head>
+
+<body class="container">
+
+    <div class="row">
+        <div class="col-md-12">
+            <nav class="navbar navbar-default" role="navigation">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <a class="navbar-brand" href="{:url('home/index')}">梦云智</a>
+                    </div>
+                    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                        <ul class="nav navbar-nav">
+                            <li {eq name=':request()->controller()' value="Home"} class="active" {/eq}><a href="{:url('home/index')}">首页</a></li>
+
+                            <li {eq name=':request()->controller()' value="Workmanage"} class="active" {/eq}><a href="{:url('workmanage/index')}">出勤管理</a></li>
+
+                            <li {eq name=':request()->controller()' value="Contribution"} class="active" {/eq}><a href="{:url('contribution/index')}">贡献值管理</a></li>
+
+                            <li {eq name=':request()->controller()' value="User"} class="active" {/eq}><a href="{:url('user/index')}">用户管理</a></li>
+
+                            <li {eq name=':request()->controller()' value="Term"} class="active" {/eq}><a href="{:url('term/index')}">学期管理</a></li>
+
+                            <li {eq name=':request()->controller()' value="Course"} class="active" {/eq}><a href="{:url('course/index')}">课程管理</a></li>
+                        </ul>
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="{:url('index/logout')}"><i class="glyphicon glyphicon-log-out"></i>&nbsp;注销</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    {block name="content"} {/block}
+    {block name="page"} {/block}
+</body>
+
+</html>
