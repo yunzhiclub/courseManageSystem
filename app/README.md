@@ -1,8 +1,27 @@
 # 梦云智课表管理系统
 
 ## 贡献值管理功能
-https://github.com/yunzhiclub/courseManageSystem
 
+### 数据库配置
+
+在原数据库上略做修改。
+
+`User`表中添加字段`contribution`，数据类型为`float`，默认值为`0`。
+
+`User`表中添加字段`coefficient`，数据类型为`int`，默认值为`1`。
+
+新建数据表`yunzhi_contribution`。
+
+---
+| 字段 | 数据类型 | 属性 | 注释 |
+| - | :-: | :-: | -: |
+| id | int | 主键、非空、自增 | 主键id |
+| username | varchar(255) | 非空、外键 | 对应user表中的username |
+| state | float | 非空 | 用户贡献值状态 |
+| time | int | 非空 | 时间戳 |
+| source | varchar(255) | | 来源仓库 |
+| remark | varchar(255) | | 备注 |
+---
 
 ### 如何使用
 
@@ -12,7 +31,7 @@ https://github.com/yunzhiclub/courseManageSystem
 
 ![](image/contribution/1.png)
 
-依次填入我们接收数据的`url`，类型选择`application/json`，事件选择`Let me select individual events`。
+依次填入我们接收数据的`url`(`C`层中的`interface`方法)，类型选择`application/json`，事件选择`Let me select individual events`。
 
 ![](image/contribution/2.png)
 
@@ -45,12 +64,3 @@ https://github.com/yunzhiclub/courseManageSystem
 ### 注意
 
 **因为本系统与`Github`对接，所以需要确保您在本系统中的用户名与`Github`用户名保持一致才可进行贡献值统计。**
-
-
-## 生产环境部署方法
-1. 启动docker `cd docker && docker-compose up -d`
-2. 更改配置文件`app/databash.php`数据库信息：mysql56 root 3306
-3. 连接数据库，并导入`duty.sql`
-4. 停止docker `docker-compose stop`
-5. 注释掉mysql的ports端口暴露。
-6. 重新启动docker `docker-compose up -d`
