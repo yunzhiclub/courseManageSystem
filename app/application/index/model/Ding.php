@@ -399,8 +399,7 @@ class Ding
      * @DateTime 2018-10-30T22:09:18+0800
      * @param    [string]                   $message [要随机推送的消息]
      */
-    public static function pushRandomUserName($message)
-    {
+    public static function pushRandomUserName($message) {
         self::autoPush($message);
     }
 }
