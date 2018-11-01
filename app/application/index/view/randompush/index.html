@@ -1,0 +1,31 @@
+<!-- 陈杰 随机推送 -->
+{extend name="index"/}
+{block name="title"}
+随机推送
+{/block}
+{block name="content"}
+<h2 class="text-center">随机推送</h2>
+<hr>
+<div class="row">
+    <form class="form-horizontal" action="{:url('randomPush')}" method="post">
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-7">
+                <label for="user">要随机推送的人：</label>
+                <div class="checkbox">
+                    {volist name="Users" id="user" key="key"}
+                    <label class="radio-inline">
+                        <input type="checkbox" name="user_name[]" id="{$user->username}" value="{$user->name}">{$user->name}&nbsp;&nbsp;&nbsp;&nbsp;
+                    </label>
+                    {/volist}
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <hr>
+            <div class="col-sm-offset-7 col-sm-10">
+                <button type="submit" class="btn btn-default glyphicon glyphicon-ok">&nbsp;确认</button>
+            </div>
+        </div>
+    </form>
+</div>
+{/block}
